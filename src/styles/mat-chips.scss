@@ -1,0 +1,50 @@
+@use "../vars" as vars;
+
+// todo: проверить все chips
+.mat-mdc-standard-chip.chip-badge {
+  --mdc-chip-container-height: auto;
+  --mdc-chip-container-shape-radius: 4px;
+  --mdc-chip-label-text-color: #fff;
+  --mdc-chip-label-text-size: 10px;
+  // --mdc-chip-elevated-container-color: #{vars.$primary-background-color};
+
+  & + & {
+    margin-left: 0.25rem;
+  }
+
+  .mdc-evolution-chip__action--primary {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  &.mat-primary {
+    --mdc-chip-elevated-container-color: #{vars.$primary-color};
+  }
+
+  &.mat-primary.outline {
+    --mdc-chip-label-text-size: 12px;
+    --mdc-chip-label-text-color: #{vars.$primary-color};
+    --mdc-chip-elevated-container-color: #fff;
+    border: 1px solid vars.$primary-color;
+  }
+
+  .mat-mdc-chip-focus-overlay {
+    display: none;
+  }
+}
+
+.mat-mdc-chip {
+  &.mat-warn {
+    --mdc-chip-elevated-container-color: #{vars.$error};
+
+    &.outline {
+      --mdc-chip-label-text-color: #{vars.$error};
+      --mdc-chip-elevated-container-color: transparent;
+      border: 1px solid vars.$error;
+    }
+  }
+
+  &.mat-attention {
+    --mdc-chip-elevated-container-color: #{vars.$attention};
+  }
+}

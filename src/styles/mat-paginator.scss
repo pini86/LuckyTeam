@@ -1,0 +1,47 @@
+.mat-mdc-paginator {
+  --mat-paginator-container-size: 40px;
+  --mat-paginator-container-text-color: rgba(0, 0, 0, 0.6);
+
+  .mat-mdc-paginator-container {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    min-height: 40px;
+  }
+
+  .mat-mdc-paginator-page-size {
+    margin: 0;
+  }
+
+  .mat-mdc-paginator-range-label {
+    margin: 0 16px;
+  }
+
+  .mat-mdc-paginator-range-actions {
+    .mat-mdc-icon-button {
+      padding: 0;
+      min-width: 0;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 40px;
+      --mdc-icon-button-icon-size: 28px;
+    }
+  }
+
+  .mat-mdc-form-field {
+    width: auto;
+
+    .mat-mdc-form-field-infix {
+      width: auto;
+      min-height: 32px;
+    }
+    .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+      padding-top: 3px;
+      padding-bottom: 3px;
+    }
+
+    .mat-mdc-select-arrow-wrapper {
+      margin-left: 15px;
+    }
+  }
+}

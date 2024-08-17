@@ -1,0 +1,10 @@
+dist/
+out-tsc/
+bazel-out/
+node_modules/
+.angular/
+.vscode/
+.idea/
+.prettierignore
+package-lock.json
+package.json

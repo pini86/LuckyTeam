@@ -1,0 +1,53 @@
+{
+  "printWidth": 140,
+  "singleQuote": true,
+  "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-organize-attributes"],
+  "attributeGroups": [
+    "^\\[?class\\.?",
+    "^\\[ngClass]",
+    "^\\[?panelClass]?",
+    "^\\[?style\\.?",
+    "^\\[ngStyle]",
+
+    "^\\[?type]?$",
+    "^mat-menu-item",
+    "^matInput",
+    "^\\[?readonly]?$",
+    "^\\[?id]?$",
+    "^\\[?entity",
+    "^\\[?name]?$",
+
+    "^\\[?href",
+    "^\\[?routerLink",
+    "^\\[queryParams]",
+    "^\\[?queryParamsHandling]?",
+    "^\\[?target]?$",
+    "^\\[?rel",
+    "^\\[?src",
+    "^\\[?title",
+    "^\\[?alt",
+
+    "^mat-(\\w+-)?button",
+    "^color",
+    "^\\[?form",
+    "^\\[?disabled",
+    "^\\[?mat-",
+    "^(?!.*matTooltip)\\[?mat\\w+",
+
+    "$DEFAULT",
+
+    "$ANGULAR_TWO_WAY_BINDING",
+    "$ANGULAR_OUTPUT",
+    "$ANGULAR_STRUCTURAL_DIRECTIVE",
+    "$ANGULAR_ELEMENT_REF"
+  ],
+  "overrides": [
+    {
+      "files": ["**/*.scss", "**/*.html"],
+      "options": {
+        "bracketSpacing": false,
+        "singleQuote": false
+      }
+    }
+  ]
+}

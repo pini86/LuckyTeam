@@ -1,0 +1,7 @@
+**/*.json
+**/*.scss
+**/*.css
+**/*.md
+src/app/models/**/*.ts
+playwright.config.ts
+tests/**

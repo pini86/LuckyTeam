@@ -1,0 +1,148 @@
+@use "@angular/material" as mat;
+@use "sass:math";
+
+:root {
+  --mat-menu-item-label-text-size: 14px;
+
+  --mdc-filled-text-field-label-text-size: 14px;
+  --mdc-outlined-text-field-label-text-size: 14px;
+  --mat-form-field-container-text-size: 14px;
+  --mat-form-field-outlined-label-text-populated-size: 14px;
+
+  --mat-select-trigger-text-size: 14px;
+  --mat-option-label-text-size: 14px;
+  --mat-optgroup-label-text-size: 14px;
+}
+
+// Form Field Layout
+//
+.mat-mdc-form-field {
+  @include mat.form-field-density(-4);
+
+  @supports (top: max(0%)) {
+    .mdc-text-field--outlined {
+      padding-right: max(12px, var(--mdc-outlined-text-field-container-shape)) !important;
+      padding-left: max(12px, calc(var(--mdc-outlined-text-field-container-shape) + 4px)) !important;
+
+      .mdc-notched-outline__leading {
+        width: max(8px, var(--mdc-outlined-text-field-container-shape)) !important;
+      }
+    }
+  }
+
+  .mat-mdc-icon-button {
+    --mdc-icon-button-state-layer-size: 38px !important;
+    padding: 8px !important;
+
+    &,
+    .mat-icon {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.mat-mdc-header-cell .mat-mdc-form-field,
+.mat-mdc-cell .mat-mdc-form-field {
+  @include mat.form-field-density(-5);
+  width: 100%;
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+
+  .mat-mdc-icon-button {
+    --mdc-icon-button-state-layer-size: 32px !important;
+    padding: 0 !important;
+  }
+}
+
+.mat-mdc-form-field-icon-suffix {
+  white-space: nowrap;
+}
+
+.scrollbar-right,
+.mat-vertical-stepper-content,
+.mdc-dialog__title + .mdc-dialog__content,
+.mdc-dialog__header + .mdc-dialog__content {
+  padding-top: 5px !important;
+  margin-top: -5px !important;
+}
+
+.mat-mdc-form-field-hint-wrapper,
+.mat-mdc-form-field-error-wrapper {
+  padding: 0 8px !important;
+}
+
+.mat-mdc-form-field-error,
+.mat-mdc-form-field-hint {
+  display: flex !important;
+}
+
+// Form Field Style
+//
+.mat-mdc-form-field {
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid) {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  &.hide-subscript {
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+  }
+}
+
+// Form Field - Select
+//
+.mat-mdc-form-field-type-mat-select:not(.mat-mdc-form-field-disabled) {
+  .mat-mdc-floating-label:not(.mat-mdc-floating-label--above),
+  .mat-mdc-text-field-wrapper {
+    cursor: pointer;
+  }
+}
+
+.mdc-menu-surface.mat-mdc-select-panel {
+  padding: 0 !important;
+}
+
+.mat-mdc-option {
+  min-height: 42px !important;
+}
+
+.mat-mdc-optgroup-label {
+  min-height: 42px !important;
+}
+
+// MatCheckbox
+//
+.mat-mdc-checkbox {
+  --mdc-checkbox-state-layer-size: 16px;
+
+  &.mat-primary {
+    --mdc-checkbox-selected-checkmark-color: #fff;
+  }
+
+  .mat-mdc-checkbox-ripple,
+  .mdc-checkbox__ripple {
+    top: -11px;
+    left: -11px;
+    right: -10px;
+    bottom: -9px;
+  }
+
+  label {
+    padding-left: 6px !important;
+  }
+}
+
+// Checkbox in list
+//
+.mat-mdc-list-option .mdc-checkbox {
+  --mdc-checkbox-selected-checkmark-color: #fff;
+}

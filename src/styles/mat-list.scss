@@ -1,0 +1,20 @@
+.mat-mdc-list .mat-mdc-list-item.mdc-list-item--with-two-lines,
+.mat-mdc-list .mat-list-option.mat-list-item-with-avatar {
+  border-bottom: 1px solid #d8dce0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.mat-mdc-list-item.cursor-pointer:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.mdc-list-item--with-leading-icon .mdc-list-item__start {
+  --mdc-list-list-item-leading-icon-color: rgba(0, 0, 0, 0.87);
+  --mdc-list-list-item-hover-leading-icon-color: rgba(0, 0, 0, 0.87);
+  align-self: center !important;
+  margin: 0 16px !important;
+  padding: 0;
+}

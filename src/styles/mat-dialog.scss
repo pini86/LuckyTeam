@@ -1,0 +1,78 @@
+@use "../vars" as vars;
+
+.primary-background-color mat-dialog-container {
+  --mdc-dialog-container-color: #{vars.$primary-background-color};
+}
+.mat-mdc-dialog-container .mdc-dialog__content {
+  --mdc-dialog-supporting-text-line-height: 20px;
+  --mdc-dialog-supporting-text-tracking: normal;
+  --mdc-dialog-supporting-text-size: 14px;
+  --mdc-dialog-supporting-text-color: rgb(0 0 0 / 87%);
+  max-height: 85vh;
+  height: 100%;
+}
+
+.mdc-dialog__surface {
+  overflow: visible !important;
+}
+
+.dialog-close-btn {
+  position: relative;
+
+  > button {
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(50%) translateY(-50%);
+    box-shadow:
+      0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+      0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
+
+    &:hover,
+    &:focus {
+      box-shadow:
+        0px 3px 3px -2px rgba(0, 0, 0, 0.2),
+        0px 3px 4px 0px rgba(0, 0, 0, 0.14),
+        0px 1px 8px 0px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    &:active,
+    &:focus:active {
+      box-shadow:
+        0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+        0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+        0px 1px 10px 0px rgba(0, 0, 0, 0.12) !important;
+    }
+  }
+}
+
+mat-dialog-container mat-card {
+  box-shadow: none !important;
+}
+
+.primary-background-color mat-dialog-container,
+mat-card {
+  table,
+  .mat-mdc-table {
+    tr {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      td {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+form .actions {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  z-index: 2;
+}

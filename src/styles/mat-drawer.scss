@@ -1,0 +1,8 @@
+@use "../vars" as vars;
+
+.mat-drawer-container {
+  --mat-sidenav-content-background-color: vars.$primary-background-color;
+}
+.mat-drawer.mat-drawer-side {
+  z-index: 0 !important;
+}

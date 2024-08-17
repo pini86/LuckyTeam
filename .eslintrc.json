@@ -1,0 +1,18 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*"],
+  "extends": ["./.eslintrc-lt"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "no-bitwise": "error",
+        "max-classes-per-file": "off",
+        "@angular-eslint/prefer-on-push-component-change-detection": "off",
+        "rxjs/finnish": "off",
+        "rxjs/no-nested-subscribe": "off",
+        "unicorn/no-this-assignment": "off"
+      }
+    }
+  ]
+}

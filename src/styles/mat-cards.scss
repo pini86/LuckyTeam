@@ -1,0 +1,25 @@
+.mat-mdc-card {
+  font-size: 14px;
+}
+
+.mdc-card {
+  .mat-mdc-card-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .mat-mdc-card-header-text:empty {
+    display: none;
+  }
+}
+
+.mat-mdc-card-subtitle {
+  --mat-card-subtitle-text-weight: 400;
+}
+
+.mat-mdc-card-content .mat-mdc-progress-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
