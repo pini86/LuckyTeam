@@ -13,16 +13,16 @@ import { TripDetailsComponent } from './public/trip-details/trip-details.compone
 import { UserProfileComponent } from './public/user-profile/user-profile.component';
 
 export const routes: Routes = [
-  { path: '', component: LoginComponent },
+  { path: '', component: SearchComponent },
+  { path: 'signin', component: LoginComponent },
   { path: 'admin', component: AdminComponent },
-  { path: 'registration', component: RegistrationComponent },
-  { path: 'user', component: UserProfileComponent },
-  { path: 'search', component: SearchComponent },
+  { path: 'signup', component: RegistrationComponent },
+  { path: 'profile', component: UserProfileComponent },
   { path: 'trip', component: TripDetailsComponent },
-  { path: 'order', component: OrderComponent },
-  { path: 'stations', component: StationsManagementComponent },
-  { path: 'carriages', component: CarriagesCarsComponent },
-  { path: 'route', component: RouteManagementComponent },
-  { path: 'ride', component: RideManagementComponent },
+  { path: 'orders', component: OrderComponent },
+  { path: 'admin/stations', component: StationsManagementComponent },
+  { path: 'admin/carriagess', component: CarriagesCarsComponent },
+  { path: 'admin/routes', component: RouteManagementComponent },
+  { path: 'admin/routes/{id}', component: RideManagementComponent },
   { path: '**', component: NotFoundComponent },
 ];

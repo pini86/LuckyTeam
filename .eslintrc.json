@@ -11,7 +11,8 @@
         "@angular-eslint/prefer-on-push-component-change-detection": "off",
         "rxjs/finnish": "off",
         "rxjs/no-nested-subscribe": "off",
-        "unicorn/no-this-assignment": "off"
+        "unicorn/no-this-assignment": "off",
+        "@typescript-eslint/dot-notation": "off"
       }
     }
   ]
