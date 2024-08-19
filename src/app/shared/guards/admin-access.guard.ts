@@ -1,5 +1,5 @@
-import {CanActivateFn, Router, UrlTree} from "@angular/router";
-import {inject} from "@angular/core";
+import { inject } from '@angular/core';
+import { CanActivateFn, Router, UrlTree } from '@angular/router';
 
 export const adminAccessGuard: CanActivateFn = (): boolean | UrlTree => {
   const userName: string = localStorage.getItem('username');
@@ -9,4 +9,4 @@ export const adminAccessGuard: CanActivateFn = (): boolean | UrlTree => {
   }
 
   return inject(Router).createUrlTree(['/signin']);
-}
+};
