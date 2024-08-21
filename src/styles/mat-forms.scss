@@ -16,7 +16,7 @@
 
 // Form Field Layout
 //
-.mat-mdc-form-field {
+/* .mat-mdc-form-field {
   @include mat.form-field-density(-4);
 
   @supports (top: max(0%)) {
@@ -41,7 +41,7 @@
       align-items: center;
     }
   }
-}
+} */
 
 .mat-mdc-header-cell .mat-mdc-form-field,
 .mat-mdc-cell .mat-mdc-form-field {

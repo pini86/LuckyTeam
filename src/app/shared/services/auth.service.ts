@@ -1,13 +1,11 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   readonly userName = signal<string>('');
   readonly token = signal<string>('');
-
-  isAdmin(): boolean {
-    return this.userName() === 'admin@admin.com';
-  }
+  readonly isAdmin = computed(() => (this.userName() === 'admin@admin.com' ? true : false));
+  readonly isLogged = computed(() => this.userName().length > 0 && this.token().length > 0);
 
   logIn(username: string, token: string): void {
     localStorage.clear();
