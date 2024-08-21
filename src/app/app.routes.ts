@@ -11,18 +11,21 @@ import { SearchComponent } from './public/search/search.component';
 import { StationsManagementComponent } from './public/stations-management/stations-management.component';
 import { TripDetailsComponent } from './public/trip-details/trip-details.component';
 import { UserProfileComponent } from './public/user-profile/user-profile.component';
+import { adminAccessGuard } from './shared/guards/admin-access.guard';
+import { guestAccessGuard } from './shared/guards/guest-access.guard';
+import { userAccessGuard } from './shared/guards/user-access.guard';
 
 export const routes: Routes = [
   { path: '', component: SearchComponent },
-  { path: 'signin', component: LoginComponent },
-  { path: 'admin', component: AdminComponent },
-  { path: 'signup', component: RegistrationComponent },
-  { path: 'profile', component: UserProfileComponent },
+  { path: 'signin', component: LoginComponent, canActivate: [guestAccessGuard] },
+  { path: 'admin', component: AdminComponent, canActivate: [adminAccessGuard] },
+  { path: 'signup', component: RegistrationComponent, canActivate: [guestAccessGuard] },
+  { path: 'profile', component: UserProfileComponent, canActivate: [userAccessGuard] },
   { path: 'trip', component: TripDetailsComponent },
-  { path: 'orders', component: OrderComponent },
-  { path: 'admin/stations', component: StationsManagementComponent },
-  { path: 'admin/carriagess', component: CarriagesCarsComponent },
-  { path: 'admin/routes', component: RouteManagementComponent },
-  { path: 'admin/routes/{id}', component: RideManagementComponent },
+  { path: 'orders', component: OrderComponent, canActivate: [userAccessGuard] },
+  { path: 'admin/stations', component: StationsManagementComponent, canActivate: [adminAccessGuard] },
+  { path: 'admin/carriages', component: CarriagesCarsComponent, canActivate: [adminAccessGuard] },
+  { path: 'admin/routes', component: RouteManagementComponent, canActivate: [adminAccessGuard] },
+  { path: 'admin/routes/{id}', component: RideManagementComponent, canActivate: [adminAccessGuard] },
   { path: '**', component: NotFoundComponent },
 ];
