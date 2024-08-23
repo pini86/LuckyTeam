@@ -22,15 +22,14 @@
           "options": {
             "allowedCommonJsDependencies": ["deepmerge", "crypto-js/md5", "crypto-js/lib-typedarrays", "hogan.js"],
             "outputPath": {
-              "base": "dist/publish-material",
-              "browser": ""
+              "base": "dist/publish-material"
             },
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/version.txt", "src/assets"],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["./node_modules/bootstrap/dist/css/bootstrap.css", "src/theme.scss", "src/styles.scss"],
             "scripts": [],
             "stylePreprocessorOptions": {
@@ -39,9 +38,11 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "./",
               "outputHashing": "all"
             },
             "development": {
+              "baseHref": "/",
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
