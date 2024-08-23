@@ -1,27 +1,57 @@
-<h2 mat-dialog-title>Add Route</h2>
+<h2 mat-dialog-title>Create Route</h2>
 <mat-dialog-content class="content">
+
 
   <div class="grid-title">
     <p class="title">Stations</p>
-    <mat-form-field class="field">
-      <mat-label>Favorite Animal</mat-label>
-      <input [(ngModel)]="animal" matInput/>
-    </mat-form-field>
+
+    @for (path of _route().path; track path) {
+      <div class="item">
+        <mat-form-field class="field">
+          <mat-label>City</mat-label>
+          <mat-select [value]="path.city">
+            @for (path of _route().path; track path) {
+              <mat-option value="path">{{ path.city }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <button class="delete-button" type="button">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </div>
+    }
+
+
+    <!--    <div class="item">-->
+    <!--      <mat-form-field class="field">-->
+    <!--        <mat-label>test</mat-label>-->
+    <!--        <mat-select>-->
+    <!--          &lt;!&ndash;          @for (food of foods; track food) {&ndash;&gt;-->
+    <!--          &lt;!&ndash;            <mat-option [value]="food.value">{{ food.viewValue }}</mat-option>&ndash;&gt;-->
+    <!--          &lt;!&ndash;          }&ndash;&gt;-->
+    <!--        </mat-select>-->
+    <!--      </mat-form-field>-->
+    <!--      <button class="delete-button" type="button">-->
+    <!--        <mat-icon>delete_forever</mat-icon>-->
+    <!--      </button>-->
+    <!--    </div>-->
   </div>
 
 
-  <div class="grid-title">
-    <p class="title">Carriages</p>
-    <mat-form-field class="field">
-      <mat-label>Favorite Animal</mat-label>
-      <input [(ngModel)]="animal" matInput />
-    </mat-form-field>
-  </div>
+  <!--  <div class="grid-title">-->
+  <!--    <p class="title">Carriages</p>-->
+  <!--    <mat-form-field class="field">-->
+  <!--      <mat-label>Favorite Animal</mat-label>-->
+  <!--      &lt;!&ndash;      <input [(ngModel)]="animal" matInput/>&ndash;&gt;-->
+  <!--    </mat-form-field>-->
+  <!--  </div>-->
+
 
 </mat-dialog-content>
 
 
 <mat-dialog-actions>
   <button (click)="onNoClick()" mat-button type="button">Cancel</button>
-  <button [mat-dialog-close]="animal()" cdkMonitorSubtreeFocus mat-button type="button">Ok</button>
+  <!--  <button [mat-dialog-close]="animal()" cdkMonitorSubtreeFocus mat-button type="button">Save</button>-->
+  <button cdkMonitorSubtreeFocus mat-button type="button">Save</button>
 </mat-dialog-actions>

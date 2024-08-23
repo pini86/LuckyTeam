@@ -4,11 +4,6 @@ import { MatDialog, MatDialogActions, MatDialogContent } from '@angular/material
 import { MatFormField } from '@angular/material/form-field';
 import { DialogAddItemComponent } from './dialog-add-item/dialog-add-item.component';
 
-export interface DialogData {
-  animal: string;
-  name: string;
-}
-
 @Component({
   selector: 'app-add-item-route',
   standalone: true,
@@ -17,20 +12,20 @@ export interface DialogData {
   styleUrl: './add-item-route.component.scss',
 })
 export class AddItemRouteComponent {
-  readonly animal = signal('');
-  readonly name = model('');
-  readonly dialog = inject(MatDialog);
+  protected readonly _animal = signal('');
+  protected readonly _name = model('');
+  protected readonly _dialog = inject(MatDialog);
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogAddItemComponent, {
-      data: { name: this.name(), animal: this.animal() },
+  public openDialog(): void {
+    const dialogRef = this._dialog.open(DialogAddItemComponent, {
+      data: { name: this._name(), animal: this._animal(), select: 'select' },
       width: '80%',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The add-item was closed', result);
       if (result !== undefined) {
-        this.animal.set(result);
+        this._animal.set(result);
       }
     });
   }

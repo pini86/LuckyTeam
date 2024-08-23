@@ -1,14 +1,10 @@
-:host {
-  background-color: red;
-}
-
 @import "vars";
 
 .example-card {
   width: 100%;
   border-radius: 1.25rem;
   overflow: hidden;
-
+  margin-bottom: 0.7rem;
 }
 
 
@@ -44,11 +40,17 @@
 .list {
   display: flex;
   justify-content: start;
+  flex-wrap: wrap;
+  user-select: none;
 
   div:not(:first-child):before {
     content: '-';
     padding: 0 0.625rem;
   }
+}
+
+.list-footer {
+  color: $text-secondary-color;
 }
 
 .content {
