@@ -1,12 +1,27 @@
-<h2 mat-dialog-title>Hi </h2>
-<mat-dialog-content>
-  <p>What's your favorite animal?</p>
-  <mat-form-field>
-    <mat-label>Favorite Animal</mat-label>
-    <input [(ngModel)]="animal" matInput/>
-  </mat-form-field>
+<h2 mat-dialog-title>Add Route</h2>
+<mat-dialog-content class="content">
+
+  <div class="grid-title">
+    <p class="title">Stations</p>
+    <mat-form-field class="field">
+      <mat-label>Favorite Animal</mat-label>
+      <input [(ngModel)]="animal" matInput/>
+    </mat-form-field>
+  </div>
+
+
+  <div class="grid-title">
+    <p class="title">Carriages</p>
+    <mat-form-field class="field">
+      <mat-label>Favorite Animal</mat-label>
+      <input [(ngModel)]="animal" matInput />
+    </mat-form-field>
+  </div>
+
 </mat-dialog-content>
+
+
 <mat-dialog-actions>
-  <button (click)="onNoClick()" mat-button type="button">No Thanks</button>
+  <button (click)="onNoClick()" mat-button type="button">Cancel</button>
   <button [mat-dialog-close]="animal()" cdkMonitorSubtreeFocus mat-button type="button">Ok</button>
 </mat-dialog-actions>

@@ -13,6 +13,7 @@ import {
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { DialogData } from '../add-item-route.component';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 
 @Component({
   selector: 'app-dialog-add-item',
@@ -28,6 +29,8 @@ import { DialogData } from '../add-item-route.component';
     MatInput,
     CdkMonitorFocus,
     FormsModule,
+    MatGridList,
+    MatGridTile
   ],
   templateUrl: './dialog-add-item.component.html',
   styleUrl: './dialog-add-item.component.scss',

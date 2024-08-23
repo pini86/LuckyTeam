@@ -24,6 +24,7 @@ export class AddItemRouteComponent {
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogAddItemComponent, {
       data: { name: this.name(), animal: this.animal() },
+      width: '80%',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
