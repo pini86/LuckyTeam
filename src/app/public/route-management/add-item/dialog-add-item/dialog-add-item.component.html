@@ -1,57 +1,69 @@
-<h2 mat-dialog-title>Create Route</h2>
-<mat-dialog-content class="content">
+<form (ngSubmit)="_submit()" [formGroup]="_form">
+  <h2 mat-dialog-title>Create Route</h2>
+  <mat-dialog-content class="content">
 
 
-  <div class="grid-title">
-    <p class="title">Stations</p>
+    <div class="grid-title">
+      <p class="title">Stations</p>
 
-    @for (path of _route().path; track path) {
+      @for (control of _formCities.controls; track control; let index = $index) {
+
+
+        <div class="item">
+          <mat-form-field class="field">
+            <mat-label>City</mat-label>
+            <!--            <mat-select [formGroup]="getFormGroup(control)">-->
+            <!--              @for (p of _route().path; track p) {-->
+            <!--                <mat-option [value]="p.city">{{ p.city }}</mat-option>-->
+            <!--              }-->
+            <!--            </mat-select>-->
+
+            <input [formControl]="getFormGroup(control)">
+          </mat-form-field>
+
+          @if (index === (_route().path.length - 1)) {
+            <button class="delete-button" type="button">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+          }
+
+        </div>
+
+
+      }
+
+
       <div class="item">
         <mat-form-field class="field">
-          <mat-label>City</mat-label>
-          <mat-select [value]="path.city">
-            @for (path of _route().path; track path) {
-              <mat-option value="path">{{ path.city }}</mat-option>
-            }
+          <mat-label>Select Station</mat-label>
+          <mat-select>
+            <mat-option value="City 33">City 33</mat-option>
           </mat-select>
         </mat-form-field>
-        <button class="delete-button" type="button">
-          <mat-icon>delete_forever</mat-icon>
-        </button>
       </div>
-    }
+    </div>
 
 
-    <!--    <div class="item">-->
-    <!--      <mat-form-field class="field">-->
-    <!--        <mat-label>test</mat-label>-->
-    <!--        <mat-select>-->
-    <!--          &lt;!&ndash;          @for (food of foods; track food) {&ndash;&gt;-->
-    <!--          &lt;!&ndash;            <mat-option [value]="food.value">{{ food.viewValue }}</mat-option>&ndash;&gt;-->
-    <!--          &lt;!&ndash;          }&ndash;&gt;-->
-    <!--        </mat-select>-->
-    <!--      </mat-form-field>-->
-    <!--      <button class="delete-button" type="button">-->
-    <!--        <mat-icon>delete_forever</mat-icon>-->
-    <!--      </button>-->
-    <!--    </div>-->
-  </div>
+    <div class="grid-title">
+      <p class="title">Carriages</p>
+
+      <mat-form-field class="field">
+        <mat-label>Select Carriages</mat-label>
+        <mat-select>
+          <mat-option value="City 33">City 33</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
 
 
-  <!--  <div class="grid-title">-->
-  <!--    <p class="title">Carriages</p>-->
-  <!--    <mat-form-field class="field">-->
-  <!--      <mat-label>Favorite Animal</mat-label>-->
-  <!--      &lt;!&ndash;      <input [(ngModel)]="animal" matInput/>&ndash;&gt;-->
-  <!--    </mat-form-field>-->
-  <!--  </div>-->
+  </mat-dialog-content>
 
 
-</mat-dialog-content>
+  <mat-dialog-actions>
+    <button (click)="onNoClick()" mat-button type="button">Cancel</button>
+    <!--  <button [mat-dialog-close]="animal()" cdkMonitorSubtreeFocus mat-button type="button">Save</button>-->
+    <button cdkMonitorSubtreeFocus mat-button type="submit">Save</button>
+  </mat-dialog-actions>
 
-
-<mat-dialog-actions>
-  <button (click)="onNoClick()" mat-button type="button">Cancel</button>
-  <!--  <button [mat-dialog-close]="animal()" cdkMonitorSubtreeFocus mat-button type="button">Save</button>-->
-  <button cdkMonitorSubtreeFocus mat-button type="button">Save</button>
-</mat-dialog-actions>
+</form>
