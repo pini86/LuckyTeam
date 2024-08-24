@@ -23,8 +23,6 @@
       ],
       "plugins": ["import", "unicorn", "rxjs", "@typescript-eslint"],
       "rules": {
-        // eslint
-        //
         "array-callback-return": "error",
         "block-scoped-var": "error",
         "consistent-return": "error",
@@ -52,8 +50,6 @@
         "prefer-template": "error",
         "radix": "error",
 
-        // plugin:import - Static analysis
-        //
         "import/namespace": "off",
         "import/no-absolute-path": "error",
         "import/no-dynamic-require": "off",
@@ -64,8 +60,6 @@
         "import/no-useless-path-segments": "error",
         "import/no-webpack-loader-syntax": "error",
 
-        // plugin:import - Helpful warnings
-        //
         "import/export": "off",
         "import/no-deprecated": "off",
         "import/no-extraneous-dependencies": "off",
@@ -74,15 +68,11 @@
         "import/no-named-as-default-member": "error",
         "import/no-unused-modules": "error",
 
-        // plugin:import - Module systems
-        //
         "import/no-amd": "error",
         "import/no-commonjs": "error",
         "import/no-import-module-exports": "error",
         "import/no-nodejs-modules": "off",
 
-        // plugin:import - Style guide
-        //
         "import/exports-last": "error",
         "import/extensions": "error",
         "import/first": "error",
@@ -93,8 +83,6 @@
         "import/no-named-default": "error",
         "import/order": "off",
 
-        // plugin:unicorn
-        //
         "unicorn/consistent-function-scoping": ["error", { "checkArrowFunctions": false }],
         "unicorn/no-array-callback-reference": "off",
         "unicorn/no-array-for-each": "off",
@@ -112,8 +100,6 @@
         "unicorn/prevent-abbreviations": "off",
         "unicorn/switch-case-braces": ["error", "avoid"],
 
-        // plugin:rxjs
-        //
         "rxjs/no-implicit-any-catch": "off",
         "rxjs/finnish": [
           "error",
@@ -139,8 +125,6 @@
         "rxjs/no-unsafe-first": "error",
         "rxjs/no-unsafe-switchmap": "error",
 
-        // plugin:@typescript-eslint
-        //
         "@typescript-eslint/array-type": ["error", { "default": "array", "readonly": "generic" }],
         "@typescript-eslint/class-methods-use-this": "off",
         "@typescript-eslint/consistent-generic-constructors": ["error", "constructor"],
@@ -267,8 +251,6 @@
         "@typescript-eslint/switch-exhaustiveness-check": "off",
         "@typescript-eslint/unbound-method": ["error", { "ignoreStatic": true }],
 
-        // plugin:@angular-eslint
-        //
         "@angular-eslint/directive-selector": "off",
         "@angular-eslint/no-forward-ref": "off",
         "@angular-eslint/sort-ngmodule-metadata-arrays": "off",

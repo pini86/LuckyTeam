@@ -15,7 +15,7 @@
  "homepage": "https://github.com/pini86/LuckyTeam#readme",
  "scripts": {
   "ng": "ng",
-  "start": "ng serve --host 0.0.0.0 --disable-host-check",
+  "start": "ng serve",
   "build": "ng build",
   "lint": "ng lint"
  },
