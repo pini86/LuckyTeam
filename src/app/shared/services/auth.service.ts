@@ -16,7 +16,10 @@ export class AuthService {
   }
 
   public getToken(): string {
-    return this.token();
+    if (this.token()) {
+      return this.token();
+    }
+    return localStorage.getItem('token');
   }
 
   public logOut(): void {

@@ -1,0 +1,48 @@
+<mat-card appearance="outlined" class="card">
+  <mat-card-header class="card-header">
+    <mat-card-title class="bold">Ride {{ schedule().rideId }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content class="content">
+
+
+    <mat-grid-list cols="3" rowHeight="2:1">
+
+      @for (path of ride().path; track path; let index = $index) {
+        <mat-grid-tile>{{ path }}</mat-grid-tile>
+
+        <mat-grid-tile>
+          @if (index < schedule().segments.length) {
+            @for (time of schedule().segments[index].time; track time) {
+              <span>
+              {{ time }}
+            </span>
+            }
+          }
+
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          @if (index < schedule().segments.length) {
+            <div class="price-list">
+
+              @for (price of schedule().segments[index].price | keyvalue; track price) {
+                <div class="item-price-list">
+                  <span>{{ price.key }} :</span>
+                </div>
+                <div class="item-price-list">
+                  {{ price.value }}
+                </div>
+              }
+            </div>
+          }
+
+
+        </mat-grid-tile>
+      }
+    </mat-grid-list>
+
+
+  </mat-card-content>
+
+</mat-card>

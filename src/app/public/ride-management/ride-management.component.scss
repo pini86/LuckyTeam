@@ -1,0 +1,25 @@
+.container {
+  max-width: 62.5rem;
+  padding: 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 1.875rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}
+
+.button {
+  outline: none;
+  width: 10rem;
+}

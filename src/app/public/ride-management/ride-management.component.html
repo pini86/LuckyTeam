@@ -1,1 +1,18 @@
-<p>ride-management works!</p>
+<div class="container">
+
+  @if (_route | async; as ride) {
+    <div class="header">
+      <button type="button" mat-icon-button (click)="_handleBack()">
+        <mat-icon>keyboard_backspace</mat-icon>
+      </button>
+      <span class="header__title">Route: {{ ride.id }}</span>
+    </div>
+
+    <button mat-stroked-button class="button" type="button">Create Ride</button>
+
+    @for (r of ride.schedule; track r.rideId) {
+      <app-ride [ride]="ride" [schedule]="r"/>
+    }
+  }
+
+</div>

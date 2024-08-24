@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabGroup } from '@angular/material/tabs';
+import { Router } from '@angular/router';
 import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { RouteService } from '../../../shared/services/route.service';
 import { CityModel, ModifyRoutesModel, RoutesModel } from '../../../shared/types/routes.model';
@@ -41,6 +42,7 @@ export class RouteItemComponent implements OnInit, OnDestroy {
   });
   private readonly _dialog = inject(MatDialog);
   private readonly _routeService: RouteService = inject(RouteService);
+  private readonly _router = inject(Router);
   private readonly _routes$: Observable<RoutesModel[]> = this._routeService.getRoutesObserver();
   private readonly _cities$: Observable<CityModel[]> = this._routeService.getCitiesObserver();
   private readonly _destroy$ = new Subject<void>();
@@ -76,5 +78,9 @@ export class RouteItemComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The add-item was closed', result);
     });
+  }
+
+  protected _handlerClickAssignRide(id: string): void {
+    this._router.navigateByUrl(`admin/routes/${id}`);
   }
 }
