@@ -1,10 +1,16 @@
 {
   "root": true,
-  "ignorePatterns": ["projects/**/*"],
-  "extends": ["./.eslintrc-lt"],
+  "ignorePatterns": [
+    "projects/**/*"
+  ],
+  "extends": [
+    "./.eslintrc-lt"
+  ],
   "overrides": [
     {
-      "files": ["*.ts"],
+      "files": [
+        "*.ts"
+      ],
       "rules": {
         "no-bitwise": "error",
         "max-classes-per-file": "off",
@@ -12,7 +18,21 @@
         "rxjs/finnish": "off",
         "rxjs/no-nested-subscribe": "off",
         "unicorn/no-this-assignment": "off",
-        "@typescript-eslint/dot-notation": "off"
+        "@typescript-eslint/dot-notation": "off",
+        "@typescript-eslint/explicit-member-accessibility": [
+          "error",
+          {
+            "accessibility": "explicit",
+            "overrides": {
+              "accessors": "explicit",
+              "constructors": "no-public",
+              "methods": "explicit",
+              "properties": "explicit",
+              "parameterProperties": "explicit"
+            }
+          }
+        ],
+        "@angular-eslint/template/prefer-control-flow": "off"
       }
     }
   ]
