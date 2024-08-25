@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { CitiesItems, CityModel, RideModel, RoutesItems, RoutesModel } from '../types/routes.model';
 import { AuthService } from './auth.service';
@@ -11,6 +11,12 @@ export class RouteService {
   private readonly _routes = new Subject<RoutesItems>();
   private readonly _cities = new Subject<CitiesItems>();
   private readonly _route = new Subject<RideModel>();
+
+  private readonly _count = signal<number>(0);
+
+  public increment(): void {
+    this._count.update(() => this._count() + 1);
+  }
 
   public getRoute(id: string): void {
     this._http

@@ -1,4 +1,5 @@
-@if (_modifyRoutes(); as routes) {
+<!--@if (_modifyRoutes(); as routes) {-->
+@if (_routes(); as routes) {
   @for (route of routes; track route.id) {
     <mat-card appearance="outlined" class="example-card">
       <mat-card-header class="card-header">
@@ -24,8 +25,10 @@
       <mat-card-content class="content">
         <mat-card-title>Cities:</mat-card-title>
         <div class="list">
-          @for (city of route.path; track city) {
-            <div>{{ city.city }}</div>
+          @if (_cities().length) {
+            @for (city of route.path; track city) {
+              <div>{{ city | transformRideCity: _cities() }}</div>
+            }
           }
         </div>
       </mat-card-content>

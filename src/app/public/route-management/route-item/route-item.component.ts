@@ -1,5 +1,5 @@
 import { AsyncPipe, NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -10,14 +10,26 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { TransformRideCityPipe } from '../../../shared/pipes/transform-ride-city.pipe';
 import { RouteService } from '../../../shared/services/route.service';
-import { CityModel, ModifyRoutesModel, RoutesModel } from '../../../shared/types/routes.model';
+import { CityModel, RoutesModel } from '../../../shared/types/routes.model';
 import { DialogAddItemComponent } from '../add-item/dialog-add-item/dialog-add-item.component';
 
 @Component({
   selector: 'app-route-item',
   standalone: true,
-  imports: [MatCardModule, MatChipsModule, MatProgressBarModule, MatIconModule, MatFabButton, MatRipple, MatTabGroup, AsyncPipe, NgFor],
+  imports: [
+    MatCardModule,
+    MatChipsModule,
+    MatProgressBarModule,
+    MatIconModule,
+    MatFabButton,
+    MatRipple,
+    MatTabGroup,
+    AsyncPipe,
+    NgFor,
+    TransformRideCityPipe,
+  ],
   templateUrl: './route-item.component.html',
   styleUrl: './route-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,25 +37,11 @@ import { DialogAddItemComponent } from '../add-item/dialog-add-item/dialog-add-i
 export class RouteItemComponent implements OnInit, OnDestroy {
   protected readonly _routes = signal<RoutesModel[]>([]);
   protected readonly _cities = signal<CityModel[]>([]);
-  protected readonly _modifyRoutes = computed<ModifyRoutesModel[]>(() => {
-    if (this._routes()?.length && this._cities()?.length) {
-      return this._routes().map((route) => {
-        const path = route.path.map((cityId) => {
-          const findCity = this._cities().find((city) => city.id === cityId);
-          if (findCity) {
-            return findCity;
-          }
-          return null;
-        });
-        return new ModifyRoutesModel(route.id, route.carriages, path);
-      });
-    }
-    return [];
-  });
+
   private readonly _dialog = inject(MatDialog);
   private readonly _routeService: RouteService = inject(RouteService);
+  protected readonly _routes$: Observable<RoutesModel[]> = this._routeService.getRoutesObserver();
   private readonly _router = inject(Router);
-  private readonly _routes$: Observable<RoutesModel[]> = this._routeService.getRoutesObserver();
   private readonly _cities$: Observable<CityModel[]> = this._routeService.getCitiesObserver();
   private readonly _destroy$ = new Subject<void>();
 
@@ -68,10 +66,10 @@ export class RouteItemComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  protected _handleUpdate(route: ModifyRoutesModel): void {
+  protected _handleUpdate(route: RoutesModel): void {
     console.log('[67] 🚀:', route);
     const dialogRef = this._dialog.open(DialogAddItemComponent, {
-      data: { route },
+      data: { route, cities: this._cities() },
       width: '80%',
     });
 

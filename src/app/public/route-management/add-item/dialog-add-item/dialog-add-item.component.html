@@ -4,45 +4,23 @@
     <div class="grid-title" formArrayName="cities">
       <p class="title">Stations</p>
 
-      <!--      @for (path of _formCities.controls; track path; let index = $index) {-->
-      <!--        <div class="item">-->
-      <!--          <mat-form-field class="field">-->
-      <!--            <mat-label>{{ path.value }}</mat-label>-->
-      <!--            <mat-select [formControlName]="_formCities.controls[index].value[_route().path[index].city]">-->
-      <!--              &lt;!&ndash;              @for (p of _route().path; track p) {&ndash;&gt;-->
-      <!--              &lt;!&ndash;                <mat-option [value]="p.city">{{ p.city }}</mat-option>&ndash;&gt;-->
-      <!--              &lt;!&ndash;              }&ndash;&gt;-->
-      <!--            </mat-select>-->
-      <!--          </mat-form-field>-->
+      @if (_cities().length) {
+        @for (path of _form.controls.cities.controls; track path; let index = $index) {
 
-      <!--          @if (index === (_route().path.length - 1)) {-->
-      <!--            <button class="delete-button" type="button">-->
-      <!--              <mat-icon>delete_forever</mat-icon>-->
-      <!--            </button>-->
-      <!--          }-->
-
-      <!--        </div>-->
+          <div class="item">
+            <!--        <div class="item">-->
+            <mat-form-field class="field">
+              <mat-select [formControl]="asFormControl(path)" [placeholder]="_route().path[index]  | transformRideCity: _cities()">
+                @for (p of _route().path; track p) {
+                  <mat-option [value]="p">{{ p | transformRideCity: _cities() }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        }
 
 
-      <!--      }-->
-
-      <div class="item">
-        <mat-form-field class="field">
-          <mat-label>test</mat-label>
-          <mat-select formControlName="city21">
-            <!--              @for (p of _route().path; track p) {-->
-            <!--                <mat-option [value]="p.city">{{ p.city }}</mat-option>-->
-            <!--              }-->
-          </mat-select>
-        </mat-form-field>
-
-        <!--        @if (index === (_route().path.length - 1)) {-->
-        <!--          <button class="delete-button" type="button">-->
-        <!--            <mat-icon>delete_forever</mat-icon>-->
-        <!--          </button>-->
-        <!--        }-->
-
-      </div>
+      }
 
 
       <div class="item">

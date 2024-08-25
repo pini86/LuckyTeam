@@ -1,7 +1,7 @@
 import { CdkMonitorFocus } from '@angular/cdk/a11y';
-import { NgFor } from '@angular/common';
+import { KeyValuePipe, NgFor } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
@@ -16,7 +16,8 @@ import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
-import { CityModel, ModifyRoutesModel } from '../../../../shared/types/routes.model';
+import { TransformRideCityPipe } from '../../../../shared/pipes/transform-ride-city.pipe';
+import { CitiesItems, RoutesModel } from '../../../../shared/types/routes.model';
 import { DialogData } from '../../types/dialogs.types';
 
 @Component({
@@ -40,35 +41,30 @@ import { DialogData } from '../../types/dialogs.types';
     MatIcon,
     NgFor,
     ReactiveFormsModule,
+    KeyValuePipe,
+    TransformRideCityPipe,
   ],
   templateUrl: './dialog-add-item.component.html',
   styleUrl: './dialog-add-item.component.scss',
 })
 export class DialogAddItemComponent implements OnInit {
-  protected readonly _route = signal<ModifyRoutesModel>({
-    id: 0,
-    path: [],
-    carriages: [],
-  });
+  protected readonly _route = signal<RoutesModel>(null);
+  protected readonly _cities = signal<CitiesItems>(null);
 
-  // protected readonly _form = new FormGroup({
   protected readonly _form = new FormGroup({
     cities: new FormArray([]),
   });
-  //   cities: this._fb.array([]),
   private readonly _dialogRef = inject(MatDialogRef<DialogAddItemComponent>);
-  // });
-  private readonly _fb = inject(FormBuilder);
-
   private readonly _data = inject<DialogData>(MAT_DIALOG_DATA);
 
   public ngOnInit(): void {
     if (this._data.route) {
       this._route.set(this._data.route);
+      this._cities.set(this._data.cities);
 
-      // this._route().path.forEach((path) => {
-      //   this._form.controls.cities.push(this._createCities(path));
-      // });
+      this._route().path.forEach((path) => {
+        this._form.controls.cities.push(new FormControl(path));
+      });
     }
   }
 
@@ -76,22 +72,11 @@ export class DialogAddItemComponent implements OnInit {
     this._dialogRef.close();
   }
 
-  protected _getName(control: any): string {
-    console.log('[78] 🍄:', control);
-    return Object.keys(control)[0];
+  public asFormControl(formControl: AbstractControl): FormControl {
+    return formControl as FormControl;
   }
 
   protected _submit(): void {
     console.log('[74] 🍄:', this._form.value);
-  }
-
-  // protected _getFormGroup(control: AbstractControl) {
-  //   return control as FormControl;
-  // }
-
-  private _createCities(path: CityModel): FormGroup {
-    return this._fb.group({
-      [path.city]: ['', Validators.required],
-    });
   }
 }

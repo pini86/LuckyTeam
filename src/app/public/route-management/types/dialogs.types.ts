@@ -1,5 +1,6 @@
-import { ModifyRoutesModel } from '../../../shared/types/routes.model';
+import { CitiesItems, RoutesModel } from '../../../shared/types/routes.model';
 
 export interface DialogData {
-  route: ModifyRoutesModel;
+  route: RoutesModel;
+  cities: CitiesItems;
 }
