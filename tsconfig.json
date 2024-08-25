@@ -7,23 +7,28 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "lib": ["ES2022", "dom"],
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
     "module": "ES2022",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "noImplicitAny": true,
     "outDir": "./dist/out-tsc",
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": false,
-    "suppressImplicitAnyIndexErrors": true,
     "ignoreDeprecations": "5.0",
     "target": "ES2022",
     "useDefineForClassFields": false,
     "paths": {
-      "ngx-material-file-input": ["node_modules/ngx-custom-material-file-input"]
+      "ngx-material-file-input": [
+        "node_modules/ngx-custom-material-file-input"
+      ]
     }
   },
   "angularCompilerOptions": {
@@ -32,5 +37,7 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "exclude": ["e2e"]
+  "exclude": [
+    "e2e"
+  ]
 }
