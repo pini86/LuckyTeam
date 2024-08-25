@@ -12,8 +12,13 @@
     font-weight: bold;
   }
 
-  &__time {
+  &__time-wrapper {
     padding: 0.6rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__time {
     display: flex;
     flex-direction: column;
   }
@@ -21,9 +26,24 @@
 
   &__price {
     padding: 0.6rem;
+    display: flex;
+    justify-content: center;
 
   }
+
+  &__button {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
 }
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+}
+
 
 .price {
 
@@ -36,7 +56,7 @@
 }
 
 .input-time {
-  width: 12rem;
+  width: 4.7rem;
   border: none;
   background-color: initial;
   color: #1f1f1f;

@@ -13,17 +13,60 @@
               {{ path | transformRideCity: _city() }}
             </div>
 
-            <div class="item__time">
-              @if (index <= schedule().segments.length) {
-                @if (index === 0) {
-                  <span>Departure: {{ schedule().segments[index].time[0] }}</span>
-                } @else if (index === schedule().segments.length) {
-                  <span>Arrival: {{ schedule().segments[index - 1].time[1] }}</span>
-                } @else {
-                  <span>Arrival: <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1]"></span>
-                  <span>Departure: {{ schedule().segments[index].time[0] }}</span>
+            <div class="item__time-wrapper">
+              <div class="item__time">
+                @if (index <= schedule().segments.length) {
+                  @if (index === 0) {
+                    <span>Departure:
+                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformDate">
+                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformTime">
+                    </span>
+                  } @else if (index === schedule().segments.length) {
+                    <span>Arrival:
+                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformDate">
+                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformTime">
+                    </span>
+                  } @else {
+                    <span>Arrival:
+                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformDate">
+                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformTime">
+                    </span>
+                    <span>Departure:
+                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformDate">
+                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformTime">
+                    </span>
+                  }
                 }
-              }
+              </div>
+
+
+              <button type="button" mat-mini-fab class="item__button" (click)="_handleChangeDate(path, $event)">
+                <mat-icon class="icon">edit_square</mat-icon>
+              </button>
+
+              <!--              <mat-form-field>-->
+              <!-- Date range picker -->
+              <!--                <mat-date-range-input [rangePicker]="datepicker">-->
+              <!--                  <input matStartDate placeholder="Start date">-->
+              <!--                  <input matEndDate placeholder="End date">-->
+              <!--                </mat-date-range-input>-->
+
+              <!--                <input matInput placeholder="Start date">-->
+              <!--                <input matInput type="datetime-local" placeholder="start date" [matDatepicker]="datepicker">-->
+
+
+              <!--                <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>-->
+
+              <!--                <mat-datepicker #datepicker></mat-datepicker>-->
+              <!--              </mat-form-field>-->
+
+              <!--              <mat-form-field>-->
+              <!--                <mat-label>Дата и время</mat-label>-->
+              <!--                &lt;!&ndash;                <input matInput [matDatepicker]="picker">&ndash;&gt;-->
+              <!--                <input type="time" matInput name="week" min="09:00" max="18:00" [matDatepicker]="picker">-->
+              <!--                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
+              <!--                <mat-datepicker type="time" #picker></mat-datepicker>-->
+              <!--              </mat-form-field>-->
             </div>
 
             <div class="item__price">
