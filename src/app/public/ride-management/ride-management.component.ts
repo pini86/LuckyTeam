@@ -17,7 +17,7 @@ import { RideComponent } from './ride/ride.component';
 export class RideManagementComponent implements OnInit {
   private readonly _activateRoute = inject(ActivatedRoute);
   private readonly _routeService: RouteService = inject(RouteService);
-  protected readonly _route = this._routeService.getRouteObserver();
+  protected readonly _routes$ = this._routeService.getRouteObserver();
   private readonly _location = inject(Location);
 
   public ngOnInit(): void {
@@ -25,6 +25,7 @@ export class RideManagementComponent implements OnInit {
 
     if (id) {
       this._routeService.getRoute(id);
+      this._routeService.getCities();
     }
   }
 

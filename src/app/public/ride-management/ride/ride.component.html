@@ -5,41 +5,49 @@
 
   <mat-card-content class="content">
 
-
     <mat-grid-list cols="3" rowHeight="2:1">
+      @if (_city()) {
+        @for (path of ride().path; track path; let index = $index) {
+          <div class="item__wrapper" appColoredStroke [item]="index">
+            <div class="item__path">
+              {{ path | transformRideCity: _city() }}
+            </div>
 
-      @for (path of ride().path; track path; let index = $index) {
-        <mat-grid-tile>{{ path }}</mat-grid-tile>
+            <div class="item__time">
+              @if (index <= schedule().segments.length) {
+                @if (index === 0) {
+                  <span>Departure: {{ schedule().segments[index].time[0] }}</span>
+                } @else if (index === schedule().segments.length) {
+                  <span>Arrival: {{ schedule().segments[index - 1].time[1] }}</span>
+                } @else {
+                  <span>Arrival: <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1]"></span>
+                  <span>Departure: {{ schedule().segments[index].time[0] }}</span>
+                }
+              }
+            </div>
 
-        <mat-grid-tile>
-          @if (index < schedule().segments.length) {
-            @for (time of schedule().segments[index].time; track time) {
-              <span>
-              {{ time }}
-            </span>
-            }
-          }
+            <div class="item__price">
+              @if (index < schedule().segments.length) {
+                <div class="price__list">
 
-        </mat-grid-tile>
-
-        <mat-grid-tile>
-          @if (index < schedule().segments.length) {
-            <div class="price-list">
-
-              @for (price of schedule().segments[index].price | keyvalue; track price) {
-                <div class="item-price-list">
-                  <span>{{ price.key }} :</span>
-                </div>
-                <div class="item-price-list">
-                  {{ price.value }}
+                  @for (price of schedule().segments[index].price | keyvalue; track price) {
+                    <div class="price__item">
+                      <span>{{ price.key }} :</span>
+                    </div>
+                    <div class="price__item">
+                      {{ price.value }}
+                    </div>
+                  }
                 </div>
               }
             </div>
-          }
 
+          </div>
 
-        </mat-grid-tile>
+        }
       }
+
+
     </mat-grid-list>
 
 
