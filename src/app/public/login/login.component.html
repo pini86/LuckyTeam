@@ -4,54 +4,54 @@
   </mat-card-header>
 
   <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="saveForm()">
+    <form (ngSubmit)="saveForm()" [formGroup]="form">
       <mat-form-field class="w-100">
         <mat-label>Email</mat-label>
-        <input type="url" matInput [formControl]="form.controls.email" />
+        <input [formControl]="form.controls.email" matInput type="url"/>
       </mat-form-field>
 
       <mat-form-field class="w-100">
         <mat-label>Password</mat-label>
-        <input type="url" matInput [formControl]="form.controls.password" />
+        <input [formControl]="form.controls.password" matInput type="url"/>
       </mat-form-field>
 
       <button
         class="mr-2 toolbar-button"
-        type="submit"
-        mat-raised-button
         color="primary"
+        mat-raised-button
         matTooltip="Sign In"
         test-locator-name="home-card-save-button"
+        type="submit"
       >
         Sign In
       </button>
 
       <button
+        (click)="signup()"
         class="mr-2 toolbar-button"
-        type="button"
-        mat-raised-button
         color="secondary"
+        mat-raised-button
         matTooltip="Sign Up"
         test-locator-name="home-card-save-button"
-        (click)="signup()"
+        type="button"
       >
         Sign Up
       </button>
       <button
+        (click)="admin()"
         class="mr-2 toolbar-button"
-        type="button"
         mat-raised-button
         test-locator-name="home-card-save-button"
-        (click)="admin()"
+        type="button"
       >
         Admin
       </button>
     </form>
     <mat-card-footer>
-      @if (isError()) {
+      @if (_isError()) {
         <div class="alert alert-warning">
           <mat-icon class="home-table-icon" color="attention">warning</mat-icon>
-          <strong>{{ isError() }}</strong>
+          <strong>{{ _isError() }}</strong>
         </div>
       }
     </mat-card-footer>
