@@ -14,12 +14,20 @@ export class ModifyRoutesModel {
   ) {}
 }
 
+export class ConnectedStation {
+  constructor(
+    public readonly id: number,
+    public readonly distance: number,
+  ) {}
+}
+
 export class CityModel {
   constructor(
     public readonly id: number,
     public readonly city: string,
     public readonly latitude: number,
     public readonly longitude: number,
+    public readonly connectedTo: ConnectedStation[],
   ) {}
 }
 

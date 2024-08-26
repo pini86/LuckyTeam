@@ -9,6 +9,7 @@
   justify-content: space-between;
   align-items: start;
   gap: 2rem;
+  max-height: 60vh;
 }
 
 .grid-title {
@@ -32,6 +33,10 @@
   display: flex;
   align-items: center;
   gap: .5rem;
-
+  font-size: 4px;
   width: 100%;
+}
+
+.block-buttons {
+  margin: 1rem 0;
 }

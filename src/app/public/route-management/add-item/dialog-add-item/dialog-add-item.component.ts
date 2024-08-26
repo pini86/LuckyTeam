@@ -53,6 +53,7 @@ export class DialogAddItemComponent implements OnInit {
 
   protected readonly _form = new FormGroup({
     cities: new FormArray([]),
+    carriages: new FormArray([]),
   });
   private readonly _dialogRef = inject(MatDialogRef<DialogAddItemComponent>);
   private readonly _data = inject<DialogData>(MAT_DIALOG_DATA);
@@ -65,6 +66,12 @@ export class DialogAddItemComponent implements OnInit {
       this._route().path.forEach((path) => {
         this._form.controls.cities.push(new FormControl(path));
       });
+
+      this._route().carriages.forEach((path) => {
+        this._form.controls.carriages.push(new FormControl(path));
+      });
+
+      console.log('[74] 🍄:', this._route().carriages);
     }
   }
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { CitiesItems, CityModel, RideModel, RoutesItems, RoutesModel } from '../types/routes.model';
+import { CitiesItems, CityModel, ConnectedStation, RideModel, RoutesItems, RoutesModel } from '../types/routes.model';
 import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
@@ -65,7 +65,11 @@ export class RouteService {
         next: (data) => {
           const arrCities: CitiesItems = [];
           data.forEach((city) => {
-            const newCity = new CityModel(city.id, city.city, city.latitude, city.longitude);
+            // Проверяем, есть ли данные по connectedTo и преобразуем их
+            const connectedStations = city.connectedTo
+              ? city.connectedTo.map((connection) => new ConnectedStation(connection.id, connection.distance))
+              : [];
+            const newCity = new CityModel(city.id, city.city, city.latitude, city.longitude, connectedStations);
             arrCities.push(newCity);
           });
           this._cities.next(arrCities);
