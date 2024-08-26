@@ -1,3 +1,27 @@
 <section class="stations-list">
-  <h2 class="list-title">List</h2>
+  <h2 class="list-title visually-hidden">List of Stations</h2>
+  <div *ngFor="let station of stations; trackBy: trackByStationId"
+       class="station-card">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ station.city }}</mat-card-title>
+        <mat-card-subtitle>{{ station.latitude }}, {{ station.longitude }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Connected to:</strong></p>
+        <mat-list>
+          <mat-list-item *ngFor="let connected of station.connectedTo; trackBy: trackByConnectedStationId">
+            <span>Station ID: {{ connected.id }}, Distance: {{ connected.distance }} km</span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-icon-button
+                color="warn"
+                type="button">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 </section>

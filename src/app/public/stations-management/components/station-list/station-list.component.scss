@@ -1,0 +1,48 @@
+.stations-list {
+  .station-card {
+    margin-bottom: 16px;
+  }
+
+  mat-card {
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  mat-card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+
+  mat-card-subtitle {
+    font-size: 1rem;
+    color: #757575;
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+
+  mat-card-content {
+    margin-top: 8px;
+  }
+
+  mat-card-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
