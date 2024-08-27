@@ -10,9 +10,13 @@
       <mat-card-content>
         <p><strong>Connected to:</strong></p>
         <mat-list>
-          <mat-list-item *ngFor="let connected of station.connectedTo; trackBy: trackByConnectedStationId">
-            <span>Station ID: {{ connected.id }}, Distance: {{ connected.distance }} km</span>
-          </mat-list-item>
+          <!-- Перебор только тех маршрутов, которые связаны с текущей станцией -->
+          <ng-container *ngFor="let route of getRoutesForStation(station); trackBy: trackByModifiedRouteId">
+            <!-- Перебор станций в маршруте -->
+            <mat-list-item *ngFor="let city of route.path; trackBy: trackByStationId">
+              <span>{{ city.city }}</span>
+            </mat-list-item>
+          </ng-container>
         </mat-list>
       </mat-card-content>
       <mat-card-actions>

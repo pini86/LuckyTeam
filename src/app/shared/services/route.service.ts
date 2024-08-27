@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { CitiesItems, CityModel, ConnectedStation, RideModel, RoutesItems, RoutesModel } from '../types/routes.model';
+import { RideModel, RoutesItems, RoutesModel } from '../types/routes.model';
 import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
@@ -9,7 +9,7 @@ export class RouteService {
   private readonly _http = inject(HttpClient);
   private readonly _auth = inject(AuthService);
   private readonly _routes = new Subject<RoutesItems>();
-  private readonly _cities = new Subject<CitiesItems>();
+
   private readonly _route = new Subject<RideModel>();
 
   private readonly _count = signal<number>(0);
@@ -54,39 +54,11 @@ export class RouteService {
       });
   }
 
-  public getCities(): void {
-    this._http
-      .get<CitiesItems>('/api/station', {
-        headers: {
-          Authorization: `Bearer ${this._auth.getToken()}`,
-        },
-      })
-      .subscribe({
-        next: (data) => {
-          const arrCities: CitiesItems = [];
-          data.forEach((city) => {
-            // Проверяем, есть ли данные по connectedTo и преобразуем их
-            const connectedStations = city.connectedTo
-              ? city.connectedTo.map((connection) => new ConnectedStation(connection.id, connection.distance))
-              : [];
-            const newCity = new CityModel(city.id, city.city, city.latitude, city.longitude, connectedStations);
-            arrCities.push(newCity);
-          });
-          this._cities.next(arrCities);
-        },
-        error: (error) => console.log(error),
-      });
-  }
-
   public getRoutesObserver(): Observable<RoutesItems> {
     return this._routes.asObservable();
   }
 
   public getRouteObserver(): Observable<RideModel> {
     return this._route.asObservable();
-  }
-
-  public getCitiesObserver(): Observable<CitiesItems> {
-    return this._cities.asObservable();
   }
 }
