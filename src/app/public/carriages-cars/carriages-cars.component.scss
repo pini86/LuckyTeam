@@ -1,0 +1,169 @@
+.create-carriages__container {
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.button-create {
+  margin-bottom: 20px;
+}
+
+.form-create {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.list-carriages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  padding: 20px;
+}
+
+.seats-wrapper {
+  width: fit-content;
+  padding: 15px;
+  border: 1px solid #6b6969;
+  border-radius: 5px;
+}
+
+.line {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.text {
+  text-align: center;
+  margin: 0;
+}
+
+.title__columns {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.title__numbers {
+  display: flex;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.vertical-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-align: center;
+}
+
+.block__seats{
+  padding-left: 80px;
+}
+
+.carriage-row {
+  display: flex;
+  gap: 20px;
+}
+
+.with-divider{
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #d7d4d4;
+}
+
+.car-cell {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  border: none;
+  z-index: 3;
+  color: white;
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    background-color: rgb(102, 202, 189);
+    border-radius: 0.7rem;
+    z-index: -1;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 85%;
+    height: 85%;
+    transform: translate(-50%, -50%);
+    background-color: #1b3487;
+    border-radius: 0.5rem;
+    border: 2px solid white;
+    z-index: 0;
+  }
+
+  .button-item{}
+
+  .number {
+    content: "";
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    position: relative;
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 12px;
+      width: 15px;
+      height: 2%;
+      border-radius: 2px;
+      background-color: rgb(102, 202, 189);
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 12px;
+      width: 15px;
+      height: 2%;
+      border-radius: 2px;
+      background-color: rgb(102, 202, 189);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+.title-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100px;
+}

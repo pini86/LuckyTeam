@@ -1,1 +1,117 @@
-<p>carriages-cars works!</p>
+<div class="create-carriages__container">
+  <button type="button"
+    class="button-create"
+    mat-raised-button
+    color="primary"
+    (click)="onShowForm()">Create</button>
+
+  @if (showForm) {
+  <mat-card>
+    <form [formGroup]="form"
+      class="form-create">
+      <mat-form-field>
+        <input matInput
+          placeholder="Name"
+          formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+          type="number"
+          placeholder="Rows"
+          formControlName="rows" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+          type="number"
+          placeholder="Left Seats"
+          formControlName="leftSeats" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+          type="number"
+          placeholder="Right Seats"
+          formControlName="rightSeats" />
+      </mat-form-field>
+
+      <button type="button"
+        mat-raised-button
+        color="primary"
+        (click)="onSave()">Save</button>
+    </form>
+  </mat-card>
+  }
+</div>
+
+<div class="list-carriages-container">
+  @if(carriageVM()){
+  <div class="carriage-wrapper">
+    <h4>{{ carriageVM().name }}</h4>
+
+    <div class="seats-wrapper">
+
+      <div class="line">
+        <p class="text">Rows</p>
+        <div class="title__columns">
+          @for (title of [].constructor(carriageVM().columnsCount); track $index) {
+          <div class="title__numbers">{{$index + 1}}</div>
+          }
+        </div>
+      </div>
+
+      <div class="block__seats">
+        @for (carriageRow of carriageVM().rows; track carriageRow; let rowIndex = $index) {
+        <div class="carriage-row"
+          [class.with-divider]="carriageVM().dividerIndex === rowIndex">
+          @for (item of carriageRow; track item.index; let itemIndex = $index) {
+          <button type="button"
+            class="car-cell"
+            [class.button-item]="rowIndex > carriageVM().dividerIndex">
+            <span class="number">{{item.index}}</span>
+          </button>
+          }
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>
+
+<div class="list-carriages-container">
+  @for (carriage of carriagesFromResponseSignal(); track carriage) {
+
+
+  <div class="carriage-wrapper">
+    <h4>{{ carriage.name }}</h4>
+
+    <div class="seats-wrapper">
+      <div class="line">
+        <p class="text">Rows</p>
+        <div class="title__columns">
+          @for (title of [].constructor(buildCarriageToVM(carriage).columnsCount); track $index) {
+          <div class="title__numbers">{{$index + 1}}</div>
+          }
+        </div>
+      </div>
+
+      <div class="block__seats">
+        @for (carriageRow of buildCarriageToVM(carriage).rows; track carriageRow; let rowIndex = $index) {
+        <div class="carriage-row"
+          [class.with-divider]="buildCarriageToVM(carriage).dividerIndex === rowIndex">
+          @for (item of carriageRow; track item.index; let itemIndex = $index) {
+          <button type="button"
+            class="car-cell"
+            [class.button-item]="rowIndex > buildCarriageToVM(carriage).dividerIndex">
+            <span class="number">{{item.index}}</span>
+          </button>
+          }
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>
