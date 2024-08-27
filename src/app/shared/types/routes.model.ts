@@ -6,14 +6,6 @@ export class RoutesModel {
   ) {}
 }
 
-export class ModifyRoutesModel {
-  constructor(
-    public readonly id: number,
-    public readonly carriages: string[],
-    public readonly path: CityModel[],
-  ) {}
-}
-
 export class ConnectedStation {
   constructor(
     public readonly id: number,

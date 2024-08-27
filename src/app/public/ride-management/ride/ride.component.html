@@ -6,66 +6,80 @@
   <mat-card-content class="content">
 
     <mat-grid-list cols="3" rowHeight="2:1">
-      @if (_city()) {
-        @for (path of ride().path; track path; let index = $index) {
-          <div class="item__wrapper" appColoredStroke [item]="index">
-            <div class="item__path">
-              {{ path | transformRideCity: _city() }}
-            </div>
 
-            <div class="item__time-wrapper">
-              <div class="item__time">
-                @if (index <= schedule().segments.length) {
-                  @if (index === 0) {
-                    <span>Departure:
-                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformDate">
-                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformTime">
-                    </span>
-                  } @else if (index === schedule().segments.length) {
-                    <span>Arrival:
-                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformDate">
-                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformTime">
-                    </span>
-                  } @else {
-                    <span>Arrival:
-                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformDate">
-                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformTime">
-                    </span>
-                    <span>Departure:
-                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformDate">
-                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformTime">
-                    </span>
-                  }
-                }
-              </div>
-
-
-              <button type="button" mat-mini-fab color="primary" class="item__button" (click)="_handleChangeDate(index, $event)">
-                <mat-icon class="icon">edit_square</mat-icon>
-              </button>
-
-            </div>
-
-            <div class="item__price">
-              @if (index < schedule().segments.length) {
-                <div class="price__list">
-
-                  @for (price of schedule().segments[index].price | keyvalue; track price) {
-                    <div class="price__item">
-                      <span>{{ price.key }} :</span>
-                    </div>
-                    <div class="price__item">
-                      {{ price.value }}
-                    </div>
-                  }
-                </div>
-              }
-            </div>
-
-          </div>
-
+      <form (ngSubmit)="_submit()" [formGroup]="_form">
+        @for (path of _form.controls.date.controls; track path; let index = $index) {
+          <input class="input-time" disabled>
+          <input class="input-time" disabled>
         }
-      }
+
+
+        <button (click)="_handleChangeDate()" class="item__button" color="primary" mat-mini-fab type="submit">
+          <mat-icon class="icon">edit_square</mat-icon>
+        </button>
+      </form>
+
+
+      <!--      @if (_city()) {-->
+      <!--        @for (path of ride().path; track path; let index = $index) {-->
+      <!--          <form class="item__wrapper" appColoredStroke [item]="index">-->
+      <!--            <div class="item__path">-->
+      <!--              {{ path | transformRideCity: _city() }}-->
+      <!--            </div>-->
+
+      <!--            <div class="item__time-wrapper">-->
+      <!--              <div class="item__time">-->
+      <!--                @if (index <= schedule().segments.length) {-->
+      <!--                  @if (index === 0) {-->
+      <!--                    <span>Departure:-->
+      <!--                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformDate">-->
+      <!--                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformTime">-->
+      <!--                    </span>-->
+      <!--                  } @else if (index === schedule().segments.length) {-->
+      <!--                    <span>Arrival:-->
+      <!--                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformDate">-->
+      <!--                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformTime">-->
+      <!--                    </span>-->
+      <!--                  } @else {-->
+      <!--                    <span>Arrival:-->
+      <!--                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformDate">-->
+      <!--                      <input class="input-time" disabled [value]="schedule().segments[index - 1].time[1] | transformTime">-->
+      <!--                    </span>-->
+      <!--                    <span>Departure:-->
+      <!--                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformDate">-->
+      <!--                      <input class="input-time" disabled [value]="schedule().segments[index].time[0] | transformTime">-->
+      <!--                    </span>-->
+      <!--                  }-->
+      <!--                }-->
+      <!--              </div>-->
+
+
+      <!--              <button type="submit" mat-mini-fab color="primary" class="item__button" (click)="_handleChangeDate(index, $event)">-->
+      <!--                <mat-icon class="icon">edit_square</mat-icon>-->
+      <!--              </button>-->
+
+      <!--            </div>-->
+
+      <!--            <div class="item__price">-->
+      <!--              @if (index < schedule().segments.length) {-->
+      <!--                <div class="price__list">-->
+
+      <!--                  @for (price of schedule().segments[index].price | keyvalue; track price) {-->
+      <!--                    <div class="price__item">-->
+      <!--                      <span>{{ price.key }} :</span>-->
+      <!--                    </div>-->
+      <!--                    <div class="price__item">-->
+      <!--                      {{ price.value }}-->
+      <!--                    </div>-->
+      <!--                  }-->
+      <!--                </div>-->
+      <!--              }-->
+      <!--            </div>-->
+
+      <!--          </form>-->
+
+      <!--        }-->
+      <!--      }-->
 
 
     </mat-grid-list>
