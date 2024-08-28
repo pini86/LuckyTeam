@@ -2,8 +2,8 @@ export interface ICarriage {
   code?: string;
   name: string;
   rows: number;
-  leftSeats: number;
-  rightSeats: number;
+  leftSeats?: number;
+  rightSeats?: number;
 }
 
 export interface ISeatVM {
@@ -16,4 +16,6 @@ export interface ICarriageVM {
   rows: ISeatVM[][];
   dividerIndex: number;
   columnsCount: number;
+  leftSeats?: number;
+  rightSeats?: number;
 }

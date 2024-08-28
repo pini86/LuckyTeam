@@ -1,4 +1,4 @@
-<div class="create-carriages__container">
+<div class="create-carriages__container" #formContainer>
   <button type="button"
     class="button-create"
     mat-raised-button
@@ -6,7 +6,7 @@
     (click)="onShowForm()">Create</button>
 
   @if (showForm) {
-  <mat-card>
+  <mat-card class="custom-card">
     <form [formGroup]="form"
       class="form-create">
       <mat-form-field>
@@ -39,78 +39,84 @@
       <button type="button"
         mat-raised-button
         color="primary"
-        (click)="onSave()">Save</button>
+        (click)="onSave()">{{ isUpdating ? 'Update' : 'Save' }}</button>
     </form>
+
+    <div class="list-carriage-container">
+      @if(carriageVM()){
+      <div class="carriage-wrapper">
+        <h4>{{ carriageVM().name }}</h4>
+
+        <div class="seats-wrapper">
+
+          <div class="line">
+            <p class="text">Rows</p>
+            <div class="title__columns">
+              @for (title of [].constructor(carriageVM().columnsCount); track $index) {
+              <div class="title__numbers">{{$index + 1}}</div>
+              }
+            </div>
+          </div>
+
+          <div class="block__seats">
+            @for (carriageRow of carriageVM().rows; track carriageRow; let rowIndex = $index) {
+            <div class="carriage-row"
+              [class.with-divider]="carriageVM().dividerIndex === rowIndex">
+              @for (item of carriageRow; track item.index; let itemIndex = $index) {
+              <button type="button"
+                class="car-cell"
+                [class.button-item]="rowIndex > carriageVM().dividerIndex">
+                <span class="number">{{item.index}}</span>
+              </button>
+              }
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+      }
+    </div>
   </mat-card>
   }
-</div>
 
-<div class="list-carriages-container">
-  @if(carriageVM()){
-  <div class="carriage-wrapper">
-    <h4>{{ carriageVM().name }}</h4>
 
-    <div class="seats-wrapper">
+  <div class="list-carriages-container">
+    @for (carriage of carriagesFromResponseSignal(); track carriage;) {
 
-      <div class="line">
-        <p class="text">Rows</p>
-        <div class="title__columns">
-          @for (title of [].constructor(carriageVM().columnsCount); track $index) {
-          <div class="title__numbers">{{$index + 1}}</div>
+    <div class="carriage-wrapper">
+      <h4>{{ carriage.name }}</h4>
+
+      <div class="seats-wrapper">
+        <div class="line">
+          <p class="text">Rows</p>
+          <div class="title__columns">
+            @for (title of [].constructor(carriage.columnsCount); track $index) {
+            <div class="title__numbers">{{$index + 1}}</div>
+            }
+          </div>
+        </div>
+
+        <div class="block__seats">
+          @for (carriageRow of carriage.rows; track carriageRow; let rowIndex = $index) {
+          <div class="carriage-row"
+            [class.with-divider]="carriage.dividerIndex === rowIndex">
+            @for (item of carriageRow; track item.index; let itemIndex = $index) {
+            <button type="button"
+              class="car-cell"
+              [class.button-item]="rowIndex > carriage.dividerIndex">
+              <span class="number">{{item.index}}</span>
+            </button>
+            }
+          </div>
           }
         </div>
       </div>
-
-      <div class="block__seats">
-        @for (carriageRow of carriageVM().rows; track carriageRow; let rowIndex = $index) {
-        <div class="carriage-row"
-          [class.with-divider]="carriageVM().dividerIndex === rowIndex">
-          @for (item of carriageRow; track item.index; let itemIndex = $index) {
-          <button type="button"
-            class="car-cell"
-            [class.button-item]="rowIndex > carriageVM().dividerIndex">
-            <span class="number">{{item.index}}</span>
-          </button>
-          }
-        </div>
-        }
-      </div>
+      <button type="button"
+        class="button-update"
+        mat-raised-button
+        color="accent"
+        (click)="onUpdate(carriage)">Update</button>
     </div>
+    }
   </div>
-  }
-</div>
-
-<div class="list-carriages-container">
-  @for (carriage of carriagesFromResponseSignal(); track carriage;) {
-
-  <div class="carriage-wrapper">
-    <h4>{{ carriage.name }}</h4>
-
-    <div class="seats-wrapper">
-      <div class="line">
-        <p class="text">Rows</p>
-        <div class="title__columns">
-          @for (title of [].constructor(carriage.columnsCount); track $index) {
-          <div class="title__numbers">{{$index + 1}}</div>
-          }
-        </div>
-      </div>
-
-      <div class="block__seats">
-        @for (carriageRow of carriage.rows; track carriageRow; let rowIndex = $index) {
-        <div class="carriage-row"
-          [class.with-divider]="carriage.dividerIndex === rowIndex">
-          @for (item of carriageRow; track item.index; let itemIndex = $index) {
-          <button type="button"
-            class="car-cell"
-            [class.button-item]="rowIndex > carriage.dividerIndex">
-            <span class="number">{{item.index}}</span>
-          </button>
-          }
-        </div>
-        }
-      </div>
-    </div>
-  </div>
-  }
 </div>

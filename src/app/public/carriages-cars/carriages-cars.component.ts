@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -25,9 +25,11 @@ export class CarriagesCarsComponent implements OnInit {
   public showForm = false;
   public carriagesFromResponseSignal = signal<ICarriageVM[]>([]);
   public carriageVM = signal<ICarriageVM | null>(null);
-  public carriagesVM = signal<ICarriageVM[]>([]);
+  public isUpdating = false;
 
   constructor(private fb: FormBuilder, private readonly http: HttpClient, private snackBar: MatSnackBar) { }
+
+  @ViewChild('formContainer') public formContainer: ElementRef;
 
   public ngOnInit(): void {
     this.savedToken = localStorage.getItem('token');
@@ -49,6 +51,7 @@ export class CarriagesCarsComponent implements OnInit {
     this.showForm = !this.showForm;
     this.form.reset();
     this.carriageVM.set(null);
+    this.isUpdating = false;
   }
 
   public getCarriages(): void {
@@ -72,7 +75,7 @@ export class CarriagesCarsComponent implements OnInit {
   }
 
   public buildCarriageToVM = (carriage: ICarriage): ICarriageVM => {
-    const { name, rows, leftSeats, rightSeats } = carriage;
+    const { code, name, rows, leftSeats, rightSeats } = carriage;
     const rowsCount = leftSeats + rightSeats;
     const columnsCount = rows;
     const dividerIndex = rightSeats - 1;
@@ -86,20 +89,22 @@ export class CarriagesCarsComponent implements OnInit {
         })
       }),
       dividerIndex,
+      code,
       name,
-      columnsCount
+      columnsCount,
+      leftSeats,
+      rightSeats
     }
   }
 
   public onSave(): void {
     if (this.form.valid) {
       const dataFromForm: ICarriage = this.form.value;
-      console.log('dataFromForm', dataFromForm);
       const existingCarriage = this.carriagesFromResponseSignal().find(carriage =>
         carriage.name.trim().toLowerCase() === dataFromForm.name.trim().toLowerCase()
       );
 
-      if (existingCarriage) {
+      if (existingCarriage && !this.isUpdating) {
         this.snackBar.open(`A carriage with this name ${this.form.value.name} already exists!`, 'Close', {
           duration: 3000,
           horizontalPosition: 'center',
@@ -108,35 +113,55 @@ export class CarriagesCarsComponent implements OnInit {
         return;
       }
 
-      this.http
-        .post<{ code: string }>('/api/carriage', dataFromForm, {
+      if (this.isUpdating) {
+        console.log('existingCarriage.code', this.carriagesFromResponseSignal());
+        this.http.put(`/api/carriage/${existingCarriage.code}`, dataFromForm, {
           headers: {
             Authorization: `Bearer ${this.savedToken}`,
-          },
-        })
-        .subscribe({
-          next: (response) => {
-            const carriageWithCode = { ...dataFromForm, code: response.code };
-            const carriageWithVM = this.buildCarriageToVM(carriageWithCode);
-            const updatedCarriages = [{ ...carriageWithVM }, ...this.carriagesFromResponseSignal()];
-
+          }
+        }).subscribe({
+          next: () => {
+            const updatedCarriages = this.carriagesFromResponseSignal().map(carriage =>
+              carriage.name === existingCarriage.name ? this.buildCarriageToVM({ ...carriage, ...dataFromForm }) : carriage
+            );
             this.carriagesFromResponseSignal.set(updatedCarriages);
             this.onShowForm();
-            // this.carriageVM.set(null);
           },
           error: (error) => console.error(error),
         });
+      } else {
+
+
+        this.http
+          .post<{ code: string }>('/api/carriage', dataFromForm, {
+            headers: {
+              Authorization: `Bearer ${this.savedToken}`,
+            },
+          })
+          .subscribe({
+            next: (response) => {
+              const carriageWithCode = { ...dataFromForm, code: response.code };
+              const carriageWithVM = this.buildCarriageToVM(carriageWithCode);
+              const updatedCarriages = [{ ...carriageWithVM }, ...this.carriagesFromResponseSignal()];
+
+              this.carriagesFromResponseSignal.set(updatedCarriages);
+              this.onShowForm();
+            },
+            error: (error) => console.error(error),
+          });
+      }
     }
   }
 
-  public onUpdate(carriage: ICarriage): void {
+  public onUpdate(carriage: ICarriageVM): void {
+    this.isUpdating = true;
     this.showForm = true;
     this.form.setValue({
-      code: carriage.code,
       name: carriage.name,
-      rows: carriage.rows,
+      rows: carriage.columnsCount,
       leftSeats: carriage.leftSeats,
-      rightSeats: carriage.rightSeats,
+      rightSeats: carriage.rightSeats
     });
+    this.formContainer.nativeElement.scrollIntoView({ behavior: 'smooth' });
   }
 }
