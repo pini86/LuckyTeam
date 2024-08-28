@@ -37,13 +37,17 @@ export class CarriagesCarsComponent implements OnInit {
 
     this.form = this.fb.group({
       name: ['', Validators.required],
-      rows: ['', [Validators.required, Validators.min(1)]],
-      leftSeats: ['', [Validators.required, Validators.min(1)]],
-      rightSeats: ['', [Validators.required, Validators.min(1)]],
+      rows: ['', [Validators.required, Validators.min(1), Validators.max(20)]],
+      leftSeats: ['', [Validators.required, Validators.min(1), Validators.max(5)]],
+      rightSeats: ['', [Validators.required, Validators.min(1), Validators.max(5)]],
     });
 
     this.form.valueChanges.subscribe((value) => {
+      if (this.form.value.rows <= 20 && this.form.value.leftSeats <= 5 && this.form.value.rightSeats <= 5) {
       this.carriageVM.set(this.buildCarriageToVM(value));
+      } else {
+        this.carriageVM.set(null);
+      }
     })
   }
 
