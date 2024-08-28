@@ -1,5 +1,5 @@
 <div class="container">
-  @if (_routes$ | async; as ride) {
+  @if (_rides$ | async; as ride) {
     <div class="header">
       <button type="button" mat-icon-button (click)="_handleBack()">
         <mat-icon>keyboard_backspace</mat-icon>
@@ -7,10 +7,17 @@
       <span class="header__title">Route: {{ ride.id }}</span>
     </div>
 
-    <button mat-stroked-button class="button" type="button">Create Ride</button>
+    <div class="block-buttons">
+      <button mat-stroked-button class="button" type="button">Create Ride</button>
 
-    @for (schedule of ride.schedule; track schedule.rideId) {
-      <app-ride [ride]="ride" [schedule]="schedule"/>
-    }
+      @for (schedule of ride.schedule; track schedule.rideId; let index = $index) {
+        <button mat-stroked-button [attr.data-current]="index === _currentItemRide()" (click)="_handleChangeRide(index)" class="button__ride" type="button">Ride <span>{{ schedule.rideId }}</span></button>
+      }
+    </div>
+
+
+    <!--    @for (schedule of ride.schedule; track schedule.rideId; let indexSchedule = $index) {-->
+    <app-ride [ride]="ride" [schedule]="ride.schedule[_currentItemRide()]" [routeId]="ride.id" [indexSchedule]="_currentItemRide()"/>
+    <!--    }-->
   }
 </div>

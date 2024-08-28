@@ -5,6 +5,7 @@
   flex-direction: column;
   gap: 0.7rem;
   margin-top: 1.875rem;
+  margin-bottom: 1.875rem;
 }
 
 .header {
@@ -19,7 +20,23 @@
   }
 }
 
+.block-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
 .button {
   outline: none;
   width: 10rem;
+
+  &__ride {
+    display: flex;
+    font-size: 0.75rem;
+    width: 3rem;
+    text-wrap: nowrap;
+  }
+}
+
+[data-current="true"] {
+  background-color: #8dce8a;
 }

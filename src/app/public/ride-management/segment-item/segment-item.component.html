@@ -26,15 +26,12 @@
 
   @if (index() < segments().length) {
     <div class="item__price">
-
       <div class="price__list">
-
-
-        @for (price of _form.controls.price.controls | keyvalue; track price) {
+        @for (price of _form.controls.price.controls | keyvalue; track price; let i = $index) {
           <div class="price__item">
             <span>{{ price.key }} :</span>
           </div>
-          <input class="input-time" [formControl]="price.value" />
+          <input class="input-time" [formControl]="price.value" type="number"/>
         }
       </div>
 

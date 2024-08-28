@@ -7,7 +7,14 @@
     @for (path of ride().path; track path; let index = $index) {
       <div class="item__wrapper" appColoredStroke [item]="index">
         @if (index < ride().path.length) {
-          <app-segment-item [ride]="ride()" [cities]="_city()" [index]="index" [segments]="ride().schedule[schedule().rideId - 1].segments" />
+          <app-segment-item
+            [routeId]="routeId()"
+            [ride]="ride()"
+            [cities]="_city()"
+            [rideId]="schedule().rideId"
+            [index]="index"
+            [segments]="ride().schedule[indexSchedule()].segments"
+          />
         }
       </div>
     }
