@@ -6,13 +6,14 @@ export interface ICarriage {
   rightSeats: number;
 }
 
-export interface SeatVM {
+export interface ISeatVM {
   index: number;
 }
 
-export interface CarriageVM {
+export interface ICarriageVM {
+  code?: string;
   name: string;
-  rows: SeatVM[][];
+  rows: ISeatVM[][];
   dividerIndex: number;
   columnsCount: number;
 }

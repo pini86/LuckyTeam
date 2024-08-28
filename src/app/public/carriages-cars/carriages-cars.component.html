@@ -81,8 +81,7 @@
 </div>
 
 <div class="list-carriages-container">
-  @for (carriage of carriagesFromResponseSignal(); track carriage) {
-
+  @for (carriage of carriagesFromResponseSignal(); track carriage;) {
 
   <div class="carriage-wrapper">
     <h4>{{ carriage.name }}</h4>
@@ -91,20 +90,20 @@
       <div class="line">
         <p class="text">Rows</p>
         <div class="title__columns">
-          @for (title of [].constructor(buildCarriageToVM(carriage).columnsCount); track $index) {
+          @for (title of [].constructor(carriage.columnsCount); track $index) {
           <div class="title__numbers">{{$index + 1}}</div>
           }
         </div>
       </div>
 
       <div class="block__seats">
-        @for (carriageRow of buildCarriageToVM(carriage).rows; track carriageRow; let rowIndex = $index) {
+        @for (carriageRow of carriage.rows; track carriageRow; let rowIndex = $index) {
         <div class="carriage-row"
-          [class.with-divider]="buildCarriageToVM(carriage).dividerIndex === rowIndex">
+          [class.with-divider]="carriage.dividerIndex === rowIndex">
           @for (item of carriageRow; track item.index; let itemIndex = $index) {
           <button type="button"
             class="car-cell"
-            [class.button-item]="rowIndex > buildCarriageToVM(carriage).dividerIndex">
+            [class.button-item]="rowIndex > carriage.dividerIndex">
             <span class="number">{{item.index}}</span>
           </button>
           }

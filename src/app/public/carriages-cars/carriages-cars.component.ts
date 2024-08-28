@@ -8,7 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CarriageVM, ICarriage } from '../../shared/interfaces/carriages.interface';
+import { ICarriageVM, ICarriage } from '../../shared/interfaces/carriages.interface';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-carriages-cars',
@@ -22,8 +23,9 @@ export class CarriagesCarsComponent implements OnInit {
   public form: FormGroup;
   public savedToken: string;
   public showForm = false;
-  public carriagesFromResponseSignal = signal<ICarriage[]>([]);
-  public carriageVM = signal<CarriageVM | null>(null);
+  public carriagesFromResponseSignal = signal<ICarriageVM[]>([]);
+  public carriageVM = signal<ICarriageVM | null>(null);
+  public carriagesVM = signal<ICarriageVM[]>([]);
 
   constructor(private fb: FormBuilder, private readonly http: HttpClient, private snackBar: MatSnackBar) { }
 
@@ -39,7 +41,7 @@ export class CarriagesCarsComponent implements OnInit {
     });
 
     this.form.valueChanges.subscribe((value) => {
-      this.carriageVM.set(this.buildCarriageToVM(value))
+      this.carriageVM.set(this.buildCarriageToVM(value));
     })
   }
 
@@ -47,7 +49,6 @@ export class CarriagesCarsComponent implements OnInit {
     this.showForm = !this.showForm;
     this.form.reset();
     this.carriageVM.set(null);
-    console.log('this.carriageVM', this.carriageVM());
   }
 
   public getCarriages(): void {
@@ -57,18 +58,21 @@ export class CarriagesCarsComponent implements OnInit {
           Authorization: `Bearer ${this.savedToken}`,
         },
       })
+      .pipe(
+        map((data) => data.map((item) =>
+          this.buildCarriageToVM(item))
+        )
+      )
       .subscribe({
         next: (data) => {
           this.carriagesFromResponseSignal.set(data);
-          console.log('getCarriages()', this.carriagesFromResponseSignal());
-          console.log('this.carriagesFromResponseSignal', this.carriagesFromResponseSignal());
         },
         error: (error) => console.error(error),
       });
   }
 
-  public buildCarriageToVM = (carriage: ICarriage): CarriageVM => {
-    const {name, rows, leftSeats, rightSeats} = carriage;
+  public buildCarriageToVM = (carriage: ICarriage): ICarriageVM => {
+    const { name, rows, leftSeats, rightSeats } = carriage;
     const rowsCount = leftSeats + rightSeats;
     const columnsCount = rows;
     const dividerIndex = rightSeats - 1;
@@ -112,7 +116,10 @@ export class CarriagesCarsComponent implements OnInit {
         })
         .subscribe({
           next: (response) => {
-            const updatedCarriages = [{ ...dataFromForm, code: response.code }, ...this.carriagesFromResponseSignal()];
+            const carriageWithCode = { ...dataFromForm, code: response.code };
+            const carriageWithVM = this.buildCarriageToVM(carriageWithCode);
+            const updatedCarriages = [{ ...carriageWithVM }, ...this.carriagesFromResponseSignal()];
+
             this.carriagesFromResponseSignal.set(updatedCarriages);
             this.onShowForm();
             // this.carriageVM.set(null);
