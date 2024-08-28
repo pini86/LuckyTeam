@@ -1,0 +1,101 @@
+@import "vars";
+
+.item {
+
+  &__wrapper {
+    display: grid;
+    grid-template-columns: .6fr 1.2fr 1.2fr;
+  }
+
+  &__path {
+    padding: 0.6rem;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  &__time-wrapper {
+    padding: 0.6rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__time {
+    display: flex;
+    flex-direction: column;
+  }
+
+
+  &__price {
+    padding: 0.6rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.7rem;
+
+  }
+
+  &__button {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+}
+
+[data-hiden="true"] {
+  display: none;
+}
+
+.input {
+  &__date {
+    width: 6rem;
+    border: none;
+    outline: 1px solid #3f51b5;
+
+    &:disabled {
+      background-color: initial;
+      outline: none;
+    }
+
+  }
+
+  &__time {
+    width: 5rem;
+    border: none;
+    outline: 1px solid #3f51b5;
+
+    &:disabled {
+      background-color: initial;
+      outline: none;
+    }
+
+  }
+}
+
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+}
+
+
+.price {
+
+  &__list {
+    display: grid;
+    grid-template-columns:1fr 1fr;
+
+  }
+
+}
+
+.input-time {
+  width: 4.7rem;
+  background-color: initial;
+  outline: 1px solid #3f51b5;
+  border: none;
+  color: #1f1f1f;
+
+  &:disabled {
+    outline: none;
+  }
+}
