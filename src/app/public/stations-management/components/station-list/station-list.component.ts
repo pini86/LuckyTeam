@@ -36,9 +36,9 @@ export class StationListComponent implements OnInit {
     // Загружаем модифицированные маршруты при инициализации компонента
     this.modifiedRouteService.loadModifiedRoutes();
 
-    // Проверяем обновление сигнала напрямую
-    setTimeout(() => {
-      this.modifiedRoutes = this.modifiedRouteService.getModifiedRoutesSignal()();
+    // Подписка на обновления модифицированных маршрутов
+    this.modifiedRouteService.getModifiedRoutes().subscribe((routes) => {
+      this.modifiedRoutes = routes;
       console.log('Modified Routes:', this.modifiedRoutes);
 
       if (this.modifiedRoutes.length > 0) {
@@ -47,7 +47,7 @@ export class StationListComponent implements OnInit {
       }
 
       this.cd.detectChanges();
-    }, 1000); // Задержка для ожидания загрузки данных
+    });
 
     // Загрузка списка станций при инициализации компонента
     this.stationService.getCities();

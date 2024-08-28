@@ -1,4 +1,5 @@
-import { inject, Injectable, Signal, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { RouteService } from '../../../shared/services/route.service';
 import { CityModel, ModifyRoutesModel } from '../../../shared/types/routes.model';
 import { StationService } from './station.service';
@@ -9,7 +10,7 @@ import { StationService } from './station.service';
 export class ModifiedRouteService {
   private readonly _stationService = inject(StationService);
   private readonly _routeService = inject(RouteService);
-  private readonly _modifiedRoutesSignal = signal<ModifyRoutesModel[]>([]);
+  private readonly _modifiedRoutesSubject = new BehaviorSubject<ModifyRoutesModel[]>([]); // Используем BehaviorSubject с начальным значением
 
   public loadModifiedRoutes(): void {
     console.log('Method loadModifiedRoutes called');
@@ -19,7 +20,7 @@ export class ModifiedRouteService {
 
     // Загружаем маршруты и станции
     this._routeService.getRoutesObserver().subscribe((routes) => {
-      console.log('Loaded routes:', routes);
+      // console.log('Loaded routes:', routes);
       this._stationService.getCitiesObserver().subscribe((stations) => {
         console.log('Loaded stations:', stations);
         const modifiedRoutes: ModifyRoutesModel[] = routes.map((route) => {
@@ -33,13 +34,13 @@ export class ModifiedRouteService {
         });
 
         console.log('Modified Routes inside service:', modifiedRoutes); // Добавлено для отладки
-        // Обновляем сигнал
-        this._modifiedRoutesSignal.set(modifiedRoutes);
+        // Обновляем BehaviorSubject
+        this._modifiedRoutesSubject.next(modifiedRoutes);
       });
     });
   }
 
-  public getModifiedRoutesSignal(): Signal<ModifyRoutesModel[]> {
-    return this._modifiedRoutesSignal;
+  public getModifiedRoutes(): Observable<ModifyRoutesModel[]> {
+    return this._modifiedRoutesSubject.asObservable();
   }
 }

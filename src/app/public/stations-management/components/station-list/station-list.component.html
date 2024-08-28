@@ -9,11 +9,12 @@
       </mat-card-header>
       <mat-card-content>
         <p><strong>Connected to:</strong></p>
-        <mat-list>
+        <mat-list class="inline-list">
           <!-- Перебор только тех маршрутов, которые связаны с текущей станцией -->
           <ng-container *ngFor="let route of getRoutesForStation(station); trackBy: trackByModifiedRouteId">
             <!-- Перебор станций в маршруте -->
-            <mat-list-item *ngFor="let city of route.path; trackBy: trackByStationId">
+            <mat-list-item class="inline-lists"
+                           *ngFor="let city of route.path; trackBy: trackByStationId">
               <span>{{ city.city }}</span>
             </mat-list-item>
           </ng-container>

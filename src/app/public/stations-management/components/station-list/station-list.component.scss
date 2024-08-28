@@ -46,3 +46,16 @@
   white-space: nowrap;
   border: 0;
 }
+
+.inline-list {
+  display: flex;
+  flex-direction: row; /* Располагаем элементы в строку */
+  flex-wrap: wrap; /* Чтобы элементы переносились, если не помещаются */
+}
+
+.inline-list .inline-lists {
+  display: inline-flex; /* Используем inline-flex для корректного отображения */
+  margin-right: 16px; /* Добавляем отступ между элементами */
+  padding: 0; /* Убираем лишние отступы */
+  width: auto; /* Отключаем фиксированную ширину */
+}
