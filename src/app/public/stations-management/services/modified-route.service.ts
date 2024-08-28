@@ -13,16 +13,16 @@ export class ModifiedRouteService {
   private readonly _modifiedRoutesSubject = new BehaviorSubject<ModifyRoutesModel[]>([]); // Используем BehaviorSubject с начальным значением
 
   public loadModifiedRoutes(): void {
-    console.log('Method loadModifiedRoutes called');
+    //console.log('Method loadModifiedRoutes called');
 
     // Запрашиваем маршруты
     this._routeService.getRoutes(); // Добавляем вызов метода для загрузки маршрутов
 
     // Загружаем маршруты и станции
     this._routeService.getRoutesObserver().subscribe((routes) => {
-      // console.log('Loaded routes:', routes);
+      //console.log('Loaded routes:', routes);
       this._stationService.getCitiesObserver().subscribe((stations) => {
-        console.log('Loaded stations:', stations);
+        //console.log('Loaded stations:', stations);
         const modifiedRoutes: ModifyRoutesModel[] = routes.map((route) => {
           const modifiedPath = route.path
             .map((stationId) => {
@@ -33,8 +33,7 @@ export class ModifiedRouteService {
           return new ModifyRoutesModel(route.id, route.carriages, modifiedPath);
         });
 
-        console.log('Modified Routes inside service:', modifiedRoutes); // Добавлено для отладки
-        // Обновляем BehaviorSubject
+        //console.log('Modified Routes inside service:', modifiedRoutes);
         this._modifiedRoutesSubject.next(modifiedRoutes);
       });
     });

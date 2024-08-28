@@ -29,7 +29,7 @@ export class StationListComponent implements OnInit {
   public ngOnInit(): void {
     // Подписка на обновления списка станций
     this.stationService.getCitiesObserver().subscribe((cities) => {
-      this.stations = cities.slice(0, 5); // Присваиваем первые 5 элементов напрямую
+      this.stations = cities.slice(0, 1); // Присваиваем первые 5 элементов напрямую
       this.cd.detectChanges(); // Принудительно запускаем Change Detection
     });
 
@@ -39,13 +39,7 @@ export class StationListComponent implements OnInit {
     // Подписка на обновления модифицированных маршрутов
     this.modifiedRouteService.getModifiedRoutes().subscribe((routes) => {
       this.modifiedRoutes = routes;
-      console.log('Modified Routes:', this.modifiedRoutes);
-
-      if (this.modifiedRoutes.length > 0) {
-        const cityNames = this.modifiedRoutes.flatMap((route) => route.path.map((city) => city.city));
-        console.log('City Names:', cityNames);
-      }
-
+      //console.log('Modified Routes:', this.modifiedRoutes);
       this.cd.detectChanges();
     });
 
@@ -53,7 +47,7 @@ export class StationListComponent implements OnInit {
     this.stationService.getCities();
   }
 
-  public trackByStationId(index: number, station: CityModel): number {
+  public trackByListStationId(index: number, station: CityModel): number {
     return station.id; // Уникальный идентификатор станции
   }
 
@@ -68,6 +62,40 @@ export class StationListComponent implements OnInit {
   }
 
   public getRoutesForStation(station: CityModel): ModifyRoutesModel[] {
-    return this.modifiedRoutes.filter((route) => route.path.some((city) => city.id === station.id));
+    const routesForStation = this.modifiedRoutes
+      .filter((route) => route.path.some((city) => city.id === station.id))
+      .map((route) => {
+        const filteredRoute = {
+          ...route,
+          path: route.path.filter((city) => city.id !== station.id),
+        };
+
+        // Логируем станции, связанные с текущей станцией
+        console.log(
+          `Routes for station ${station.city}:`,
+          filteredRoute.path.map((city) => city.city),
+        );
+
+        return filteredRoute;
+      });
+
+    // Логируем маршруты, возвращенные для текущей станции
+    console.log(`Filtered routes for station ${station.city}:`, routesForStation);
+
+    return routesForStation;
+  }
+
+  public getConnectedStationsWithNames(currentStation: CityModel): CityModel[] {
+    return currentStation.connectedTo
+      .map((connected) => {
+        for (const route of this.modifiedRoutes) {
+          const foundStation = route.path.find((city) => city.id === connected.id);
+          if (foundStation) {
+            return foundStation; // Возвращаем найденную станцию
+          }
+        }
+        return null; // Возвращаем null, если станция не найдена
+      })
+      .filter((station): station is CityModel => station !== null);
   }
 }

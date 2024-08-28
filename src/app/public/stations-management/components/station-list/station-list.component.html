@@ -1,6 +1,6 @@
 <section class="stations-list">
   <h2 class="list-title visually-hidden">List of Stations</h2>
-  <div *ngFor="let station of stations; trackBy: trackByStationId"
+  <div *ngFor="let station of stations; trackBy: trackByListStationId"
        class="station-card">
     <mat-card>
       <mat-card-header>
@@ -10,14 +10,10 @@
       <mat-card-content>
         <p><strong>Connected to:</strong></p>
         <mat-list class="inline-list">
-          <!-- Перебор только тех маршрутов, которые связаны с текущей станцией -->
-          <ng-container *ngFor="let route of getRoutesForStation(station); trackBy: trackByModifiedRouteId">
-            <!-- Перебор станций в маршруте -->
-            <mat-list-item class="inline-lists"
-                           *ngFor="let city of route.path; trackBy: trackByStationId">
-              <span>{{ city.city }}</span>
-            </mat-list-item>
-          </ng-container>
+          <mat-list-item class="inline-lists"
+                         *ngFor="let connectedStation of getConnectedStationsWithNames(station); trackBy: trackByListStationId">
+            {{ connectedStation.city }}
+          </mat-list-item>
         </mat-list>
       </mat-card-content>
       <mat-card-actions>
