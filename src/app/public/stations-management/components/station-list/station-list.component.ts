@@ -35,8 +35,8 @@ export class StationListComponent implements OnInit {
   public ngOnInit(): void {
     // Подписка на обновления списка станций
     this.stationService.getCitiesObserver().subscribe((cities) => {
-      //this.stations = cities.slice(0, 1); // Присваиваем первые 5 элементов напрямую
-      this.stations = cities; // Присваиваем первые 5 элементов напрямую
+      //this.stations = cities.slice(0, 5); // Присваиваем первые 5 элементов напрямую
+      this.stations = cities;
       this.cd.detectChanges(); // Принудительно запускаем Change Detection
       this.paginateStations();
     });

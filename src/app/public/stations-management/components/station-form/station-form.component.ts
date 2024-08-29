@@ -7,6 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { StationValidators } from 'src/app/shared/utils/station-validators';
+import { CityModel } from '../../../../shared/types/routes.model';
+import { StationService } from '../../services/station.service';
 import { ConnectedStationsComponent } from '../connected-stations/connected-stations.component';
 
 @Component({
@@ -27,14 +29,12 @@ import { ConnectedStationsComponent } from '../connected-stations/connected-stat
 })
 export class StationFormComponent implements OnInit {
   public stationForm: FormGroup;
+  public stationsList: CityModel[] = []; // Список существующих станций
 
-  // Доступные станции для выбора в списке подключений
-  public availableStations = [
-    { id: 1, distance: 50 },
-    { id: 2, distance: 100 },
-  ];
-
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private stationService: StationService,
+  ) {}
 
   public ngOnInit(): void {
     this.stationForm = this.fb.group({
@@ -43,6 +43,14 @@ export class StationFormComponent implements OnInit {
       longitude: ['', [Validators.required, StationValidators.longitudeValidator]],
       connectedStations: this.fb.array<FormControl>([]), // Массив подключённых станций
     });
+
+    // Подписка на обновления списка станций
+    this.stationService.getCitiesObserver().subscribe((stations) => {
+      this.stationsList = stations;
+    });
+
+    // Инициируем загрузку списка станций
+    this.stationService.getCities();
 
     // Слушаем изменения широты и долготы для синхронизации с картой
     this.stationForm.get('latitude')?.valueChanges.subscribe((value) => {
@@ -67,11 +75,19 @@ export class StationFormComponent implements OnInit {
   }
 
   public addConnectedStation(): void {
-    this.connectedStations.push(this.fb.control('', Validators.required)); // Добавляем валидатор для нового элемента
+    this.connectedStations.push(this.fb.control('', Validators.required));
+  }
+
+  public removeConnectedStation(index: number): void {
+    this.connectedStations.removeAt(index);
   }
 
   public trackByStationId(index: number, control: FormControl): number {
     return control.value;
+  }
+
+  public trackByIndex(index: number): number {
+    return index;
   }
 
   public onSubmit(): void {
