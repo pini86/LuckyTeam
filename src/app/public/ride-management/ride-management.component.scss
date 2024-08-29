@@ -23,17 +23,18 @@
 .block-buttons {
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
 .button {
   outline: none;
-  width: 10rem;
 
   &__ride {
     display: flex;
     font-size: 0.75rem;
-    width: 3rem;
+    width: fit-content;
     text-wrap: nowrap;
+    min-width: auto;
   }
 }
 

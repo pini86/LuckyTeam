@@ -8,16 +8,22 @@
     </div>
 
     <div class="block-buttons">
-      <button mat-stroked-button class="button" type="button">Create Ride</button>
+      <button (click)="_handleCreateRide()" mat-stroked-button class="button" type="button">Create Ride</button>
+
+      <span>Ride: </span>
 
       @for (schedule of ride.schedule; track schedule.rideId; let index = $index) {
-        <button mat-stroked-button [attr.data-current]="index === _currentItemRide()" (click)="_handleChangeRide(index)" class="button__ride" type="button">Ride <span>{{ schedule.rideId }}</span></button>
+        <button
+          mat-stroked-button
+          [attr.data-current]="schedule.rideId === _currentRideId()"
+          (click)="_handleChangeRide(schedule.rideId)"
+          class="button__ride"
+          type="button">
+          <span>{{ schedule.rideId }}</span>
+        </button>
       }
     </div>
 
-
-    <!--    @for (schedule of ride.schedule; track schedule.rideId; let indexSchedule = $index) {-->
-      <!--    <app-ride [ride]="ride" [schedule]="ride.schedule[_currentItemRide()]" [routeId]="ride.id" [indexSchedule]="_currentItemRide()"/>-->
-      <!--    }-->
+    <app-ride/>
   }
 </div>

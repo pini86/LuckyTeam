@@ -1,7 +1,7 @@
 <form class="item__wrapper">
   <div class="item__path">
     @if (cities()) {
-      <!--      {{ ride().path[index()] | transformRideCity: cities() }}-->
+      {{ _currentRide().path[index()] | transformRideCity: cities() }}
     }
   </div>
 
@@ -27,11 +27,11 @@
   @if (index() < _segments().length) {
     <div class="item__price">
       <div class="price__list">
-        @for (price of _form.controls.price.controls | keyvalue; track price; let i = $index) {
+        @for (price of _form.controls.price.controls | keyvalue; track price) {
           <div class="price__item">
             <span>{{ price.key }} :</span>
           </div>
-          <input class="input-time" [formControl]="price.value" type="number" />
+          <input class="input-time" [formControl]="price.value" type="number"/>
         }
       </div>
 

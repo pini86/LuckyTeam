@@ -1,5 +1,5 @@
 import { DatePipe, KeyValuePipe } from '@angular/common';
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, Injector, OnInit, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { MatCard, MatCardActions, MatCardContent, MatCardFooter, MatCardHeader, MatCardTitle } from '@angular/material/card';
@@ -12,6 +12,7 @@ import { ColoredBorderDirective } from '../../../shared/directives/colored-list-
 import { TransformDatePipe } from '../../../shared/pipes/date-ride.pipe';
 import { TransformTimePipe } from '../../../shared/pipes/time-ride.pipe';
 import { TransformRideCityPipe } from '../../../shared/pipes/transform-ride-city.pipe';
+import { RideService } from '../../../shared/services/ride.service';
 import { RouteService } from '../../../shared/services/route.service';
 import { CitiesItems } from '../../../shared/types/routes.model';
 import { SegmentItemComponent } from '../segment-item/segment-item.component';
@@ -48,24 +49,37 @@ import { SegmentItemComponent } from '../segment-item/segment-item.component';
     TransformDatePipe,
     TransformTimePipe,
     ReactiveFormsModule,
-    SegmentItemComponent
+    SegmentItemComponent,
   ],
   templateUrl: './ride.component.html',
-  styleUrl: './ride.component.scss'
+  styleUrl: './ride.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RideComponent implements OnInit {
-  // public readonly ride = input.required<RideModel>();
-  // public readonly schedule = input.required<Schedule>();
-  public readonly indexSchedule = input.required<number>();
-  public readonly routeId = input.required<number>();
   protected readonly _city = signal<CitiesItems>(null);
-
   private readonly _routeService: RouteService = inject(RouteService);
   private readonly _cities$ = this._routeService.getCitiesObserver();
+
+  private readonly _rideService: RideService = inject(RideService);
+  protected readonly _currentRideId = this._rideService.currentRideId;
+  protected readonly _currentRide = this._rideService.currentRide;
+
+  private readonly _injector = inject(Injector);
 
   public ngOnInit(): void {
     this._cities$.subscribe((city) => {
       this._city.set(city);
     });
+
+    effect(
+      () => {
+        console.log('[71] 🚀:', this._currentRideId(), this._currentRide());
+      },
+      { injector: this._injector },
+    );
+  }
+
+  protected _handleDeleteRide(): void {
+    this._rideService.deleteRide();
   }
 }
