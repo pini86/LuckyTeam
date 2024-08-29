@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CityModel, ConnectedStation, ModifyRoutesModel } from '../../../../shared/types/routes.model';
 import { ModifiedRouteService } from '../../services/modified-route.service';
 import { StationService } from '../../services/station.service';
@@ -12,13 +13,18 @@ import { ConnectedStationsComponent } from '../connected-stations/connected-stat
 @Component({
   selector: 'app-station-list',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, ConnectedStationsComponent, MatListModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, ConnectedStationsComponent, MatListModule, MatPaginatorModule],
   templateUrl: './station-list.component.html',
   styleUrl: './station-list.component.scss',
 })
 export class StationListComponent implements OnInit {
   public stations: CityModel[] = []; // Массив для хранения станций
   public modifiedRoutes: ModifyRoutesModel[] = []; // Массив для хранения модифицированных маршрутов
+
+  public paginationAllStations: CityModel[] = []; // Весь список станций, инициализируется вашими данными
+  public paginatedStations: CityModel[] = []; // Станции на текущей странице
+  public pageSize = 10; // Количество станций на одной странице по умолчанию
+  public currentPage = 0;
 
   constructor(
     private stationService: StationService,
@@ -29,8 +35,10 @@ export class StationListComponent implements OnInit {
   public ngOnInit(): void {
     // Подписка на обновления списка станций
     this.stationService.getCitiesObserver().subscribe((cities) => {
-      this.stations = cities.slice(0, 1); // Присваиваем первые 5 элементов напрямую
+      //this.stations = cities.slice(0, 1); // Присваиваем первые 5 элементов напрямую
+      this.stations = cities; // Присваиваем первые 5 элементов напрямую
       this.cd.detectChanges(); // Принудительно запускаем Change Detection
+      this.paginateStations();
     });
 
     // Загружаем модифицированные маршруты при инициализации компонента
@@ -45,6 +53,8 @@ export class StationListComponent implements OnInit {
 
     // Загрузка списка станций при инициализации компонента
     this.stationService.getCities();
+
+    this.paginateStations();
   }
 
   public trackByListStationId(index: number, station: CityModel): number {
@@ -97,5 +107,27 @@ export class StationListComponent implements OnInit {
         return null; // Возвращаем null, если станция не найдена
       })
       .filter((station): station is CityModel => station !== null);
+  }
+
+  public paginateStations(): void {
+    const startIndex = this.currentPage * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+
+    // Проверка на выход за пределы массива
+    if (startIndex > this.stations.length) {
+      this.currentPage = 0;
+    }
+
+    this.paginatedStations = this.stations.slice(startIndex, endIndex);
+  }
+
+  public onPageChange(event: PageEvent): void {
+    // Обновляем размер страницы
+    this.pageSize = event.pageSize;
+
+    // Проверяем, чтобы текущая страница не выходила за границы
+    this.currentPage = event.pageIndex;
+
+    this.paginateStations();
   }
 }

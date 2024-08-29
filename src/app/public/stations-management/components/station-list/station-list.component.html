@@ -1,6 +1,6 @@
 <section class="stations-list">
   <h2 class="list-title visually-hidden">List of Stations</h2>
-  <div *ngFor="let station of stations; trackBy: trackByListStationId"
+  <div *ngFor="let station of paginatedStations; trackBy: trackByListStationId"
        class="station-card">
     <mat-card>
       <mat-card-header>
@@ -25,4 +25,10 @@
       </mat-card-actions>
     </mat-card>
   </div>
+  <!-- Пагинация -->
+  <mat-paginator [length]="stations.length"
+                 [pageSize]="pageSize"
+                 [pageSizeOptions]="[5, 10, 20]"
+                 (page)="onPageChange($event)">
+  </mat-paginator>
 </section>
