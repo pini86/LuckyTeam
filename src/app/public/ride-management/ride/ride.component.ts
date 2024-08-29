@@ -13,7 +13,7 @@ import { TransformDatePipe } from '../../../shared/pipes/date-ride.pipe';
 import { TransformTimePipe } from '../../../shared/pipes/time-ride.pipe';
 import { TransformRideCityPipe } from '../../../shared/pipes/transform-ride-city.pipe';
 import { RouteService } from '../../../shared/services/route.service';
-import { CitiesItems, RideModel, Schedule } from '../../../shared/types/routes.model';
+import { CitiesItems } from '../../../shared/types/routes.model';
 import { SegmentItemComponent } from '../segment-item/segment-item.component';
 
 @Component({
@@ -48,14 +48,14 @@ import { SegmentItemComponent } from '../segment-item/segment-item.component';
     TransformDatePipe,
     TransformTimePipe,
     ReactiveFormsModule,
-    SegmentItemComponent,
+    SegmentItemComponent
   ],
   templateUrl: './ride.component.html',
-  styleUrl: './ride.component.scss',
+  styleUrl: './ride.component.scss'
 })
 export class RideComponent implements OnInit {
-  public readonly ride = input.required<RideModel>();
-  public readonly schedule = input.required<Schedule>();
+  // public readonly ride = input.required<RideModel>();
+  // public readonly schedule = input.required<Schedule>();
   public readonly indexSchedule = input.required<number>();
   public readonly routeId = input.required<number>();
   protected readonly _city = signal<CitiesItems>(null);

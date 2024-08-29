@@ -14,33 +14,36 @@ export class RideService {
     this._http
       .get<RideModel>(`/api/route/${id}`, {
         headers: {
-          Authorization: `Bearer ${this._auth.getToken()}`,
-        },
+          Authorization: `Bearer ${this._auth.getToken()}`
+        }
       })
       .subscribe({
         next: (data) => {
           const newRoute = new RideModel(data.id, data.carriages, data.path, data.schedule);
           this._rite.next(newRoute);
         },
-        error: (error) => console.log(error),
+        error: (error) => console.log(error)
       });
   }
 
-  public updateRide(routeId: string, rideId: string, segments: Segments[]): void {
+  public updateRide(routeId: string, rideId: string, segments: Segments[], ride: RideModel): void {
     this._http
       .put(
         `/api/route/${routeId}/ride/${rideId}`,
         {
-          segments,
+          segments
         },
         {
           headers: {
-            Authorization: `Bearer ${this._auth.getToken()}`,
-          },
-        },
+            Authorization: `Bearer ${this._auth.getToken()}`
+          }
+        }
       )
       .subscribe({
-        error: (error) => console.log(error),
+        next: () => {
+          this.updateSubjectRide(ride);
+        },
+        error: (error) => console.log(error)
       });
   }
 

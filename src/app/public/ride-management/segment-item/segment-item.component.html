@@ -1,7 +1,7 @@
 <form class="item__wrapper">
   <div class="item__path">
     @if (cities()) {
-      {{ ride().path[index()] | transformRideCity: cities() }}
+      <!--      {{ ride().path[index()] | transformRideCity: cities() }}-->
     }
   </div>
 
@@ -11,7 +11,7 @@
         <input [formControl]="_form.controls.date.controls.arrivalDate" class="input__date" type="date">
         <input [formControl]="_form.controls.date.controls.arrivalTime" class="input__time" type="time">
       </span>
-      <span [attr.data-hiden]="index() >= segments().length">Departure:
+      <span [attr.data-hiden]="index() >= _segments().length">Departure:
         <input [formControl]="_form.controls.date.controls.departureDate" class="input__date" type="date">
         <input [formControl]="_form.controls.date.controls.departureTime" class="input__time" type="time">
       </span>
@@ -24,14 +24,14 @@
 
   </div>
 
-  @if (index() < segments().length) {
+  @if (index() < _segments().length) {
     <div class="item__price">
       <div class="price__list">
         @for (price of _form.controls.price.controls | keyvalue; track price; let i = $index) {
           <div class="price__item">
             <span>{{ price.key }} :</span>
           </div>
-          <input class="input-time" [formControl]="price.value" type="number"/>
+          <input class="input-time" [formControl]="price.value" type="number" />
         }
       </div>
 
