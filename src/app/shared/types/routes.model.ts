@@ -32,4 +32,5 @@ export interface StoreRoutes {
   currentRouteId: number;
   currentRideId: number;
   currentRide: RideModel;
+  cities: CitiesItems;
 }

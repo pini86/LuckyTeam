@@ -3,13 +3,14 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { CitiesItems, CityModel, ConnectedStation, RoutesItems, RoutesModel } from '../types/routes.model';
 import { AuthService } from './auth.service';
+import { StateService } from './state.service';
 
 @Injectable({ providedIn: 'root' })
 export class RouteService {
   private readonly _http = inject(HttpClient);
   private readonly _auth = inject(AuthService);
+  private readonly _stateService = inject(StateService);
   private readonly _routes = new Subject<RoutesItems>();
-  private readonly _cities = new Subject<CitiesItems>();
 
   public getRoutes(): void {
     this._http
@@ -49,7 +50,7 @@ export class RouteService {
             const newCity = new CityModel(city.id, city.city, city.latitude, city.longitude, connectedStations);
             arrCities.push(newCity);
           });
-          this._cities.next(arrCities);
+          this._stateService.addCities(arrCities);
         },
         error: (error) => console.log(error),
       });
@@ -57,9 +58,5 @@ export class RouteService {
 
   public getRoutesObserver(): Observable<RoutesItems> {
     return this._routes.asObservable();
-  }
-
-  public getCitiesObserver(): Observable<CitiesItems> {
-    return this._cities.asObservable();
   }
 }

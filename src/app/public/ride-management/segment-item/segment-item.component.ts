@@ -5,8 +5,8 @@ import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TransformRideCityPipe } from '../../../shared/pipes/transform-ride-city.pipe';
 import { RideService } from '../../../shared/services/ride.service';
+import { StateService } from '../../../shared/services/state.service';
 import { RideModel, Segments } from '../../../shared/types/ride.model';
-import { CitiesItems } from '../../../shared/types/routes.model';
 import { PriceForm } from './form.type';
 
 @Component({
@@ -19,7 +19,6 @@ import { PriceForm } from './form.type';
 })
 export class SegmentItemComponent implements OnInit {
   public readonly index = input.required<number>();
-  public readonly cities = input.required<CitiesItems>();
   public readonly isEditableDateField = signal<boolean>(false);
   public readonly isEditablePriceField = signal<boolean>(false);
   protected readonly _form = new FormGroup({
@@ -31,31 +30,35 @@ export class SegmentItemComponent implements OnInit {
     }),
     price: new FormGroup<PriceForm>({}),
   });
+  private readonly _stateService = inject(StateService);
+  protected readonly _currentRide = this._stateService.currentRide;
+  protected readonly _currentRideId = this._stateService.currentRideId;
   protected readonly _segments = computed<Segments[]>(() => {
     return this._currentRide().schedule.find((schedule) => schedule.rideId === this._currentRideId()).segments;
   });
+  protected readonly _cities = this._stateService.cities;
   private readonly _rideService = inject(RideService);
-  protected readonly _currentRide = this._rideService.currentRide;
-  protected readonly _currentRideId = this._rideService.currentRideId;
   private readonly _injector = inject(Injector);
 
   public ngOnInit(): void {
     effect(
       () => {
         const dateFormGroup = this._form.controls.date.controls;
-
-        // console.log('[48] 🚀:', this._segments());
         if (this.index() === 0) {
-          dateFormGroup.departureDate.setValue(this._transformDate(this.index(), 0).date);
-          dateFormGroup.departureTime.setValue(this._transformDate(this.index(), 0).time);
+          const firstDate = this._transformDate(this.index(), 0);
+          dateFormGroup.departureDate.setValue(firstDate.date);
+          dateFormGroup.departureTime.setValue(firstDate.time);
         } else if (this.index() === this._segments().length) {
-          dateFormGroup.arrivalDate.setValue(this._transformDate(this.index() - 1, 1).date);
-          dateFormGroup.arrivalTime.setValue(this._transformDate(this.index() - 1, 1).time);
-        } else {
-          dateFormGroup.departureDate.setValue(this._transformDate(this.index(), 0).date);
-          dateFormGroup.departureTime.setValue(this._transformDate(this.index(), 0).time);
-          dateFormGroup.arrivalDate.setValue(this._transformDate(this.index() - 1, 1).date);
-          dateFormGroup.arrivalTime.setValue(this._transformDate(this.index() - 1, 1).time);
+          const secondDate = this._transformDate(this.index() - 1, 1);
+          dateFormGroup.arrivalDate.setValue(secondDate.date);
+          dateFormGroup.arrivalTime.setValue(secondDate.time);
+        } else if (this.index() < this._segments().length) {
+          const secondDate = this._transformDate(this.index() - 1, 1);
+          const firstDate = this._transformDate(this.index(), 0);
+          dateFormGroup.departureDate.setValue(firstDate.date);
+          dateFormGroup.departureTime.setValue(firstDate.time);
+          dateFormGroup.arrivalDate.setValue(secondDate.date);
+          dateFormGroup.arrivalTime.setValue(secondDate.time);
         }
 
         if (this.index() < this._segments().length) {
@@ -133,14 +136,12 @@ export class SegmentItemComponent implements OnInit {
       }),
     };
 
-    this._rideService.setCurrentRide(newRide);
-
+    this._stateService.setCurrentRide(newRide);
     this._rideService.updateRide(this._segments());
   }
 
   private _transformDate(indexSegment: number, indexTime: 0 | 1): { date: string; time: string } {
     const date = new Date(this._segments()[indexSegment].time[indexTime]);
-
     const year = date.getUTCFullYear();
     const month = String(date.getUTCMonth() + 1).padStart(2, '0');
     const day = String(date.getUTCDate()).padStart(2, '0');

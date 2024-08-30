@@ -12,8 +12,9 @@ import { Router } from '@angular/router';
 import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { TransformRideCityPipe } from '../../../shared/pipes/transform-ride-city.pipe';
 import { RouteService } from '../../../shared/services/route.service';
-import { CityModel, RoutesModel } from '../../../shared/types/routes.model';
-import { DialogAddItemComponent } from '../add-item/dialog-add-item/dialog-add-item.component';
+import { StateService } from '../../../shared/services/state.service';
+import { RoutesModel } from '../../../shared/types/routes.model';
+import { ModalEditItemComponent } from '../modal-edit-item/modal-edit-item.component';
 
 @Component({
   selector: 'app-route-item',
@@ -36,20 +37,16 @@ import { DialogAddItemComponent } from '../add-item/dialog-add-item/dialog-add-i
 })
 export class RouteItemComponent implements OnInit, OnDestroy {
   protected readonly _routes = signal<RoutesModel[]>([]);
-  protected readonly _cities = signal<CityModel[]>([]);
-
   private readonly _dialog = inject(MatDialog);
   private readonly _routeService: RouteService = inject(RouteService);
   protected readonly _routes$: Observable<RoutesModel[]> = this._routeService.getRoutesObserver();
+  private readonly _stateService: StateService = inject(StateService);
+  protected readonly _cities = this._stateService.cities;
   private readonly _router = inject(Router);
-  private readonly _cities$: Observable<CityModel[]> = this._routeService.getCitiesObserver();
   private readonly _destroy$ = new Subject<void>();
 
   public ngOnInit(): void {
-    this._routeService.getCities();
     this._routeService.getRoutes();
-
-    this._cities$.pipe(takeUntil(this._destroy$)).subscribe((data) => this._cities.set(data));
 
     this._routes$
       .pipe(
@@ -68,13 +65,13 @@ export class RouteItemComponent implements OnInit, OnDestroy {
 
   protected _handleUpdate(route: RoutesModel): void {
     console.log('[67] 🚀:', route);
-    const dialogRef = this._dialog.open(DialogAddItemComponent, {
+    const dialogRef = this._dialog.open(ModalEditItemComponent, {
       data: { route, cities: this._cities() },
       width: '80%',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The add-item was closed', result);
+      console.log('The modal-add-item was closed', result);
     });
   }
 

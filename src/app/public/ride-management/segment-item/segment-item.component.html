@@ -1,7 +1,7 @@
 <form class="item__wrapper">
   <div class="item__path">
-    @if (cities()) {
-      {{ _currentRide().path[index()] | transformRideCity: cities() }}
+    @if (_cities().length) {
+      {{ _currentRide().path[index()] | transformRideCity: _cities() }}
     }
   </div>
 

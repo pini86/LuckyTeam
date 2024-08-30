@@ -5,6 +5,7 @@ import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute } from '@angular/router';
 import { RideService } from '../../shared/services/ride.service';
 import { RouteService } from '../../shared/services/route.service';
+import { StateService } from '../../shared/services/state.service';
 import { RideComponent } from './ride/ride.component';
 
 @Component({
@@ -18,18 +19,22 @@ import { RideComponent } from './ride/ride.component';
 export class RideManagementComponent implements OnInit {
   private readonly _activateRoute = inject(ActivatedRoute);
   private readonly _routeService: RouteService = inject(RouteService);
+  private readonly _stateService: StateService = inject(StateService);
+  protected readonly _currentRideId = this._stateService.currentRideId;
+  protected readonly _currentRide = this._stateService.currentRide;
+  protected readonly _cities = this._stateService.cities;
   private readonly _rideService: RideService = inject(RideService);
-  protected readonly _currentRideId = this._rideService.currentRideId;
-  protected readonly _currentRide = this._rideService.currentRide;
   private readonly _location = inject(Location);
 
   public ngOnInit(): void {
     const id: string | null = this._activateRoute.snapshot.paramMap.get('id');
 
+    this._stateService.setCurrentRide(null);
+
     if (id) {
-      this._rideService.getRoute(id);
       this._routeService.getCities();
-      this._rideService.setCurrentRouteId(Number(id));
+      this._stateService.setCurrentRouteId(Number(id));
+      this._rideService.getRoute(id);
     }
   }
 
@@ -38,7 +43,7 @@ export class RideManagementComponent implements OnInit {
   }
 
   protected _handleChangeRide(index: number): void {
-    this._rideService.setCurrentRideId(index);
+    this._stateService.setCurrentRideId(index);
   }
 
   protected _handleCreateRide(): void {

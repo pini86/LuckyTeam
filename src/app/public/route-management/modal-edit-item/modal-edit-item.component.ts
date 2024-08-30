@@ -16,12 +16,12 @@ import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
-import { TransformRideCityPipe } from '../../../../shared/pipes/transform-ride-city.pipe';
-import { CitiesItems, RoutesModel } from '../../../../shared/types/routes.model';
-import { DialogData } from '../../types/dialogs.types';
+import { TransformRideCityPipe } from '../../../shared/pipes/transform-ride-city.pipe';
+import { CitiesItems, RoutesModel } from '../../../shared/types/routes.model';
+import { DialogData } from '../types/dialogs.types';
 
 @Component({
-  selector: 'app-dialog-add-item',
+  selector: 'app-modal-edit-item',
   standalone: true,
   imports: [
     MatButton,
@@ -44,10 +44,10 @@ import { DialogData } from '../../types/dialogs.types';
     KeyValuePipe,
     TransformRideCityPipe,
   ],
-  templateUrl: './dialog-add-item.component.html',
-  styleUrl: './dialog-add-item.component.scss',
+  templateUrl: './modal-edit-item.component.html',
+  styleUrl: './modal-edit-item.component.scss',
 })
-export class DialogAddItemComponent implements OnInit {
+export class ModalEditItemComponent implements OnInit {
   protected readonly _route = signal<RoutesModel>(null);
   protected readonly _cities = signal<CitiesItems>(null);
 
@@ -55,7 +55,7 @@ export class DialogAddItemComponent implements OnInit {
     cities: new FormArray([]),
     carriages: new FormArray([]),
   });
-  private readonly _dialogRef = inject(MatDialogRef<DialogAddItemComponent>);
+  private readonly _dialogRef = inject(MatDialogRef<ModalEditItemComponent>);
   private readonly _data = inject<DialogData>(MAT_DIALOG_DATA);
 
   public ngOnInit(): void {

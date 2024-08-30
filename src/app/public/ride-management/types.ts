@@ -1,4 +1,4 @@
-import { RideModel } from '../../shared/types/routes.model';
+import { RideModel } from '../../shared/types/ride.model';
 
 export interface DialogUpdateTimeData {
   id: number;
