@@ -1,0 +1,260 @@
+.create-carriages__container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.25rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.custom-card {
+  background-color: #d5e0eb;
+  width: min-content;
+}
+
+.button-create,
+.button-update {
+  width: fit-content;
+}
+
+.form-create {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.list-carriage-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+  gap: 3.125rem;
+  padding: 1.25rem;
+}
+
+.list-carriages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3.125rem;
+  padding: 1.25rem;
+}
+
+.seats-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  padding: 1rem;
+  border: 0.3rem solid #6b6969;
+  border-radius: 1.875rem;
+  margin-bottom: 0.625rem;
+}
+
+.line {
+  display: flex;
+  align-items: center;
+}
+
+.text {
+  text-align: center;
+  margin: 0;
+}
+
+.title__columns {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.title__numbers {
+  display: flex;
+  width: 2.8rem;
+  height: 2.8rem;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+.vertical-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.375rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-align: center;
+}
+
+.block__seats {
+  display: flex;
+  flex-direction: column;
+  padding-left: 2.5rem;
+}
+
+.carriage-row {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.with-divider {
+  padding-bottom: 1.875rem;
+  margin-bottom: 1.875rem;
+  border-bottom: 0.125rem solid #d7d4d4;
+}
+
+.car-cell {
+  width: 2.5rem;
+  height: 2.5rem;
+  position: relative;
+  border: none;
+  z-index: 3;
+  color: white;
+  background-color: transparent;
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 70%;
+    height: 100%;
+    background-color: rgb(102, 202, 189);
+    border-radius: 0.7rem;
+    z-index: -1;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 85%;
+    height: 85%;
+    transform: translate(-50%, -50%);
+    background-color: #1b3487;
+    border-radius: 0.5rem;
+    border: 0.125rem solid white;
+    z-index: 0;
+  }
+
+  .number {
+    content: "";
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    position: relative;
+  }
+}
+
+.title-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 6.25rem;
+}
+
+@media (max-width: 780px) {
+  .seats-wrapper {
+    flex-direction: row;
+  }
+  .block__seats {
+    flex-direction: row-reverse;
+    padding-left: 0;
+    padding-top: 1.5rem;
+  }
+
+  .carriage-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+  }
+
+  .with-divider {
+    padding-left: 1.25rem;
+    margin-left: 1.25rem;
+    padding-bottom: 0rem;
+    margin-bottom: 0rem;
+    border-left: 2px solid #d7d4d4;
+    border-bottom: none;
+  }
+
+  .line {
+    flex-direction: column;
+  }
+
+  .title__columns {
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .title__numbers {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .form-create {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .car-cell {
+    width: 2.5rem;
+    height: 2.5rem;
+    position: relative;
+    border: none;
+    z-index: 3;
+    color: white;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 1.25rem;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background-color: rgb(102, 202, 189);
+      border-radius: 0.7rem;
+      z-index: -1;
+    }
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 85%;
+      height: 85%;
+      transform: translate(-50%, -50%);
+      background-color: #1b3487;
+      border-radius: 0.5rem;
+      border: 0.125rem solid white;
+      z-index: 0;
+    }
+
+    .number {
+      content: "";
+      display: flex;
+      flex-direction: column;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.8rem;
+      position: relative;
+    }
+  }
+}
