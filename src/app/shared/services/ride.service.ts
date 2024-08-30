@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 const initialState: StoreRoutes = {
   currentRideId: 0,
   currentRouteId: 0,
-  currentRide: null,
+  currentRide: null
 };
 
 @Injectable({ providedIn: 'root' })
@@ -25,15 +25,15 @@ export class RideService {
     this._http
       .get<RideModel>(`/api/route/${id}`, {
         headers: {
-          Authorization: `Bearer ${this._auth.getToken()}`,
-        },
+          Authorization: `Bearer ${this._auth.getToken()}`
+        }
       })
       .subscribe({
         next: (data) => {
           const newRoute = new RideModel(data.id, data.carriages, data.path, data.schedule);
           this._ride.next(newRoute);
         },
-        error: (error) => console.log(error),
+        error: (error) => console.log(error)
       });
   }
 
@@ -42,16 +42,16 @@ export class RideService {
       .put(
         `/api/route/${this.currentRouteId()}/ride/${this.currentRideId()}`,
         {
-          segments,
+          segments
         },
         {
           headers: {
-            Authorization: `Bearer ${this._auth.getToken()}`,
-          },
-        },
+            Authorization: `Bearer ${this._auth.getToken()}`
+          }
+        }
       )
       .subscribe({
-        error: (error) => console.log(error),
+        error: (error) => console.log(error)
       });
   }
 
@@ -60,20 +60,20 @@ export class RideService {
       .post<{ id: number }>(
         `/api/route/${this.currentRouteId()}/ride`,
         {
-          segments,
+          segments
         },
         {
           headers: {
-            Authorization: `Bearer ${this._auth.getToken()}`,
-          },
-        },
+            Authorization: `Bearer ${this._auth.getToken()}`
+          }
+        }
       )
       .subscribe({
         next: (data) => {
           this._createNewRide(segments, data.id);
-          this.setCurrentRideId(data.id);
+          this.setCurrentRideId(Number(data.id));
         },
-        error: (error) => console.log(error),
+        error: (error) => console.log(error)
       });
   }
 
@@ -81,16 +81,15 @@ export class RideService {
     this._http
       .delete(`/api/route/${this.currentRouteId()}/ride/${this.currentRideId()}`, {
         headers: {
-          Authorization: `Bearer ${this._auth.getToken()}`,
-        },
+          Authorization: `Bearer ${this._auth.getToken()}`
+        }
       })
       .subscribe({
-        next: (data) => {
-          console.log('[73] 🚧: response', data);
+        next: () => {
           this._deleteRide();
-          this.setCurrentRideId(this.currentRide().schedule.find((_, index) => this.currentRide().schedule.length === index).rideId);
+          this.setCurrentRideId(this.currentRide().schedule.find((_, index) => this.currentRide().schedule.length - 1 === index).rideId);
         },
-        error: (error) => console.error(error),
+        error: (error) => console.error(error)
       });
   }
 
@@ -99,6 +98,7 @@ export class RideService {
   }
 
   public setCurrentRideId(rideId: number): void {
+    console.log('[101] 🚀:', rideId);
     this._stateRoute.update((state) => ({ ...state, currentRideId: rideId }));
   }
 
@@ -119,20 +119,27 @@ export class RideService {
           ...state.currentRide.schedule,
           {
             rideId,
-            segments,
-          },
-        ],
-      },
+            segments
+          }
+        ]
+      }
     }));
   }
 
   private _deleteRide(): void {
+
+    console.log('⭐:', this.currentRideId());
     this._stateRoute.update((state) => ({
       ...state,
       currentRide: {
         ...state.currentRide,
-        schedule: state.currentRide.schedule.filter((schedule) => schedule.rideId !== this.currentRideId()),
-      },
+        schedule: state.currentRide.schedule.filter((schedule) => {
+
+          console.log('🧨:', schedule.rideId, this.currentRideId());
+
+          return schedule.rideId !== this.currentRideId();
+        })
+      }
     }));
   }
 }
