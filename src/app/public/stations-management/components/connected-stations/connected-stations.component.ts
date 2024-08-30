@@ -24,7 +24,7 @@ export class ConnectedStationsComponent implements OnInit, OnChanges {
     if (changes['connectedStations'] && !this.connectedStations) {
       console.error('connectedStations is still not initialized after changes!');
     } else {
-      console.log('connectedStations has been passed to component:', this.connectedStations);
+      //console.log('connectedStations has been passed to component:', this.connectedStations);
     }
   }
 
@@ -33,12 +33,13 @@ export class ConnectedStationsComponent implements OnInit, OnChanges {
     if (!this.connectedStations) {
       console.error('connectedStations is not initialized!');
     } else {
-      console.log('connectedStations is initialized:', this.connectedStations);
+      //console.log('connectedStations is initialized:', this.connectedStations);
     }
   }
 
   public addConnectedStation(): void {
     this.connectedStations.push(this.fb.control('', Validators.required));
+    console.log('Added control:', this.connectedStations.value);
   }
 
   public removeConnectedStation(index: number): void {
@@ -55,5 +56,10 @@ export class ConnectedStationsComponent implements OnInit, OnChanges {
 
   public asFormControl(control: AbstractControl): FormControl {
     return control as FormControl;
+  }
+
+  public onStationSelect(stationId: number, index: number): void {
+    this.connectedStations.at(index).setValue(stationId);
+    console.log('Updated control:', this.connectedStations.value);
   }
 }

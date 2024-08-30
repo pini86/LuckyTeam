@@ -36,7 +36,7 @@ export class StationService {
       });
   }
 
-  public addStation(stationData: { city: string; latitude: number; longitude: number; connectedTo: number[] }): void {
+  public addStation(stationData: { city: string; latitude: number; longitude: number; relations: number[] }): void {
     this._http
       .post<CityModel>('/api/station', stationData, {
         headers: {

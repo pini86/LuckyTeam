@@ -75,9 +75,38 @@ export class StationFormComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.stationForm.valid) {
-      // Логика отправки данных формы (например, через сервис)
-      console.log(this.stationForm.value);
+      const formData = this.stationForm.value;
+      console.log('Form Data:', formData); // Логируем данные формы
+
+      const relations = this._getConnectedStations().getRawValue();
+      console.log('Relations:', relations);
+
+      // Проверяем типы данных
+      console.log('Типы данных:', {
+        city: typeof formData.city, // Должен быть 'string'
+        latitude: typeof formData.latitude, // Должен быть 'number'
+        longitude: typeof formData.longitude, // Должен быть 'number'
+        relations: relations.map((rel) => typeof rel), // Должен быть ['number', 'number', ...]
+      });
+
+      const stationData = {
+        city: formData.city,
+        latitude: Number.parseFloat(formData.latitude), // Преобразуем в число
+        longitude: Number.parseFloat(formData.longitude), // Преобразуем в число
+        relations: relations,
+      };
+
+      console.log('Данные для отправки:', stationData); // Логируем данные для отправки
+      this.addStation(stationData);
     }
+  }
+
+  private _getConnectedStations(): FormArray {
+    return this.stationForm.get('connectedStations') as FormArray;
+  }
+
+  public addStation(stationData: { city: string; latitude: number; longitude: number; relations: number[] }): void {
+    this.stationService.addStation(stationData);
   }
 
   public hasError(controlName: string, errorCode: string): boolean {
