@@ -39,7 +39,6 @@ export class ConnectedStationsComponent implements OnInit, OnChanges {
 
   public addConnectedStation(): void {
     this.connectedStations.push(this.fb.control('', Validators.required));
-    console.log('Added control:', this.connectedStations.value);
   }
 
   public removeConnectedStation(index: number): void {
@@ -60,6 +59,5 @@ export class ConnectedStationsComponent implements OnInit, OnChanges {
 
   public onStationSelect(stationId: number, index: number): void {
     this.connectedStations.at(index).setValue(stationId);
-    console.log('Updated control:', this.connectedStations.value);
   }
 }

@@ -76,27 +76,17 @@ export class StationFormComponent implements OnInit {
   public onSubmit(): void {
     if (this.stationForm.valid) {
       const formData = this.stationForm.value;
-      console.log('Form Data:', formData); // Логируем данные формы
 
       const relations = this._getConnectedStations().getRawValue();
       console.log('Relations:', relations);
 
-      // Проверяем типы данных
-      console.log('Типы данных:', {
-        city: typeof formData.city, // Должен быть 'string'
-        latitude: typeof formData.latitude, // Должен быть 'number'
-        longitude: typeof formData.longitude, // Должен быть 'number'
-        relations: relations.map((rel) => typeof rel), // Должен быть ['number', 'number', ...]
-      });
-
       const stationData = {
         city: formData.city,
-        latitude: Number.parseFloat(formData.latitude), // Преобразуем в число
-        longitude: Number.parseFloat(formData.longitude), // Преобразуем в число
+        latitude: Number.parseFloat(formData.latitude),
+        longitude: Number.parseFloat(formData.longitude),
         relations: relations,
       };
 
-      console.log('Данные для отправки:', stationData); // Логируем данные для отправки
       this.addStation(stationData);
     }
   }
@@ -106,7 +96,17 @@ export class StationFormComponent implements OnInit {
   }
 
   public addStation(stationData: { city: string; latitude: number; longitude: number; relations: number[] }): void {
-    this.stationService.addStation(stationData);
+    this.stationService.addStation(stationData).subscribe({
+      next: (newStation) => {
+        console.log('Новая станция создана:', newStation);
+        // Обновляем список станций
+        this.stationService.getCities();
+
+        // Очистка формы после успешного создания станции
+        this.stationForm.reset();
+      },
+      error: (error: Error) => console.log('Ошибка при создании станции:', error),
+    });
   }
 
   public hasError(controlName: string, errorCode: string): boolean {
