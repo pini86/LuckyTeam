@@ -22,7 +22,7 @@ export class ModifiedRouteService {
     this._routeService.getRoutesObserver().subscribe((routes) => {
       //console.log('Loaded routes:', routes);
       this._stationService.getCitiesObserver().subscribe((stations) => {
-        console.log('Loaded stations:', stations);
+        //console.log('Loaded stations:', stations);
         const modifiedRoutes: ModifyRoutesModel[] = routes.map((route) => {
           const modifiedPath = route.path
             .map((stationId) => {

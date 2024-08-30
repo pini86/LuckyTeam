@@ -1,11 +1,27 @@
-<div *ngFor="let station of connectedStations.controls; let i = index; trackBy: trackByStationId">
-  <mat-form-field class="w-100">
-    <mat-label>Connected Stations</mat-label>
-    <mat-select [formControl]="station">
-      <mat-option *ngFor="let option of availableStations; trackBy: trackByOptionId"
-                  [value]="option.id">
-        Station {{ option.id }} - Distance: {{ option.distance }} km
+<div *ngFor="let stationControl of connectedStations.controls; let i = index; trackBy: trackByIndex"
+     class="connected-station-group">
+  <mat-form-field class="w-75">
+    <mat-label>Select Station</mat-label>
+    <mat-select [formControl]="asFormControl(stationControl)">
+      <mat-option *ngFor="let station of stationsList; trackBy: trackByStationId"
+                  [value]="station.id">
+        {{ station.city }}
       </mat-option>
     </mat-select>
   </mat-form-field>
+  <button mat-icon-button
+          color="warn"
+          type="button"
+          (click)="removeConnectedStation(i)">
+    <mat-icon>close</mat-icon>
+  </button>
 </div>
+
+<button mat-stroked-button
+        color="primary"
+        type="button"
+        class="add-station-button"
+        (click)="addConnectedStation()">
+  <mat-icon>add</mat-icon>
+  Add Station
+</button>

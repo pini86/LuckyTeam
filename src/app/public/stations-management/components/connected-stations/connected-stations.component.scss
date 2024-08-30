@@ -1,0 +1,25 @@
+.connected-station-group {
+  display: flex;
+  column-gap: 20px;
+  align-items: center;
+}
+
+.full-width {
+  flex: 1;
+}
+
+.remove-button {
+  margin-left: 8px;
+}
+
+.add-station-button {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+
+.add-station-button mat-icon {
+  margin-right: 8px;
+}

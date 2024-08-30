@@ -64,13 +64,10 @@
         </mat-form-field>
 
         <!-- Новый компонент для выбора из списка станций -->
-        <div formArrayName="connectedStations">
-          <app-connected-stations [connectedStations]="connectedStations">
-          </app-connected-stations>
-        </div>
+        <app-connected-stations [stationsList]="stationsList"
+                                [connectedStations]="connectedStations">
+        </app-connected-stations>
 
-        <button mat-button
-                type="button">Add Station</button>
 
         <div class="mt-3">
           <button mat-raised-button

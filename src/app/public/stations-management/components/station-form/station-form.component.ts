@@ -41,7 +41,7 @@ export class StationFormComponent implements OnInit {
       city: ['', [Validators.required, StationValidators.cityNameValidator]],
       latitude: ['', [Validators.required, StationValidators.latitudeValidator]],
       longitude: ['', [Validators.required, StationValidators.longitudeValidator]],
-      connectedStations: this.fb.array<FormControl>([]), // Массив подключённых станций
+      connectedStations: this.fb.array([]), // Массив подключённых станций
     });
 
     // Подписка на обновления списка станций
@@ -51,15 +51,6 @@ export class StationFormComponent implements OnInit {
 
     // Инициируем загрузку списка станций
     this.stationService.getCities();
-
-    // Слушаем изменения широты и долготы для синхронизации с картой
-    this.stationForm.get('latitude')?.valueChanges.subscribe((value) => {
-      this.updateMapMarker(value, this.stationForm.get('longitude')?.value);
-    });
-
-    this.stationForm.get('longitude')?.valueChanges.subscribe((value) => {
-      this.updateMapMarker(this.stationForm.get('latitude')?.value, value);
-    });
   }
 
   public get latitude(): AbstractControl | null {
@@ -72,14 +63,6 @@ export class StationFormComponent implements OnInit {
 
   public get connectedStations(): FormArray<FormControl> {
     return this.stationForm.get('connectedStations') as FormArray<FormControl>;
-  }
-
-  public addConnectedStation(): void {
-    this.connectedStations.push(this.fb.control('', Validators.required));
-  }
-
-  public removeConnectedStation(index: number): void {
-    this.connectedStations.removeAt(index);
   }
 
   public trackByStationId(index: number, control: FormControl): number {
@@ -95,11 +78,6 @@ export class StationFormComponent implements OnInit {
       // Логика отправки данных формы (например, через сервис)
       console.log(this.stationForm.value);
     }
-  }
-
-  public updateMapMarker(latitude: number, longitude: number): void {
-    // Вызов функции в StationMapComponent для обновления маркера
-    console.log(`Обновить маркер на карте: широта ${latitude}, долгота ${longitude}`);
   }
 
   public hasError(controlName: string, errorCode: string): boolean {

@@ -1,27 +1,59 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { FormArray, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { CityModel } from '../../../../shared/types/routes.model';
 
 @Component({
   selector: 'app-connected-stations',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatSelectModule, MatOptionModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatSelectModule, MatOptionModule, MatIconModule],
   templateUrl: './connected-stations.component.html',
   styleUrl: './connected-stations.component.scss',
 })
-export class ConnectedStationsComponent {
-  @Input() public connectedStations!: FormArray<FormControl>;
-  @Input() public availableStations!: { id: number; distance: number }[];
+export class ConnectedStationsComponent implements OnInit, OnChanges {
+  @Input() public stationsList: CityModel[] = []; // Список всех станций с сервера
+  @Input() public connectedStations!: FormArray; // Массив для хранения выбранных станций
 
-  public trackByStationId(index: number, control: FormControl): number {
-    return control.value;
+  constructor(private fb: FormBuilder) {}
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['connectedStations'] && !this.connectedStations) {
+      console.error('connectedStations is still not initialized after changes!');
+    } else {
+      console.log('connectedStations has been passed to component:', this.connectedStations);
+    }
   }
 
-  // Новая функция trackBy для списка опций
-  public trackByOptionId(index: number, option: { id: number; distance: number }): number {
-    return option.id;
+  public ngOnInit(): void {
+    // eslint-disable-next-line unicorn/no-negated-condition
+    if (!this.connectedStations) {
+      console.error('connectedStations is not initialized!');
+    } else {
+      console.log('connectedStations is initialized:', this.connectedStations);
+    }
+  }
+
+  public addConnectedStation(): void {
+    this.connectedStations.push(this.fb.control('', Validators.required));
+  }
+
+  public removeConnectedStation(index: number): void {
+    this.connectedStations.removeAt(index);
+  }
+
+  public trackByIndex(index: number, stationControl: AbstractControl): number {
+    return index;
+  }
+
+  public trackByStationId(index: number, station: CityModel): number {
+    return station.id;
+  }
+
+  public asFormControl(control: AbstractControl): FormControl {
+    return control as FormControl;
   }
 }

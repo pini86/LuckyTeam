@@ -8,12 +8,11 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CityModel, ConnectedStation, ModifyRoutesModel } from '../../../../shared/types/routes.model';
 import { ModifiedRouteService } from '../../services/modified-route.service';
 import { StationService } from '../../services/station.service';
-import { ConnectedStationsComponent } from '../connected-stations/connected-stations.component';
 
 @Component({
   selector: 'app-station-list',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, ConnectedStationsComponent, MatListModule, MatPaginatorModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatListModule, MatPaginatorModule],
   templateUrl: './station-list.component.html',
   styleUrl: './station-list.component.scss',
 })
