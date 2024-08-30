@@ -1,7 +1,7 @@
 <mat-card appearance="outlined" class="card">
   <mat-card-header class="card-header">
     <mat-card-title class="bold">Ride {{ _currentRideId() }}</mat-card-title>
-    <button (click)="_handleDeleteRide()" class="delete-button" type="button">
+    <button (click)="_openConfirmModal()" class="delete-button" type="button">
       <mat-icon class="svg">delete</mat-icon>
     </button>
   </mat-card-header>

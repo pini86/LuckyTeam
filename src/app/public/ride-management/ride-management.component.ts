@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/cor
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute } from '@angular/router';
-import { tap } from 'rxjs';
 import { RideService } from '../../shared/services/ride.service';
 import { RouteService } from '../../shared/services/route.service';
 import { RideComponent } from './ride/ride.component';
@@ -20,7 +19,6 @@ export class RideManagementComponent implements OnInit {
   private readonly _activateRoute = inject(ActivatedRoute);
   private readonly _routeService: RouteService = inject(RouteService);
   private readonly _rideService: RideService = inject(RideService);
-  protected readonly _rides$ = this._rideService.getRideObserver();
   protected readonly _currentRideId = this._rideService.currentRideId;
   protected readonly _currentRide = this._rideService.currentRide;
   private readonly _location = inject(Location);
@@ -29,16 +27,10 @@ export class RideManagementComponent implements OnInit {
     const id: string | null = this._activateRoute.snapshot.paramMap.get('id');
 
     if (id) {
-      this._rideService.getRite(id);
+      this._rideService.getRoute(id);
       this._routeService.getCities();
       this._rideService.setCurrentRouteId(Number(id));
     }
-
-    this._rides$.pipe(tap((ride) => console.log('🆘:', ride))).subscribe((ride) => {
-      const firstRideId = ride.schedule[0].rideId;
-      this._rideService.setCurrentRideId(firstRideId);
-      this._rideService.setCurrentRide(ride);
-    });
   }
 
   protected _handleBack(): void {
