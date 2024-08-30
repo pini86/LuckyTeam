@@ -2,17 +2,19 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CityModel, ConnectedStation, ModifyRoutesModel } from '../../../../shared/types/routes.model';
 import { ModifiedRouteService } from '../../services/modified-route.service';
 import { StationService } from '../../services/station.service';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-station-list',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatListModule, MatPaginatorModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatListModule, MatPaginatorModule, MatDialogModule],
   templateUrl: './station-list.component.html',
   styleUrl: './station-list.component.scss',
 })
@@ -29,6 +31,7 @@ export class StationListComponent implements OnInit {
     private stationService: StationService,
     private modifiedRouteService: ModifiedRouteService,
     private cd: ChangeDetectorRef,
+    private dialog: MatDialog,
   ) {}
 
   public ngOnInit(): void {
@@ -128,5 +131,21 @@ export class StationListComponent implements OnInit {
     this.currentPage = event.pageIndex;
 
     this.paginateStations();
+  }
+
+  public onDeleteStation(stationId: number): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.stationService.deleteStation(stationId).subscribe({
+          next: () => {
+            // Обновляем список станций после удаления
+            this.stationService.getCities();
+          },
+          error: (error) => console.log('Ошибка при удалении станции:', error),
+        });
+      }
+    });
   }
 }

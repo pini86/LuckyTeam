@@ -54,20 +54,12 @@ export class StationService {
       });
   }
 
-  public deleteStation(stationId: number): void {
-    this._http
-      .delete(`/api/station/${stationId}`, {
-        headers: {
-          Authorization: `Bearer ${this._auth.getToken()}`,
-        },
-      })
-      .subscribe({
-        next: () => {
-          // Обновляем список станций после удаления
-          this.getCities();
-        },
-        error: (error) => console.log(error),
-      });
+  public deleteStation(stationId: number): Observable<void> {
+    return this._http.delete<void>(`/api/station/${stationId}`, {
+      headers: {
+        Authorization: `Bearer ${this._auth.getToken()}`,
+      },
+    });
   }
 
   public getCitiesObserver(): Observable<CitiesItems> {
