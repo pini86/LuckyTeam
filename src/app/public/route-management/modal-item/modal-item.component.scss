@@ -1,5 +1,3 @@
-@import '../../../../vars';
-
 .field {
   width: 100%;
 }
@@ -25,7 +23,7 @@
   background-color: initial;
   outline: none;
   border: none;
-  color: $error;
+  color: #f44336;
   transform: translateY(-10px);
 }
 
@@ -39,4 +37,8 @@
 
 .block-buttons {
   margin: 1rem 0;
+}
+
+[data-valid='true'] {
+
 }

@@ -16,3 +16,11 @@ export interface Segments {
   readonly price: Record<string, number>;
   readonly time: string[];
 }
+
+export interface ICarriage {
+  code?: string;
+  name: string;
+  rows: number;
+  leftSeats?: number;
+  rightSeats?: number;
+}

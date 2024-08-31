@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RideService } from '../../shared/services/ride.service';
 import { RouteService } from '../../shared/services/route.service';
 import { StateService } from '../../shared/services/state.service';
+import { Segments } from '../../shared/types/ride.model';
 import { RideComponent } from './ride/ride.component';
 
 @Component({
@@ -22,7 +23,6 @@ export class RideManagementComponent implements OnInit {
   private readonly _stateService: StateService = inject(StateService);
   protected readonly _currentRideId = this._stateService.currentRideId;
   protected readonly _currentRide = this._stateService.currentRide;
-  protected readonly _cities = this._stateService.cities;
   private readonly _rideService: RideService = inject(RideService);
   private readonly _location = inject(Location);
 
@@ -59,12 +59,36 @@ export class RideManagementComponent implements OnInit {
       return price;
     };
 
-    const newSegment = this._currentRide().schedule[0].segments.map((segment) => ({
-      ...segment,
-      time: [date.toISOString(), date.toISOString()],
-      price: { ...getNewPrice(segment.price) },
-    }));
+    if (this._currentRide().schedule.length > 0) {
+      const newSegment = this._currentRide().schedule[0].segments.map((segment: Segments) => ({
+        ...segment,
+        time: [date.toISOString(), date.toISOString()],
+        price: { ...getNewPrice(segment.price) },
+      }));
 
-    this._rideService.createRide(newSegment);
+      this._rideService.createRide(newSegment);
+    } else {
+      const newArrSegment: Segments[] = [];
+
+      const createSegment = (): Segments => {
+        const originalCarriages = [...new Set(this._currentRide().carriages)];
+        const carriageObject: Record<string, number> = {};
+        for (const carriage of originalCarriages) {
+          carriageObject[carriage] = 0;
+        }
+        return {
+          time: [date.toISOString(), date.toISOString()],
+          price: carriageObject,
+        };
+      };
+
+      this._currentRide().path.forEach((_, index, array) => {
+        if (index < array.length - 1) {
+          newArrSegment.push(createSegment());
+        }
+      });
+
+      this._rideService.createRide(newArrSegment);
+    }
   }
 }

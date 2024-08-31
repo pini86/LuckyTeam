@@ -4,23 +4,26 @@
       <button type="button" mat-icon-button (click)="_handleBack()">
         <mat-icon>keyboard_backspace</mat-icon>
       </button>
+
       <span class="header__title">Route: {{ ride.id }}</span>
     </div>
 
+
     <div class="block-buttons">
       <button (click)="_handleCreateRide()" mat-stroked-button class="button" type="button">Create Ride</button>
+      @if (_currentRide().schedule.length) {
+        <span>Ride: </span>
 
-      <span>Ride: </span>
-
-      @for (schedule of ride.schedule; track schedule.rideId; let index = $index) {
-        <button
-          mat-stroked-button
-          [attr.data-current]="schedule.rideId === _currentRideId()"
-          (click)="_handleChangeRide(schedule.rideId)"
-          class="button__ride"
-          type="button">
-          <span>{{ schedule.rideId }}</span>
-        </button>
+        @for (schedule of ride.schedule; track schedule.rideId; let index = $index) {
+          <button
+            mat-stroked-button
+            [attr.data-current]="schedule.rideId === _currentRideId()"
+            (click)="_handleChangeRide(schedule.rideId)"
+            class="button__ride"
+            type="button">
+            <span>{{ schedule.rideId }}</span>
+          </button>
+        }
       }
     </div>
 

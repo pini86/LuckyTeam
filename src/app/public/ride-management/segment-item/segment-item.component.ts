@@ -30,19 +30,25 @@ export class SegmentItemComponent implements OnInit {
     }),
     price: new FormGroup<PriceForm>({}),
   });
-  private readonly _stateService = inject(StateService);
-  protected readonly _currentRide = this._stateService.currentRide;
-  protected readonly _currentRideId = this._stateService.currentRideId;
   protected readonly _segments = computed<Segments[]>(() => {
     return this._currentRide().schedule.find((schedule) => schedule.rideId === this._currentRideId()).segments;
   });
+  private readonly _stateService = inject(StateService);
+  protected readonly _currentRide = this._stateService.currentRide;
+  protected readonly _currentRideId = this._stateService.currentRideId;
   protected readonly _cities = this._stateService.cities;
   private readonly _rideService = inject(RideService);
   private readonly _injector = inject(Injector);
 
   public ngOnInit(): void {
+    this._addPriceControls();
+
     effect(
       () => {
+        if (this._currentRide().schedule.length === 0) {
+          return;
+        }
+
         const dateFormGroup = this._form.controls.date.controls;
         if (this.index() === 0) {
           const firstDate = this._transformDate(this.index(), 0);
@@ -61,16 +67,7 @@ export class SegmentItemComponent implements OnInit {
           dateFormGroup.arrivalTime.setValue(secondDate.time);
         }
 
-        if (this.index() < this._segments().length) {
-          const prices = this._segments()[this.index()].price;
-          for (const price in prices) {
-            if (Object.hasOwn(prices, price)) {
-              this._form.controls.price.removeControl(price);
-              const control = new FormControl<number>({ value: prices[price], disabled: true }, Validators.required);
-              this._form.controls.price.addControl(price, control);
-            }
-          }
-        }
+        this._addPriceControls();
       },
       { injector: this._injector },
     );
@@ -137,7 +134,7 @@ export class SegmentItemComponent implements OnInit {
     };
 
     this._stateService.setCurrentRide(newRide);
-    this._rideService.updateRide(this._segments());
+    this._rideService.updateRide(modifySegment);
   }
 
   private _transformDate(indexSegment: number, indexTime: 0 | 1): { date: string; time: string } {
@@ -164,5 +161,18 @@ export class SegmentItemComponent implements OnInit {
 
     const date = new Date(Date.UTC(year, month, day, hours, minutes));
     return date.toISOString();
+  }
+
+  private _addPriceControls(): void {
+    if (this.index() < this._segments().length) {
+      const prices = this._segments()[this.index()].price;
+      for (const price in prices) {
+        if (Object.hasOwn(prices, price)) {
+          this._form.controls.price.removeControl(price);
+          const control = new FormControl<number>({ value: prices[price], disabled: true }, Validators.required);
+          this._form.controls.price.addControl(price, control);
+        }
+      }
+    }
   }
 }

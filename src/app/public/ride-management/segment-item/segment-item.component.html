@@ -28,10 +28,13 @@
     <div class="item__price">
       <div class="price__list">
         @for (price of _form.controls.price.controls | keyvalue; track price) {
-          <div class="price__item">
-            <span>{{ price.key }} :</span>
+          <div class="price__item-wrapper">
+            <div class="price__item">
+              <span>{{ price.key }} :</span>
+            </div>
+            <input class="input-time" [formControl]="price.value" type="number"/>
           </div>
-          <input class="input-time" [formControl]="price.value" type="number"/>
+
         }
       </div>
 

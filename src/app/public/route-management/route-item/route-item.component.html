@@ -11,12 +11,12 @@
             Update
           </button>
 
-          <button (click)="_handlerClickAssignRide(route.id.toString())" class="header-button" type="button">
+          <button (click)="_handlerClickAssignRoute(route.id.toString())" class="header-button" type="button">
             <mat-icon>train</mat-icon>
             Assign ride
           </button>
 
-          <button class="header-button" type="button">
+          <button (click)="_handlerClickDeleteRoute(route.id.toString())" class="header-button" type="button">
             <mat-icon>delete</mat-icon>
           </button>
         </mat-card-actions>

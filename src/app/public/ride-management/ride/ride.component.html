@@ -1,23 +1,24 @@
-<mat-card appearance="outlined" class="card">
-  <mat-card-header class="card-header">
-    <mat-card-title class="bold">Ride {{ _currentRideId() }}</mat-card-title>
-    <button (click)="_openConfirmModal()" class="delete-button" type="button">
-      <mat-icon class="svg">delete</mat-icon>
-    </button>
-  </mat-card-header>
+@if (_currentRide().schedule.length) {
+  <mat-card appearance="outlined" class="card">
+    <mat-card-header class="card-header">
+      <mat-card-title class="bold">Ride {{ _currentRideId() }}</mat-card-title>
+      <button (click)="_openConfirmModal()" class="delete-button" type="button">
+        <mat-icon class="svg">delete</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content class="content">
+      @for (path of _currentRide().path; track path; let index = $index) {
+        <div class="item__wrapper" appColoredStroke [item]="index">
+          @if (index < _currentRide().path.length) {
+            <app-segment-item
+              [index]="index"
+            />
+          }
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <div>Schedules have not yet been created</div>
+}
 
-
-  <mat-card-content class="content">
-    @for (path of _currentRide().path; track path; let index = $index) {
-      <div class="item__wrapper" appColoredStroke [item]="index">
-        @if (index < _currentRide().path.length) {
-          <app-segment-item
-            [index]="index"
-          />
-        }
-      </div>
-    }
-  </mat-card-content>
-
-
-</mat-card>

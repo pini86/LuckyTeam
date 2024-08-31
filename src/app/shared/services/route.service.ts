@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { ICarriage } from '../types/ride.model';
 import { CitiesItems, CityModel, ConnectedStation, RoutesItems, RoutesModel } from '../types/routes.model';
 import { AuthService } from './auth.service';
 import { StateService } from './state.service';
@@ -10,7 +10,6 @@ export class RouteService {
   private readonly _http = inject(HttpClient);
   private readonly _auth = inject(AuthService);
   private readonly _stateService = inject(StateService);
-  private readonly _routes = new Subject<RoutesItems>();
 
   public getRoutes(): void {
     this._http
@@ -26,7 +25,70 @@ export class RouteService {
             const newItem = new RoutesModel(item.id, item.carriages, item.path);
             arrRoutes.push(newItem);
           });
-          this._routes.next(arrRoutes);
+          this._stateService.setRoutes(arrRoutes);
+        },
+        error: (error) => console.error(error),
+      });
+  }
+
+  public createRoute(path: number[], carriages: string[]): void {
+    this._http
+      .post<{ id: number }>(
+        '/api/route',
+        {
+          path,
+          carriages,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${this._auth.getToken()}`,
+          },
+        },
+      )
+      .subscribe({
+        next: (data) => {
+          this._stateService.createNewRoute({
+            id: data.id,
+            path,
+            carriages,
+          });
+        },
+        error: (error) => console.error(error),
+      });
+  }
+
+  public updateRoute(path: number[], carriages: string[], routeId: number): void {
+    this._http
+      .put<{ id: number }>(
+        `/api/route/${routeId}`,
+        {
+          path,
+          carriages,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${this._auth.getToken()}`,
+          },
+        },
+      )
+      .subscribe({
+        next: (data) => {
+          this._stateService.updateRoute(routeId, path, carriages);
+        },
+        error: (error) => console.error(error),
+      });
+  }
+
+  public deleteRoute(routeId: string): void {
+    this._http
+      .delete(`/api/route/${routeId}`, {
+        headers: {
+          Authorization: `Bearer ${this._auth.getToken()}`,
+        },
+      })
+      .subscribe({
+        next: (data) => {
+          this._stateService.deleteRoute(Number(routeId));
         },
         error: (error) => console.log(error),
       });
@@ -52,11 +114,22 @@ export class RouteService {
           });
           this._stateService.addCities(arrCities);
         },
-        error: (error) => console.log(error),
+        error: (error) => console.error(error),
       });
   }
 
-  public getRoutesObserver(): Observable<RoutesItems> {
-    return this._routes.asObservable();
+  public getCarriages(): void {
+    this._http
+      .get<ICarriage[]>('/api/carriage', {
+        headers: {
+          Authorization: `Bearer ${this._auth.getToken()}`,
+        },
+      })
+      .subscribe({
+        next: (data) => {
+          this._stateService.setCarriages(data);
+        },
+        error: (error) => console.error(error),
+      });
   }
 }

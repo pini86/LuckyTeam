@@ -1,5 +1,5 @@
 import { AsyncPipe, NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -9,12 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
-import { map, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { TransformRideCityPipe } from '../../../shared/pipes/transform-ride-city.pipe';
 import { RouteService } from '../../../shared/services/route.service';
 import { StateService } from '../../../shared/services/state.service';
 import { RoutesModel } from '../../../shared/types/routes.model';
-import { ModalEditItemComponent } from '../modal-edit-item/modal-edit-item.component';
+import { ConfirmModalComponent } from '../../ride-management/confirm-modal/confirm-modal.component';
+import { ModalItemComponent } from '../modal-item/modal-item.component';
 
 @Component({
   selector: 'app-route-item',
@@ -35,47 +35,40 @@ import { ModalEditItemComponent } from '../modal-edit-item/modal-edit-item.compo
   styleUrl: './route-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RouteItemComponent implements OnInit, OnDestroy {
-  protected readonly _routes = signal<RoutesModel[]>([]);
+export class RouteItemComponent implements OnInit {
   private readonly _dialog = inject(MatDialog);
   private readonly _routeService: RouteService = inject(RouteService);
-  protected readonly _routes$: Observable<RoutesModel[]> = this._routeService.getRoutesObserver();
   private readonly _stateService: StateService = inject(StateService);
+  protected readonly _routes = this._stateService.routes;
   protected readonly _cities = this._stateService.cities;
+  protected readonly _carriages = this._stateService.carriages;
   private readonly _router = inject(Router);
-  private readonly _destroy$ = new Subject<void>();
 
   public ngOnInit(): void {
     this._routeService.getRoutes();
-
-    this._routes$
-      .pipe(
-        // map(arr => arr.slice((p.currentMainPage - 1) * p.offset, p.offset * p.currentMainPage)),
-        map((arr) => arr.slice(0, 10)),
-        tap((t) => console.log('[32] 🥕:', t)),
-        takeUntil(this._destroy$),
-      )
-      .subscribe((data) => this._routes.set(data));
-  }
-
-  public ngOnDestroy(): void {
-    this._destroy$.next();
-    this._destroy$.complete();
   }
 
   protected _handleUpdate(route: RoutesModel): void {
-    console.log('[67] 🚀:', route);
-    const dialogRef = this._dialog.open(ModalEditItemComponent, {
-      data: { route, cities: this._cities() },
+    const dialogRef = this._dialog.open(ModalItemComponent, {
+      data: { route, cities: this._cities(), carriages: this._carriages() },
       width: '80%',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The modal-add-item was closed', result);
+      console.log('The modal-item was closed', result);
     });
   }
 
-  protected _handlerClickAssignRide(id: string): void {
+  protected _handlerClickAssignRoute(id: string): void {
     this._router.navigateByUrl(`admin/routes/${id}`);
+  }
+
+  protected _handlerClickDeleteRoute(id: string): void {
+    const dialogRef = this._dialog.open(ConfirmModalComponent);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'true') {
+        this._routeService.deleteRoute(id);
+      }
+    });
   }
 }

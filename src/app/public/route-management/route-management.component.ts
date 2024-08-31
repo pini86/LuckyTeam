@@ -3,13 +3,13 @@ import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { RouteService } from '../../shared/services/route.service';
 import { StateService } from '../../shared/services/state.service';
-import { ModalAddItemComponent } from './modal-add-item/modal-add-item.component';
+import { ModalItemComponent } from './modal-item/modal-item.component';
 import { RouteItemComponent } from './route-item/route-item.component';
 
 @Component({
   selector: 'app-route-management',
   standalone: true,
-  imports: [RouteItemComponent, ModalAddItemComponent, MatButton],
+  imports: [MatButton, RouteItemComponent],
   templateUrl: './route-management.component.html',
   styleUrl: './route-management.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,22 +19,17 @@ export class RouteManagementComponent implements OnInit {
   private readonly _routeService: RouteService = inject(RouteService);
   private readonly _stateService: StateService = inject(StateService);
   protected readonly _cities = this._stateService.cities;
+  protected readonly _carriages = this._stateService.carriages;
 
   public ngOnInit(): void {
     this._routeService.getCities();
+    this._routeService.getCarriages();
   }
 
   public openDialog(): void {
-    const dialogRef = this._dialog.open(ModalAddItemComponent, {
-      data: { cities: this._cities() },
+    this._dialog.open(ModalItemComponent, {
+      data: { cities: this._cities(), carriages: this._carriages() },
       width: '80%',
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The modal-add-item was closed', result);
-      if (result !== undefined) {
-        console.log('[29] 🚀: Confirmation success');
-      }
     });
   }
 }

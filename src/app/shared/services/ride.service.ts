@@ -24,9 +24,11 @@ export class RideService {
         next: (data) => {
           const newRoute = new RideModel(data.id, data.carriages, data.path, data.schedule);
           this._stateService.setCurrentRide(newRoute);
-          this._stateService.setCurrentRideId(newRoute.schedule[0].rideId);
+          if (data.schedule.length > 0) {
+            this._stateService.setCurrentRideId(newRoute.schedule[0].rideId);
+          }
         },
-        error: (error) => console.log(error),
+        error: (error) => console.error(error),
       });
   }
 
@@ -44,7 +46,7 @@ export class RideService {
         },
       )
       .subscribe({
-        error: (error) => console.log(error),
+        error: (error) => console.error(error),
       });
   }
 
@@ -66,7 +68,7 @@ export class RideService {
           this._stateService.createNewRide(segments, data.id);
           this._stateService.setCurrentRideId(Number(data.id));
         },
-        error: (error) => console.log(error),
+        error: (error) => console.error(error),
       });
   }
 
@@ -80,6 +82,9 @@ export class RideService {
       .subscribe({
         next: () => {
           this._stateService.deleteRide();
+          if (this._currentRide().schedule.length === 0) {
+            return;
+          }
           this._stateService.setCurrentRideId(
             this._currentRide().schedule.find((_, index) => this._currentRide().schedule.length - 1 === index).rideId,
           );
