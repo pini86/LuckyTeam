@@ -148,8 +148,6 @@ export class ModalItemComponent implements OnInit {
       return value === 0 && index < citiesValues.length - 1;
     });
 
-    console.log('🍁:', carriagesValues);
-
     const isFilledCitiesValue = citiesValues.filter((value) => value !== 0).length > 1;
     const isFilledCarriagesValue = carriagesValues.some((value) => value !== 0);
 
