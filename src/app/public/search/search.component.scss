@@ -1,0 +1,41 @@
+.container {
+  margin-top: 1.25rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.round {
+  position: absolute;
+  top: 1.45rem;
+  left: 0;
+  display: flex;
+  width: 10px;
+  height: 10px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  border: 2px solid #1b3487;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background-color: rgb(102, 202, 189);
+    opacity: .7;
+    border-radius: 50%;
+    z-index: -1;
+  }
+}
+
+.bg-full {
+  background-color: #1b3487;
+}
+
+.button {
+  height: 55px;
+  width: 100px;
+}

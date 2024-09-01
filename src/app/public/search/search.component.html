@@ -1,1 +1,25 @@
-<p>search works!</p>
+<form (ngSubmit)="_submit()" [formGroup]="_form" class="container">
+  <mat-form-field>
+    <span class="round"></span>
+    <mat-label class="pl-4">From</mat-label>
+    <input [formControl]="_form.controls.from" class="pl-4" matInput>
+  </mat-form-field>
+
+  <mat-form-field class="rounded-circle">
+    <span class="round bg-full"></span>
+    <mat-label class="pl-4">To</mat-label>
+    <input [formControl]="_form.controls.to" class="pl-4" matInput>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Choose a date</mat-label>
+
+    <input [formControl]="_form.controls.date" [matDatepicker]="picker" [min]="_minDate" matInput>
+    <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <button [disabled]="!_form.valid" class="button" mat-stroked-button type="submit">Search</button>
+
+</form>
+
