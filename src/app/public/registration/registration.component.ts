@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { IError } from '../../shared/models/sign';
+import { AuthService } from '../../shared/services/auth.service';
 import { emailCustomValidator } from '../../shared/validators/email-custom-validator.component';
 
 @Component({
@@ -31,32 +33,27 @@ import { emailCustomValidator } from '../../shared/validators/email-custom-valid
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss',
 })
-export class RegistrationComponent {
+export class RegistrationComponent implements OnInit {
+  private readonly _http = inject(HttpClient);
+  private readonly _router = inject(Router);
+  private readonly _destroyRef = inject(DestroyRef);
+  private readonly _auth = inject(AuthService);
+
   public form = new FormGroup({
     email: new FormControl<string>('', [Validators.required, emailCustomValidator()]),
     password: new FormControl<string>('', [Validators.required, Validators.minLength(8)]),
     repeatPassword: new FormControl<string>('', [Validators.required, Validators.minLength(8)]),
   });
+
   protected readonly _isError = signal<IError>(null);
   public readonly isLoading = signal<boolean>(false);
-  private readonly _http = inject(HttpClient);
-  private readonly _router = inject(Router);
-  readonly #destroyRef = inject(DestroyRef);
 
   public disableSignUpButton = true;
-
-  public get password(): FormControl<string> {
-    return this.form.controls.password;
-  }
-
-  public get repeatPassword(): FormControl<string> {
-    return this.form.controls.repeatPassword;
-  }
 
   constructor() {
     this.form.statusChanges.subscribe(() => {
       this._isError.set(null);
-      if (this.form.status === 'INVALID' || this.form.controls.password.value !== this.form.controls.repeatPassword.value) {
+      if (this.form.invalid || this.form.controls.password.value !== this.form.controls.repeatPassword.value) {
         this.disableSignUpButton = true;
       } else {
         this.disableSignUpButton = false;
@@ -64,10 +61,17 @@ export class RegistrationComponent {
     });
   }
 
+  ngOnInit(): void {
+    if (this._auth.isLogged()) {
+      this._router.navigate(['']);
+    }
+  }
+
   public register(): void {
-    if (this.form.status === 'INVALID') {
+    if (this.form.invalid) {
       return;
     }
+
     this.disableSignUpButton = true;
     this.isLoading.set(true);
     this._http
@@ -76,7 +80,7 @@ export class RegistrationComponent {
         finalize(() => {
           this.isLoading.set(false);
         }),
-        takeUntilDestroyed(this.#destroyRef),
+        takeUntilDestroyed(this._destroyRef),
       )
       .subscribe({
         next: () => {

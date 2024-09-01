@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,24 +33,26 @@ import { emailCustomValidator } from '../../shared/validators/email-custom-valid
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  private readonly _http = inject(HttpClient);
+  private readonly _router = inject(Router);
+  private readonly _auth = inject(AuthService);
+  private readonly _destroyRef = inject(DestroyRef);
+
   public form = new FormGroup({
     email: new FormControl<string>('', [Validators.required, emailCustomValidator()]),
     password: new FormControl<string>('', Validators.required),
   });
+
   protected readonly _isError = signal<IError>(null);
   public readonly isLoading = signal<boolean>(false);
-  private readonly _http = inject(HttpClient);
-  private readonly _router = inject(Router);
-  private readonly _auth = inject(AuthService);
-  readonly #destroyRef = inject(DestroyRef);
 
   public disableSignInButton = true;
 
   constructor() {
     this.form.statusChanges.subscribe(() => {
       this._isError.set(null);
-      if (this.form.status === 'INVALID') {
+      if (this.form.invalid) {
         this.disableSignInButton = true;
       } else {
         this.disableSignInButton = false;
@@ -57,8 +60,14 @@ export class LoginComponent {
     });
   }
 
+  ngOnInit(): void {
+    if (this._auth.isLogged()) {
+      this._router.navigate(['']);
+    }
+  }
+
   public signIn(): void {
-    if (this.form.status === 'INVALID') {
+    if (this.form.invalid) {
       return;
     }
     this.disableSignInButton = true;
@@ -69,7 +78,7 @@ export class LoginComponent {
         finalize(() => {
           this.isLoading.set(false);
         }),
-        takeUntilDestroyed(this.#destroyRef),
+        takeUntilDestroyed(this._destroyRef),
       )
       .subscribe({
         next: (value) => {
