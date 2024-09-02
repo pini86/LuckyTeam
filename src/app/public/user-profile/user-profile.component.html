@@ -1,1 +1,76 @@
-<p>user-profile works!</p>
+<mat-card class="mb-3 h-50 mt-4 mx-auto">
+  <mat-card-header class="mb-3">
+    <mat-card-title>Profile</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="isAdmin">
+      @if (isAdmin()) {
+        Manager
+      }
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="changePassword()">
+      <mat-form-field class="w-100">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput [formControl]="form.controls.email" />
+
+        <mat-error>
+          @if (form.controls.email.errors?.required) {
+            Required
+          }
+          @if (form.controls.email.errors?.emailValid) {
+            Incorrect email
+          }
+        </mat-error>
+        <button class="btn-suffix" type="button" matSuffix matTooltip="Edit or save user`s email" (click)="clickEventEmail($event)">
+          <mat-icon>{{ editEmail() ? "edit" : "save" }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-error class="top-abs-1">
+        @if (_isError()?.reason === "invalidUniqueKey") {
+          Account with this email already exists
+        }
+      </mat-error>
+
+      <mat-form-field class="w-100">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput [formControl]="form.controls.name" />
+        <button class="btn-suffix" type="button" matSuffix matTooltip="Edit or save user`s name" (click)="clickEventName($event)">
+          <mat-icon>{{ editName() ? "edit" : "save" }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-card-actions class="justify-content-between">
+        <button
+          class="mr-2 toolbar-button"
+          type="button"
+          mat-raised-button
+          color="accent"
+          matTooltip="Logout current user"
+          (click)="logout()"
+        >
+          Logout
+        </button>
+
+        <button class="mr-2 toolbar-button" type="submit" mat-raised-button color="primary" matTooltip="Change password current user">
+          Change password
+        </button>
+      </mat-card-actions>
+    </form>
+    <mat-card-footer>
+      @if (_isError()?.message) {
+        <div class="alert alert-warning">
+          <mat-icon class="home-table-icon" color="attention">warning</mat-icon>
+          <strong> {{ _isError()?.message }}</strong>
+        </div>
+      }
+    </mat-card-footer>
+  </mat-card-content>
+</mat-card>
+
+@if (isLoading()) {
+  <div class="progress-wrapper position-fixed">
+    <mat-spinner></mat-spinner>
+  </div>
+}

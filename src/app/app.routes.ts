@@ -26,6 +26,6 @@ export const routes: Routes = [
   { path: 'admin/stations', component: StationsManagementComponent, canActivate: [adminAccessGuard] },
   { path: 'admin/carriages', component: CarriagesCarsComponent, canActivate: [adminAccessGuard] },
   { path: 'admin/routes', component: RouteManagementComponent, canActivate: [adminAccessGuard] },
-  { path: 'admin/routes/{id}', component: RideManagementComponent, canActivate: [adminAccessGuard] },
+  { path: 'admin/routes/:id', component: RideManagementComponent, canActivate: [adminAccessGuard] },
   { path: '**', component: NotFoundComponent },
 ];

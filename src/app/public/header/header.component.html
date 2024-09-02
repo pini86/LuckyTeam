@@ -3,92 +3,92 @@ Any logo can be added. -->
 <header>
   <mat-toolbar color="primary">
     <a [routerLink]="['']"
-      mat-button>
+       mat-button>
       <mat-icon aria-hidden="false"
-        aria-label="Example home icon"
-        fontIcon="home"></mat-icon>
+                aria-label="Example home icon"
+                fontIcon="home"></mat-icon>
       Home
     </a>
 
     <div class="spacer"></div>
 
-    <button type="button" mat-button [matMenuTriggerFor]="menu">Pages</button>
+    <button [matMenuTriggerFor]="menu" mat-button type="button">Pages</button>
     <mat-menu #menu="matMenu">
-      <button type="button" mat-menu-item [routerLink]="['/signin']">LoginComponent</button>
-      <button type="button" mat-menu-item [routerLink]="['/admin']">AdminComponent</button>
-      <button type="button" mat-menu-item [routerLink]="['/signup']">RegistrationComponent</button>
-      <button type="button" mat-menu-item [routerLink]="['/profile']">UserProfileComponent</button>
-      <button type="button" mat-menu-item [routerLink]="['']">SearchComponent</button>
-      <button type="button" mat-menu-item [routerLink]="['/trip']">TripDetailsComponent</button>
-      <button type="button" mat-menu-item [routerLink]="['/orders']">OrderComponent</button>
-      <button type="button" mat-menu-item [routerLink]="['/admin/stations']">StationsManagementComponent</button>
-      <button type="button" mat-menu-item [routerLink]="['/admin/carriages']">CarriagesCarsComponent</button>
-      <button type="button" mat-menu-item [routerLink]="['/admin/routes']">RouteManagementComponent</button>
-      <button type="button" mat-menu-item [routerLink]="['/admin/routes/{id}']">RideManagementComponent</button>
-      <button type="button" mat-menu-item [routerLink]="['/error']">NotFoundComponent</button>
+      <button [routerLink]="['/signin']" mat-menu-item type="button">LoginComponent</button>
+      <button [routerLink]="['/admin']" mat-menu-item type="button">AdminComponent</button>
+      <button [routerLink]="['/signup']" mat-menu-item type="button">RegistrationComponent</button>
+      <button [routerLink]="['/profile']" mat-menu-item type="button">UserProfileComponent</button>
+      <button [routerLink]="['']" mat-menu-item type="button">SearchComponent</button>
+      <button [routerLink]="['/trip']" mat-menu-item type="button">TripDetailsComponent</button>
+      <button [routerLink]="['/orders']" mat-menu-item type="button">OrderComponent</button>
+      <button [routerLink]="['/admin/stations']" mat-menu-item type="button">StationsManagementComponent</button>
+      <button [routerLink]="['/admin/carriages']" mat-menu-item type="button">CarriagesCarsComponent</button>
+      <button [routerLink]="['/admin/routes']" mat-menu-item type="button">RouteManagementComponent</button>
+      <button [routerLink]="['/admin/routes/{id}']" mat-menu-item type="button">RideManagementComponent</button>
+      <button [routerLink]="['/error']" mat-menu-item type="button">NotFoundComponent</button>
     </mat-menu>
 
     <div class="spacer"></div>
 
     @if (!_auth.userName()) {
-    <a [routerLink]="['/signin']"
-      mat-button>Sign In</a>
+      <a [routerLink]="['/signin']"
+         mat-button>Sign In</a>
 
-    <a [routerLink]="['/signup']"
-      mat-raised-button
-      color="accent">Sign Up</a>
+      <a [routerLink]="['/signup']"
+         mat-raised-button
+         color="accent">Sign Up</a>
     }
 
     @if (_auth.userName() && !_auth.isAdmin()) {
-    <button type="button"
-      mat-button
-      [matMenuTriggerFor]="user">
-      <mat-icon aria-hidden="false"
-        aria-label="Example home icon"
-        fontIcon="account_circle">
-      </mat-icon>
-      {{_auth.userName()}}
-    </button>
-    <mat-menu #user="matMenu">
-      <button [routerLink]="['/profile']"
-        type="button"
-        mat-menu-item>
-        Profile
+      <button type="button"
+              mat-button
+              [matMenuTriggerFor]="user">
+        <mat-icon aria-hidden="false"
+                  aria-label="Example home icon"
+                  fontIcon="account_circle">
+        </mat-icon>
+        {{ _auth.userName() }}
       </button>
+      <mat-menu #user="matMenu">
+        <button [routerLink]="['/profile']"
+                type="button"
+                mat-menu-item>
+          Profile
+        </button>
 
-      <button [routerLink]="['/orders']"
-        type="button"
-        mat-menu-item>
-        My Orders
-      </button>
-    </mat-menu>
+        <button [routerLink]="['/orders']"
+                type="button"
+                mat-menu-item>
+          My Orders
+        </button>
+      </mat-menu>
     }
 
     @if (_auth.isAdmin()) {
-    <button type="button"
-      mat-button
-      [matMenuTriggerFor]="admin">
-      Admin
-    </button>
-    <mat-menu #admin="matMenu">
-      <button [routerLink]="['/admin']"
-        type="button"
-        mat-menu-item>
+      <button type="button"
+              mat-button
+              [matMenuTriggerFor]="admin">
         Admin
       </button>
+      <mat-menu #admin="matMenu">
+        <button [routerLink]="['/admin']"
+                type="button"
+                mat-menu-item>
+          Admin
+        </button>
 
-      <button [routerLink]="['/profile']"
-        type="button"
-        mat-menu-item>
-        Profile
-      </button>
+        <button [routerLink]="['/profile']"
+                type="button"
+                mat-menu-item>
+          Profile
+        </button>
 
-      <button [routerLink]="['/orders']"
-        type="button"
-        mat-menu-item>
-        Orders
-      </button>
-    </mat-menu>
+        <button [routerLink]="['/orders']"
+                type="button"
+                mat-menu-item>
+          Orders
+        </button>
+      </mat-menu>
     }
   </mat-toolbar>
 </header>
