@@ -2,14 +2,30 @@
   <mat-form-field>
     <span class="round"></span>
     <mat-label class="pl-4">From</mat-label>
-    <input [formControl]="_form.controls.from" class="pl-4" matInput>
+    <input [formControl]="_form.controls.from" [matAutocomplete]="from" class="pl-4" matInput>
   </mat-form-field>
+
+  <mat-autocomplete #from="matAutocomplete" autoActiveFirstOption>
+    @for (city of _filteredOptionsFrom | async; track city) {
+      <mat-option [value]="city.city">
+        {{ city.city }}
+      </mat-option>
+    }
+  </mat-autocomplete>
 
   <mat-form-field class="rounded-circle">
     <span class="round bg-full"></span>
     <mat-label class="pl-4">To</mat-label>
-    <input [formControl]="_form.controls.to" class="pl-4" matInput>
+    <input [formControl]="_form.controls.to" [matAutocomplete]="to" class="pl-4" matInput>
   </mat-form-field>
+
+  <mat-autocomplete #to="matAutocomplete" autoActiveFirstOption>
+    @for (city of _filteredOptionsTo | async; track city) {
+      <mat-option [value]="city.city">
+        {{ city.city }}
+      </mat-option>
+    }
+  </mat-autocomplete>
 
   <mat-form-field>
     <mat-label>Choose a date</mat-label>
