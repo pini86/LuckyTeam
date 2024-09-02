@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { RouteService } from '../../../shared/services/route.service';
 import { CityModel, ModifyRoutesModel } from '../types/routes.model';
+import { RouteService } from './route.service';
 import { StationService } from './station.service';
 
 @Injectable({
