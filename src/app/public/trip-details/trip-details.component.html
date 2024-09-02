@@ -1,1 +1,17 @@
-<p>trip-details works!</p>
+<div class="container">
+  @if (_tripSignal(); as trip) {
+  <div class="header">
+    <button type="button"
+      mat-icon-button
+      (click)="_handleBack()">
+      <mat-icon>keyboard_backspace</mat-icon>
+    </button>
+    @if(_cityNameSignal(); as cityName){
+    <div>{{cityName[0]}}</div>
+    }
+    <div></div>
+  </div>
+  <span class="header__title">Ride: {{ trip.rideId }}</span>
+
+  }
+</div>
