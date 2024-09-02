@@ -7,6 +7,15 @@ export class AuthService {
   public readonly isAdmin = computed(() => (this.userName() === 'admin@admin.com' ? true : false));
   public readonly isLogged = computed(() => this.userName().length > 0 && this.token().length > 0);
 
+  constructor() {
+    if (localStorage.getItem('username') && localStorage.getItem('token')) {
+      this.userName.set(localStorage.getItem('username'));
+      this.token.set(localStorage.getItem('token'));
+    } else {
+      this.logOut();
+    }
+  }
+
   public logIn(username: string, token: string): void {
     localStorage.clear();
     localStorage.setItem('username', username);

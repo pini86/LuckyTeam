@@ -1,0 +1,54 @@
+.progress-wrapper {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.6);
+  top: 65%;
+  left: calc(50% - 50px);
+}
+
+mat-card {
+  width: 35%;
+  @media screen and (max-width: 768px) {
+    width: 80%;
+  }
+  box-sizing: border-box;
+  background-image: linear-gradient(to right, lightgrey 0%, lightgrey 1%, #e0e0e0 26%, #efefef 48%, #d9d9d9 75%, #bcbcbc 100%);
+  border-radius: 10px;
+
+  mat-card-title {
+    font-size: 40px;
+    font-weight: 700;
+    color: #3f51b5;
+  }
+}
+
+.top-abs-1 {
+  position: absolute;
+  top: 7.5rem;
+  left: 1.5rem;
+}
+
+.isAdmin {
+  color: blue;
+  font-size: medium;
+  padding-left: 0.5rem;
+  left: 15rem;
+  top: 1.3rem;
+  position: absolute;
+}
+
+.btn-suffix {
+  border: none;
+  outline: none;
+  padding: 0;
+  background: none;
+  color: blue;
+  margin-right: 1rem;
+}
+
+.home-table-icon {
+  margin-bottom: -0.5rem;
+}
+
+.alert {
+  margin-top: 1rem;
+}

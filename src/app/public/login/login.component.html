@@ -1,59 +1,68 @@
-<mat-card class="mb-3 h-50 w-50 mx-auto">
+<mat-card class="mb-3 h-50 mt-4 mx-auto">
   <mat-card-header class="mb-3">
     <mat-card-title>Sign In</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
-    <form (ngSubmit)="saveForm()" [formGroup]="form">
+    <form [formGroup]="form" (ngSubmit)="signIn()">
       <mat-form-field class="w-100">
         <mat-label>Email</mat-label>
-        <input [formControl]="form.controls.email" matInput type="url"/>
+        <input type="email" matInput [formControl]="form.controls.email" matTooltip="Input your email" />
+        <mat-error>
+          @if (form.controls.email.errors?.required) {
+            Required
+          }
+          @if (form.controls.email.errors?.emailValid) {
+            Incorrect email
+          }
+        </mat-error>
       </mat-form-field>
+      <mat-error class="top-abs-0">
+        @if (_isError()?.reason === "invalidEmail") {
+          Incorrect email
+        }
+        @if (_isError()?.reason === "userNotFound") {
+          Incorrect email or password
+        }
+      </mat-error>
 
       <mat-form-field class="w-100">
         <mat-label>Password</mat-label>
-        <input [formControl]="form.controls.password" matInput type="url"/>
+        <input type="text" matInput [formControl]="form.controls.password" matTooltip="Input your password" />
+        <mat-error>
+          @if (form.controls.password.errors?.required) {
+            Required
+          }
+        </mat-error>
       </mat-form-field>
+      <mat-error class="top-abs-1">
+        @if (_isError()?.reason === "userNotFound") {
+          Incorrect email or password
+        }
+      </mat-error>
 
-      <button
-        class="mr-2 toolbar-button"
-        color="primary"
-        mat-raised-button
-        matTooltip="Sign In"
-        test-locator-name="home-card-save-button"
-        type="submit"
-      >
-        Sign In
-      </button>
+      <mat-card-actions class="justify-content-around">
+        <button
+          class="mr-2 toolbar-button"
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="disableSignInButton"
+          matTooltip="Sign In existing user"
+        >
+          Sign In
+        </button>
 
-      <button
-        (click)="signup()"
-        class="mr-2 toolbar-button"
-        color="secondary"
-        mat-raised-button
-        matTooltip="Sign Up"
-        test-locator-name="home-card-save-button"
-        type="button"
-      >
-        Sign Up
-      </button>
-      <button
-        (click)="admin()"
-        class="mr-2 toolbar-button"
-        mat-raised-button
-        test-locator-name="home-card-save-button"
-        type="button"
-      >
-        Admin
-      </button>
+        <button class="mr-2 toolbar-button" type="button" mat-raised-button matTooltip="Register new user" (click)="signup()">
+          Sign Up
+        </button>
+      </mat-card-actions>
     </form>
-    <mat-card-footer>
-      @if (_isError()) {
-        <div class="alert alert-warning">
-          <mat-icon class="home-table-icon" color="attention">warning</mat-icon>
-          <strong>{{ _isError() }}</strong>
-        </div>
-      }
-    </mat-card-footer>
   </mat-card-content>
 </mat-card>
+
+@if (isLoading()) {
+  <div class="progress-wrapper position-fixed">
+    <mat-spinner></mat-spinner>
+  </div>
+}
