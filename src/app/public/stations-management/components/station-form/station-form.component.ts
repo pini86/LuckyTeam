@@ -7,8 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { StationValidators } from 'src/app/shared/utils/station-validators';
-import { CityModel } from '../../../../shared/types/routes.model';
 import { StationService } from '../../services/station.service';
+import { CityModel } from '../../types/routes.model';
 import { ConnectedStationsComponent } from '../connected-stations/connected-stations.component';
 
 @Component({

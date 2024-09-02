@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { AuthService } from '../../../shared/services/auth.service';
-import { CitiesItems, CityModel, ConnectedStation } from '../../../shared/types/routes.model';
+import { CitiesItems, CityModel, ConnectedStation } from '../types/routes.model';
 
 @Injectable({
   providedIn: 'root',

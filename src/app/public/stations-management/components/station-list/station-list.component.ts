@@ -6,9 +6,9 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { CityModel, ConnectedStation, ModifyRoutesModel } from '../../../../shared/types/routes.model';
 import { ModifiedRouteService } from '../../services/modified-route.service';
 import { StationService } from '../../services/station.service';
+import { CityModel, ConnectedStation, ModifyRoutesModel } from '../../types/routes.model';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
