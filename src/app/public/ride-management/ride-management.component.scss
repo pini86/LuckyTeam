@@ -1,0 +1,43 @@
+.container {
+  max-width: 62.5rem;
+  padding: 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 1.875rem;
+  margin-bottom: 1.875rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}
+
+.block-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.button {
+  outline: none;
+
+  &__ride {
+    display: flex;
+    font-size: 0.75rem;
+    width: fit-content;
+    text-wrap: nowrap;
+    min-width: auto;
+  }
+}
+
+[data-current="true"] {
+  background-color: #8dce8a;
+}

@@ -1,0 +1,44 @@
+.field {
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 2rem;
+  max-height: 60vh;
+}
+
+.grid-title {
+  width: 100%;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.delete-button {
+  background-color: initial;
+  outline: none;
+  border: none;
+  color: #f44336;
+  transform: translateY(-10px);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: 4px;
+  width: 100%;
+}
+
+.block-buttons {
+  margin: 1rem 0;
+}
+
+[data-valid='true'] {
+
+}

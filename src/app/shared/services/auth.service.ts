@@ -3,8 +3,8 @@ import { computed, Injectable, signal } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   public readonly userName = signal<string>('');
-  public readonly isAdmin = computed(() => this.userName() === 'admin@admin.com');
   public readonly token = signal<string>('');
+  public readonly isAdmin = computed(() => (this.userName() === 'admin@admin.com' ? true : false));
   public readonly isLogged = computed(() => this.userName().length > 0 && this.token().length > 0);
 
   public logIn(username: string, token: string): void {
@@ -13,6 +13,13 @@ export class AuthService {
     localStorage.setItem('token', token);
     this.userName.set(username);
     this.token.set(token);
+  }
+
+  public getToken(): string {
+    if (this.token()) {
+      return this.token();
+    }
+    return localStorage.getItem('token');
   }
 
   public logOut(): void {
