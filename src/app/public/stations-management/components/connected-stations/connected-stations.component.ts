@@ -33,7 +33,9 @@ export class ConnectedStationsComponent implements OnInit, OnChanges {
     if (!this.connectedStations) {
       console.error('connectedStations is not initialized!');
     } else {
-      //console.log('connectedStations is initialized:', this.connectedStations);
+      if (this.connectedStations.length === 0) {
+        this.addConnectedStation(); // Добавить первое поле при инициализации
+      }
     }
   }
 
@@ -58,6 +60,8 @@ export class ConnectedStationsComponent implements OnInit, OnChanges {
   }
 
   public onStationSelect(stationId: number, index: number): void {
-    this.connectedStations.at(index).setValue(stationId);
+    if (index === this.connectedStations.length - 1) {
+      this.addConnectedStation();
+    }
   }
 }
