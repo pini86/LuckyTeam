@@ -1,0 +1,50 @@
+<form class="item__wrapper">
+  <div class="item__path">
+    @if (_cities().length) {
+      {{ _currentRide().path[index()] | transformRideCity: _cities() }}
+    }
+  </div>
+
+  <div class="item__time-wrapper">
+    <div class="item__time">
+      <span [attr.data-hiden]="index() === 0">Arrival:
+        <input [formControl]="_form.controls.date.controls.arrivalDate" class="input__date" type="date">
+        <input [formControl]="_form.controls.date.controls.arrivalTime" class="input__time" type="time">
+      </span>
+      <span [attr.data-hiden]="index() >= _segments().length">Departure:
+        <input [formControl]="_form.controls.date.controls.departureDate" class="input__date" type="date">
+        <input [formControl]="_form.controls.date.controls.departureTime" class="input__time" type="time">
+      </span>
+    </div>
+
+
+    <button (click)="_handleChangeDate()" class="item__button" color="primary" mat-mini-fab type="button">
+      <mat-icon class="icon">{{ isEditableDateField() ? 'save' : 'edit_square' }}</mat-icon>
+    </button>
+
+  </div>
+
+  @if (index() < _segments().length) {
+    <div class="item__price">
+      <div class="price__list">
+        @for (price of _form.controls.price.controls | keyvalue; track price) {
+          <div class="price__item-wrapper">
+            <div class="price__item">
+              <span>{{ price.key }} :</span>
+            </div>
+            <input class="input-time" [formControl]="price.value" type="number"/>
+          </div>
+
+        }
+      </div>
+
+      <button (click)="_handleChangePrice()" class="item__button" color="accent" mat-mini-fab type="button">
+        <mat-icon class="icon">{{ isEditablePriceField() ? 'save' : 'edit_square' }}</mat-icon>
+      </button>
+
+    </div>
+
+  }
+
+
+</form>

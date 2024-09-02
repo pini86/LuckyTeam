@@ -31,7 +31,7 @@
     "@angular/platform-browser": "17.3.11",
     "@angular/platform-browser-dynamic": "17.3.11",
     "@angular/router": "17.3.11",
-    "@planess/train-a-backend": "0.0.6",
+    "@planess/train-a-backend": "0.0.7",
     "angular-split": "17.2.0",
     "bootstrap": "4.3.1",
     "crypto-js": "4.2.0",
