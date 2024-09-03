@@ -48,6 +48,41 @@
         <span>{{carriage.name}}</span>
         <span class="available-seats">{{carriage.availableSeats}} seats</span>
       </div>
+
+
+      <div class="list-carriages-container">
+        @for (carriagesFromResponse of _carriageService.carriagesFromResponseSignal(); track carriagesFromResponse;) {
+        @if(carriagesFromResponse.code === uniqueCarriage.type){
+        <div class="carriage-wrapper">
+          <div class="seats-wrapper">
+            <div class="line">
+              <p class="text">Rows</p>
+              <div class="title__columns">
+                @for (title of [].constructor(carriagesFromResponse.columnsCount); track $index) {
+                <div class="title__numbers">{{$index + 1}}</div>
+                }
+              </div>
+            </div>
+
+            <div class="block__seats">
+              @for (carriageRow of carriagesFromResponse.rows; track carriageRow; let rowIndex = $index) {
+              <div class="carriage-row"
+                [class.with-divider]="carriagesFromResponse.dividerIndex === rowIndex">
+                @for (item of carriageRow; track item.index; let itemIndex = $index) {
+                <button type="button"
+                  class="car-cell"
+                  [class.button-item]="rowIndex > carriagesFromResponse.dividerIndex">
+                  <span class="number">{{item.index}}</span>
+                </button>
+                }
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+        }
+        }
+      </div>
       }
       }
     </mat-tab>

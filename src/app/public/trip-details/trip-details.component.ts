@@ -10,6 +10,7 @@ import { IStations } from '../../shared/interfaces/stations.interface';
 import { MatCard } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { forkJoin, map } from 'rxjs';
+import { CarriageService } from '../../shared/services/carriage.service';
 
 
 // http://localhost:4200/trip/6?from=145&to=159
@@ -26,6 +27,7 @@ export class TripDetailsComponent implements OnInit {
   private _location = inject(Location);
   private _activatedRoute = inject(ActivatedRoute);
   private _tripService = inject(TripService);
+  protected _carriageService = inject(CarriageService);
 
   protected _tripVMSignal = signal<ITripVM>(null);
 
@@ -40,6 +42,7 @@ export class TripDetailsComponent implements OnInit {
 
     if (this.rideId) {
       this.loadTrip(this.rideId);
+      this._carriageService.getCarriages()
     }
   }
 
