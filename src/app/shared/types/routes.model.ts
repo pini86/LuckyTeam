@@ -1,4 +1,5 @@
 import { ICarriage, RideModel } from './ride.model';
+import { SearchRoutesModel } from './search-routes.model';
 
 export class RoutesModel {
   constructor(
@@ -33,6 +34,7 @@ export interface StoreRoutes {
   currentRideId: number;
   currentRide: RideModel;
   routes: RoutesItems;
+  searchRoutes: SearchRoutesModel;
   cities: CitiesItems;
   carriages: ICarriage[];
 }
