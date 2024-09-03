@@ -9,7 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ICarriageVM, ICarriage } from '../../shared/interfaces/carriages.interface';
-import { map } from 'rxjs';
+import { CarriageService } from '../../shared/services/carriage.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-carriages-cars',
@@ -21,19 +22,19 @@ import { map } from 'rxjs';
 })
 export class CarriagesCarsComponent implements OnInit {
   public form: FormGroup;
-  public savedToken: string;
+  // public savedToken: string;
   public showForm = false;
-  public carriagesFromResponseSignal = signal<ICarriageVM[]>([]);
+  // public carriagesFromResponseSignal = signal<ICarriageVM[]>([]);
   public carriageVM = signal<ICarriageVM | null>(null);
   public isUpdating = false;
 
-  constructor(private fb: FormBuilder, private readonly http: HttpClient, private snackBar: MatSnackBar) { }
+  constructor(private fb: FormBuilder, private readonly http: HttpClient, private snackBar: MatSnackBar, protected carriageService: CarriageService, private auth: AuthService) { }
 
   @ViewChild('formContainer') public formContainer: ElementRef;
 
   public ngOnInit(): void {
-    this.savedToken = localStorage.getItem('token');
-    this.getCarriages();
+    // this.savedToken = localStorage.getItem('token');
+    this.carriageService.getCarriages();
 
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -44,7 +45,7 @@ export class CarriagesCarsComponent implements OnInit {
 
     this.form.valueChanges.subscribe((value) => {
       if (this.form.value.rows <= 20 && this.form.value.leftSeats <= 5 && this.form.value.rightSeats <= 5) {
-      this.carriageVM.set(this.buildCarriageToVM(value));
+      this.carriageVM.set(this.carriageService.buildCarriageToVM(value));
       } else {
         this.carriageVM.set(null);
       }
@@ -58,53 +59,11 @@ export class CarriagesCarsComponent implements OnInit {
     this.isUpdating = false;
   }
 
-  public getCarriages(): void {
-    this.http
-      .get<ICarriage[]>('/api/carriage', {
-        headers: {
-          Authorization: `Bearer ${this.savedToken}`,
-        },
-      })
-      .pipe(
-        map((data) => data.map((item) =>
-          this.buildCarriageToVM(item))
-        )
-      )
-      .subscribe({
-        next: (data) => {
-          this.carriagesFromResponseSignal.set(data);
-        },
-        error: (error) => console.error(error),
-      });
-  }
-
-  public buildCarriageToVM = (carriage: ICarriage): ICarriageVM => {
-    const { code, name, rows, leftSeats, rightSeats } = carriage;
-    const rowsCount = leftSeats + rightSeats;
-    const columnsCount = rows;
-    const dividerIndex = rightSeats - 1;
-
-    return {
-      rows: Array.from({ length: rowsCount }).map((row, rowIndex) => {
-        return Array.from({ length: columnsCount }).map((item, columnIndex) => {
-          return {
-            index: (rowsCount - rowIndex) + rowsCount * columnIndex,
-          }
-        })
-      }),
-      dividerIndex,
-      code,
-      name,
-      columnsCount,
-      leftSeats,
-      rightSeats
-    }
-  }
 
   public onSave(): void {
     if (this.form.valid) {
       const dataFromForm: ICarriage = this.form.value;
-      const existingCarriage = this.carriagesFromResponseSignal().find(carriage =>
+      const existingCarriage = this.carriageService.carriagesFromResponseSignal().find(carriage =>
         carriage.name.trim().toLowerCase() === dataFromForm.name.trim().toLowerCase()
       );
 
@@ -118,17 +77,17 @@ export class CarriagesCarsComponent implements OnInit {
       }
 
       if (this.isUpdating) {
-        console.log('existingCarriage.code', this.carriagesFromResponseSignal());
+        console.log('existingCarriage.code', this.carriageService.carriagesFromResponseSignal());
         this.http.put(`/api/carriage/${existingCarriage.code}`, dataFromForm, {
           headers: {
-            Authorization: `Bearer ${this.savedToken}`,
+            Authorization: `Bearer ${this.auth.getToken()}`,
           }
         }).subscribe({
           next: () => {
-            const updatedCarriages = this.carriagesFromResponseSignal().map(carriage =>
-              carriage.name === existingCarriage.name ? this.buildCarriageToVM({ ...carriage, ...dataFromForm }) : carriage
+            const updatedCarriages = this.carriageService.carriagesFromResponseSignal().map(carriage =>
+              carriage.name === existingCarriage.name ? this.carriageService.buildCarriageToVM({ ...carriage, ...dataFromForm }) : carriage
             );
-            this.carriagesFromResponseSignal.set(updatedCarriages);
+            this.carriageService.carriagesFromResponseSignal.set(updatedCarriages);
             this.onShowForm();
           },
           error: (error) => console.error(error),
@@ -139,16 +98,16 @@ export class CarriagesCarsComponent implements OnInit {
         this.http
           .post<{ code: string }>('/api/carriage', dataFromForm, {
             headers: {
-              Authorization: `Bearer ${this.savedToken}`,
+              Authorization: `Bearer ${this.auth.getToken()}`,
             },
           })
           .subscribe({
             next: (response) => {
               const carriageWithCode = { ...dataFromForm, code: response.code };
-              const carriageWithVM = this.buildCarriageToVM(carriageWithCode);
-              const updatedCarriages = [{ ...carriageWithVM }, ...this.carriagesFromResponseSignal()];
+              const carriageWithVM = this.carriageService.buildCarriageToVM(carriageWithCode);
+              const updatedCarriages = [{ ...carriageWithVM }, ...this.carriageService.carriagesFromResponseSignal()];
 
-              this.carriagesFromResponseSignal.set(updatedCarriages);
+              this.carriageService.carriagesFromResponseSignal.set(updatedCarriages);
               this.onShowForm();
             },
             error: (error) => console.error(error),
