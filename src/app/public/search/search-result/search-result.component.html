@@ -1,6 +1,27 @@
 @if (_searchRoutes(); as model) {
   <div class="wrapper container">
     <span>{{ _searchRoutes().from.city }} --> {{ _searchRoutes().to.city }} DATE</span>
+
+    <mat-tab-group>
+
+
+      @for (date of _startDate(); track date) {
+        <mat-tab>
+
+          <ng-template mat-tab-label class="card-date">
+            <div class="card-date__title">
+              <span>{{ date | transformDateIsoToMonth }} </span> <span>{{ date | transformDateIsoToDay }}</span>
+            </div>
+            <span class="card-date__week"> {{ date | transformDateIsoToWeek }}</span>
+          </ng-template>
+
+        </mat-tab>
+      }
+
+
+    </mat-tab-group>
+
+
   </div>
 }
 

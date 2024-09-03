@@ -6,13 +6,12 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { errorInterceptor } from './shared/interceptors/error-interceptor';
 
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptors([errorInterceptor])),
     provideAnimations(),
-    provideNativeDateAdapter()
-  ]
+    provideNativeDateAdapter(),
+  ],
 };

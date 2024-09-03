@@ -13,5 +13,9 @@
   &::-webkit-scrollbar-thumb {
     background-color: #1b3487;
   }
+}
 
+.mdc-tab__text-label {
+  flex-direction: column;
+  gap: 0.3rem;
 }
