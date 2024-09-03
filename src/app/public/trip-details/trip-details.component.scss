@@ -18,6 +18,8 @@
     display: flex;
     align-items: center;
     gap: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
   }
 
   &__title {
@@ -37,16 +39,23 @@
 
 .button {
   outline: none;
-
-  &__ride {
-    display: flex;
-    font-size: 0.75rem;
-    width: fit-content;
-    text-wrap: nowrap;
-    min-width: auto;
-  }
 }
 
-[data-current="true"] {
-  background-color: #8dce8a;
+.button-back {
+  background-color: #eeeded;
+}
+
+.additional-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.available-seats {
+  border: 1px solid #d6cfcf;
+  border-radius: 10px;
+  padding: 3px 5px;
+  background-color: #d6cfcf;
 }

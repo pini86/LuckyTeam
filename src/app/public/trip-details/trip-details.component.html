@@ -5,18 +5,19 @@
       <div class="header__city">
 
         <button type="button"
+          class="button-back"
           mat-icon-button
           (click)="_handleBack()">
           <mat-icon>arrow_back</mat-icon>
         </button>
 
-        <div>{{tripVM.firstCityName}}</div>
+        <div>{{tripVM.firstCityName}} {{tripVM.departureDate}}</div>
 
         <mat-icon aria-hidden="false"
           aria-label="Example home icon"
           fontIcon="trending_flat"></mat-icon>
 
-        <div>{{tripVM.lastCityName}}</div>
+        <div>{{tripVM.lastCityName}} {{tripVM.arrivalDate}}</div>
       </div>
 
       <div class="header__title">
@@ -33,9 +34,22 @@
   </mat-card>
 
   <mat-tab-group>
-    @for (carriage of tripVM.uniqueCarriages; track carriage) {
-    <mat-tab [label]="carriage.type">
-      Content for {{ carriage.type }}
+    @for (uniqueCarriage of tripVM.uniqueCarriages; track uniqueCarriage) {
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div [ngClass]="{'additional-content': true}">
+          <div>Carriage type {{ uniqueCarriage.type }}: {{uniqueCarriage.availableSeats}}</div>
+          <div>{{uniqueCarriage.price}}$</div>
+        </div>
+      </ng-template>
+      @for(carriage of tripVM.carriages; track carriage ){
+      @if(carriage.type === uniqueCarriage.type){
+      <div>
+        <span>{{carriage.name}}</span>
+        <span class="available-seats">{{carriage.availableSeats}} seats</span>
+      </div>
+      }
+      }
     </mat-tab>
     }
   </mat-tab-group>

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@ang
 import { TripService } from '../../shared/services/trip.service';
 import { ActivatedRoute } from '@angular/router';
 import { ICarriagesVM, ITrip, ITripVM, IUniqueCarriages } from '../../shared/interfaces/trip.interface';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { RideComponent } from '../ride-management/ride/ride.component';
@@ -18,7 +18,7 @@ import { forkJoin, map } from 'rxjs';
   selector: 'app-trip-details',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIcon, MatIconButton, MatButton, MatCard, MatTabsModule, RideComponent],
+  imports: [MatIcon, MatIconButton, MatButton, MatCard, MatTabsModule, RideComponent, CommonModule],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',
 })
@@ -109,7 +109,8 @@ export class TripDetailsComponent implements OnInit {
         }, 0),
         price: segments.reduce((sum, segment) => {
           return sum + (segment.price[carriage] || 0);
-        }, 0),
+        }, 0) / 100,
+
       };
     });
 
@@ -121,7 +122,7 @@ export class TripDetailsComponent implements OnInit {
 
       const price = segments.reduce((sum, segment) => {
         return sum + (segment.price[carriage] || 0);
-      }, 0);
+      }, 0) / 100;
 
       return {
         type: carriage,
@@ -129,7 +130,8 @@ export class TripDetailsComponent implements OnInit {
         price,
       };
     });
-
+    console.log('carriagesVM', carriagesVM);
+    console.log('uniqueCarriagesVM', uniqueCarriagesVM);
     return {
       rideId: trip.rideId,
       firstCityName,
