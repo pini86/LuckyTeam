@@ -61,6 +61,12 @@ Any logo can be added. -->
                 mat-menu-item>
           My Orders
         </button>
+
+        <button (click)="_logout()"
+                type="button"
+                mat-menu-item>
+          Log out
+        </button>
       </mat-menu>
     }
 
@@ -77,6 +83,26 @@ Any logo can be added. -->
           Admin
         </button>
 
+        <button [routerLink]="['/admin/stations']"
+                mat-menu-item
+                type="button">
+          Stations
+        </button>
+
+        <button
+          [routerLink]="['/admin/carriages']"
+          mat-menu-item
+          type="button">
+          Carriages
+        </button>
+
+        <button
+          [routerLink]="['/admin/routes']"
+          mat-menu-item
+          type="button">
+          Route
+        </button>
+
         <button [routerLink]="['/profile']"
                 type="button"
                 mat-menu-item>
@@ -87,6 +113,12 @@ Any logo can be added. -->
                 type="button"
                 mat-menu-item>
           Orders
+        </button>
+
+        <button (click)="_logout()"
+                type="button"
+                mat-menu-item>
+          Log out
         </button>
       </mat-menu>
     }
