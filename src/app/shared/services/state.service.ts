@@ -1,12 +1,14 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { ICarriage, RideModel, Segments } from '../types/ride.model';
 import { CitiesItems, RoutesItems, RoutesModel, StoreRoutes } from '../types/routes.model';
+import { SearchRoutesModel } from '../types/search-routes.model';
 
 const initialState: StoreRoutes = {
   currentRideId: 0,
   currentRouteId: 0,
   currentRide: null,
   routes: [],
+  searchRoutes: null,
   cities: [],
   carriages: [],
 };
@@ -20,6 +22,7 @@ export class StateService {
   public readonly cities = computed<CitiesItems>(() => this._stateRoute().cities);
   public readonly carriages = computed<ICarriage[]>(() => this._stateRoute().carriages);
   public readonly routes = computed<RoutesItems>(() => this._stateRoute().routes);
+  public readonly searchRoutes = computed<SearchRoutesModel>(() => this._stateRoute().searchRoutes);
 
   public setCurrentRouteId(routeId: number): void {
     this._stateRoute.update((state) => ({ ...state, currentRouteId: routeId }));
@@ -39,6 +42,10 @@ export class StateService {
 
   public setRoutes(routes: RoutesItems): void {
     this._stateRoute.update((state) => ({ ...state, routes: routes }));
+  }
+
+  public setSearchRoutes(searchRoutes: SearchRoutesModel): void {
+    this._stateRoute.update((state) => ({ ...state, searchRoutes }));
   }
 
   public addCities(cities: CitiesItems): void {

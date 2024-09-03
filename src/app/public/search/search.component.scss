@@ -1,0 +1,114 @@
+.container {
+  margin-top: 1.25rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.round {
+  position: absolute;
+  top: 1.45rem;
+  left: 0;
+  display: flex;
+  width: 10px;
+  height: 10px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  border: 2px solid #1b3487;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background-color: rgb(102, 202, 189);
+    opacity: .7;
+    border-radius: 50%;
+    z-index: -1;
+  }
+}
+
+.bg-full {
+  background-color: #1b3487;
+}
+
+.button {
+  height: 55px;
+  width: 100px;
+}
+
+input[type=time] {
+  border: none;
+  border-bottom: 1px solid #1f1f1f;
+  outline: none;
+  color: #2a2c2d;
+  font-size: 14px;
+  padding: 0 0.3rem;
+  width: 8rem;
+  background-color: #f2f4f5;
+
+}
+
+input[type=time]::-webkit-datetime-edit-fields-wrapper {
+  display: flex;
+}
+
+/* The space between the fields - between hour and minute, the minute and
+second, second and am/pm */
+input[type=time]::-webkit-datetime-edit-text {
+  padding: 16px 4px;
+  font-size: 1.5rem;
+}
+
+/* The naming convention for the hour, minute, second, and am/pm field is
+`-webkit-datetime-edit-{field}-field` */
+/* Hour */
+input[type=time]::-webkit-datetime-edit-hour-field {
+  background-color: #f2f4f5;
+  border-radius: 5%;
+  padding: 16px 7px;
+  user-select: none;
+  font-size: 1.5rem;
+}
+
+/* Minute */
+input[type=time]::-webkit-datetime-edit-minute-field {
+  background-color: #f2f4f5;
+  border-radius: 5%;
+  padding: 16px 7px;
+  color: #1f1f1f;
+  user-select: none;
+}
+
+
+/* 'X' button for resetting/clearing time */
+input[type=time]::-webkit-clear-button {
+  display: none;
+}
+
+input[type="time"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  cursor: pointer;
+  display: block;
+  width: 20px;
+  color: red;
+  text-align: center;
+  position: relative;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(60%) sepia(0) saturate(0) hue-rotate(175deg);
+  //color: #6c757d;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+
+
+
+
+
