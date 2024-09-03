@@ -89,7 +89,13 @@ export class SearchComponent implements OnInit {
       const toLongitude = toCity.longitude;
       const time = new Date(this._form.value.date).getTime();
 
-      console.log('🍁:', fromLatitude, fromLongitude, toLatitude, toLongitude);
+      console.table({
+        fromLatitude,
+        fromLongitude,
+        toLatitude,
+        toLongitude,
+        time
+      });
 
 
       this._searchService.getSection({ fromLatitude, fromLongitude, toLongitude, toLatitude, time });
