@@ -12,24 +12,6 @@ Any logo can be added. -->
 
     <div class="spacer"></div>
 
-    <button [matMenuTriggerFor]="menu" mat-button type="button">Pages</button>
-    <mat-menu #menu="matMenu">
-      <button [routerLink]="['/signin']" mat-menu-item type="button">LoginComponent</button>
-      <button [routerLink]="['/admin']" mat-menu-item type="button">AdminComponent</button>
-      <button [routerLink]="['/signup']" mat-menu-item type="button">RegistrationComponent</button>
-      <button [routerLink]="['/profile']" mat-menu-item type="button">UserProfileComponent</button>
-      <button [routerLink]="['']" mat-menu-item type="button">SearchComponent</button>
-      <button [routerLink]="['/trip']" mat-menu-item type="button">TripDetailsComponent</button>
-      <button [routerLink]="['/orders']" mat-menu-item type="button">OrderComponent</button>
-      <button [routerLink]="['/admin/stations']" mat-menu-item type="button">StationsManagementComponent</button>
-      <button [routerLink]="['/admin/carriages']" mat-menu-item type="button">CarriagesCarsComponent</button>
-      <button [routerLink]="['/admin/routes']" mat-menu-item type="button">RouteManagementComponent</button>
-      <button [routerLink]="['/admin/routes/{id}']" mat-menu-item type="button">RideManagementComponent</button>
-      <button [routerLink]="['/error']" mat-menu-item type="button">NotFoundComponent</button>
-    </mat-menu>
-
-    <div class="spacer"></div>
-
     @if (!_auth.userName()) {
       <a [routerLink]="['/signin']"
          mat-button>Sign In</a>
