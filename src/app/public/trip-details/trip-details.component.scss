@@ -10,11 +10,20 @@
 
 .header {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: start;
   gap: 1rem;
 
+  &__city {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
   &__title {
+    display: flex;
+    gap: 20px;
+    padding-left: 20px;
     font-size: 1.5rem;
     font-weight: bold;
   }

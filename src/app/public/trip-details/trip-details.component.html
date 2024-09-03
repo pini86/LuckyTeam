@@ -1,17 +1,43 @@
 <div class="container">
-  @if (_tripSignal(); as trip) {
-  <div class="header">
-    <button type="button"
-      mat-icon-button
-      (click)="_handleBack()">
-      <mat-icon>keyboard_backspace</mat-icon>
-    </button>
-    @if(_cityNameSignal(); as cityName){
-    <div>{{cityName[0]}}</div>
-    }
-    <div></div>
-  </div>
-  <span class="header__title">Ride: {{ trip.rideId }}</span>
+  @if (_tripVMSignal(); as tripVM) {
+  <mat-card>
+    <div class="header">
+      <div class="header__city">
 
+        <button type="button"
+          mat-icon-button
+          (click)="_handleBack()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+
+        <div>{{tripVM.firstCityName}}</div>
+
+        <mat-icon aria-hidden="false"
+          aria-label="Example home icon"
+          fontIcon="trending_flat"></mat-icon>
+
+        <div>{{tripVM.lastCityName}}</div>
+      </div>
+
+      <div class="header__title">
+        <p>Ride: {{ tripVM.rideId }}</p>
+        <a mat-raised-button
+          href="#">
+          Route
+          <mat-icon aria-hidden="false"
+            aria-label="Example home icon"
+            fontIcon="keyboard_arrow_down"></mat-icon>
+        </a>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-tab-group>
+    @for (carriage of tripVM.uniqueCarriages; track carriage) {
+    <mat-tab [label]="carriage.type">
+      Content for {{ carriage.type }}
+    </mat-tab>
+    }
+  </mat-tab-group>
   }
 </div>

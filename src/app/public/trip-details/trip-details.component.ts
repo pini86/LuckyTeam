@@ -1,13 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { TripService } from '../../shared/services/trip.service';
 import { ActivatedRoute } from '@angular/router';
-import { ITrip } from '../../shared/interfaces/trip.interface';
+import { ICarriagesVM, ITrip, ITripVM, IUniqueCarriages } from '../../shared/interfaces/trip.interface';
 import { Location } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { RideComponent } from '../ride-management/ride/ride.component';
 import { IStations } from '../../shared/interfaces/stations.interface';
 import { MatCard } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
+import { forkJoin, map } from 'rxjs';
 
 
 // http://localhost:4200/trip/6?from=145&to=159
@@ -16,24 +18,20 @@ import { MatCard } from '@angular/material/card';
   selector: 'app-trip-details',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIcon, MatIconButton, MatButton, MatCard, RideComponent],
+  imports: [MatIcon, MatIconButton, MatButton, MatCard, MatTabsModule, RideComponent],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',
 })
 export class TripDetailsComponent implements OnInit {
+  private _location = inject(Location);
   private _activatedRoute = inject(ActivatedRoute);
   private _tripService = inject(TripService);
-  private readonly _location = inject(Location);
 
-  protected _tripSignal = signal<ITrip>(null);
-  protected _cityNameSignal = signal<string[]>([]);
-  protected _cityNameSignal2 = signal<Record<number, string>[]>([]);
+  protected _tripVMSignal = signal<ITripVM>(null);
 
   public rideId: string | null;
   public fromStationId: string;
   public toStationId: string;
-  protected _path: number[];
-  protected _stations: IStations[];
 
   public ngOnInit(): void {
     this.rideId = this._activatedRoute.snapshot.paramMap.get('rideId');
@@ -45,54 +43,105 @@ export class TripDetailsComponent implements OnInit {
     }
   }
 
+  public loadTrip(rideId: string): void {
+    forkJoin({
+      trip: this._tripService.getTrip(rideId),
+      stations: this._tripService.getStations(),
+    }).pipe(
+      map(({ trip, stations }) => this._buildTripVM(trip, stations))
+    ).subscribe({
+      next: (tripVM) => {
+        this._tripVMSignal.set(tripVM);
+        console.log('Trip ViewModel:', tripVM);
+      },
+      error: (error) => console.error('Error loading trip or stations:', error),
+    });
+  }
+
+
+  private _buildTripVM(trip: ITrip, stations: IStations[]): ITripVM {
+    console.log('trip', trip);
+
+    const firstCityId = trip.path[0];
+    const lastCityId = trip.path[trip.path.length - 1];
+
+    const formattedFirstCityName = stations.find(city => city.id === firstCityId)?.city || '';
+    const formattedLastCityName = stations.find(city => city.id === lastCityId)?.city || '';
+
+    const capitalize = (cityName: string): string => cityName.charAt(0).toUpperCase() + cityName.slice(1);
+
+    const firstCityName = capitalize(formattedFirstCityName);
+    const lastCityName = capitalize(formattedLastCityName);
+
+    const segments = trip.schedule.segments;
+
+    const options: Intl.DateTimeFormatOptions = {
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'UTC',
+    };
+
+    const formatDateTime = (dateString: string): string => {
+      return new Date(dateString)
+        .toLocaleString('en-US', options)
+        .replace(' at', ',');
+    };
+
+    const departureDate = segments.length > 0 && segments[0].time.length > 0
+      ? formatDateTime(segments[0].time[0])
+      : '';
+
+    const arrivalDate = segments.length > 0 && segments[segments.length - 1].time.length > 1
+      ? formatDateTime(segments[segments.length - 1].time[1])
+      : '';
+
+
+    const carriagesVM: ICarriagesVM[] = trip.carriages.map((carriage, index) => {
+      return {
+        number: index + 1,
+        name: `Car ${index + 1}`,
+        type: carriage,
+        availableSeats: segments.reduce((sum, segment) => {
+          return sum + segment.occupiedSeats.filter(seat => seat.toString() === carriage).length;
+        }, 0),
+        price: segments.reduce((sum, segment) => {
+          return sum + (segment.price[carriage] || 0);
+        }, 0),
+      };
+    });
+
+    const uniqueCarriagesSet = new Set(trip.carriages);
+    const uniqueCarriagesVM: IUniqueCarriages[] = [...uniqueCarriagesSet].map(carriage => {
+      const availableSeats = segments.reduce((sum, segment) => {
+        return sum + segment.occupiedSeats.filter(seat => seat.toString() === carriage).length;
+      }, 0);
+
+      const price = segments.reduce((sum, segment) => {
+        return sum + (segment.price[carriage] || 0);
+      }, 0);
+
+      return {
+        type: carriage,
+        availableSeats,
+        price,
+      };
+    });
+
+    return {
+      rideId: trip.rideId,
+      firstCityName,
+      lastCityName,
+      departureDate,
+      arrivalDate,
+      carriages: carriagesVM,
+      uniqueCarriages: uniqueCarriagesVM
+    };
+  }
+
   protected _handleBack(): void {
     this._location.back();
-  }
-
-  public loadTrip(rideId: string): void {
-    this._tripService.getTrip(rideId).subscribe({
-      next: (data) => {
-        this._tripSignal.set(data);
-        this._path = data.path;
-        console.log('Trip signal:', rideId, this._tripSignal());
-        console.log('Path signal:', rideId, this._path);
-
-        if (this._path && this._path.length > 0) {
-          this.loadCityNamesByIds(this._path);
-        }
-      },
-      error: (error) => console.error('Error loading trip:', error),
-    });
-  }
-
-  public loadCityNamesByIds(ids: number[]): void {
-    this._tripService.getStations().subscribe({
-      next: (data) => {
-        const namesCities = ids.map(id => {
-          const matchingCity = data.find(city => city.id === id);
-          return matchingCity ? matchingCity.city : '';
-        });
-        this._cityNameSignal.set(namesCities);
-        console.log(this._cityNameSignal());
-      },
-      error: (error) => console.error('Error loading trip:', error),
-    });
-  }
-
-  public loadCityNamesByIds2(ids: number[]): void {
-    this._tripService.getStations().subscribe({
-      next: (data) => {
-        const namesCities = ids
-          .filter(city => city !== null)
-          .map(id => {
-            const matchingCity = data.find(city => city.id === id);
-            return matchingCity ? { id: matchingCity.id, city: matchingCity.city } : null;
-          });
-        this._cityNameSignal2.set(namesCities);
-        console.log(namesCities);
-
-      },
-      error: (error) => console.error('Error loading trip:', error),
-    });
   }
 }

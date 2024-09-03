@@ -15,10 +15,6 @@ export class TripService {
   private readonly _auth = inject(AuthService);
   private readonly _router = inject(Router);
 
-  public onS(): void {
-    this._router.navigate(['/trip', 6], { queryParams: { from: 145, to: 159 } });
-  }
-
   public getTrip(rideId: string): Observable<ITrip> {
     return this._http.get<ITrip>(`/api/search/${rideId}`, {
       headers: {
