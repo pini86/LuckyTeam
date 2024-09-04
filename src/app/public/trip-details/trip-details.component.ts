@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { TripService } from '../../shared/services/trip.service';
 import { ActivatedRoute } from '@angular/router';
-import { ICarriagesVM, ITrip, ITripVM, IUniqueCarriages } from '../../shared/interfaces/trip.interface';
+import { ICarriagesVM, ITrip, ITripVM, IUniqueCarriagesVM } from '../../shared/interfaces/trip.interface';
 import { CommonModule, Location } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
@@ -122,7 +122,8 @@ export class TripDetailsComponent implements OnInit {
     });
 
     const uniqueCarriagesSet = new Set(trip.carriages);
-    const uniqueCarriagesVM: IUniqueCarriages[] = [...uniqueCarriagesSet].map(carriage => {
+
+    const uniqueCarriagesVM: IUniqueCarriagesVM[] = [...uniqueCarriagesSet].map(carriage => {
       const occupiedSeats = segments.reduce((sum, segment) => {
         return sum + segment.occupiedSeats.filter(seat => seat.toString() === carriage).length;
       }, 0);
@@ -131,8 +132,12 @@ export class TripDetailsComponent implements OnInit {
         return sum + (segment.price[carriage] || 0);
       }, 0) / 100;
 
-      const countSeats = this._carriageService.carriagesFromResponseSignal()
-        .find((item) => item.code === carriage)?.countSeats || 0;
+      const countSeats = trip.carriages
+        .filter((item) => item === carriage)
+        .reduce((total, item) => {
+          const carriageData = this._carriageService.carriagesFromResponseSignal().find(c => c.code === item);
+          return total + (carriageData ? carriageData.countSeats : 0);
+        }, 0);
 
       return {
         type: carriage,

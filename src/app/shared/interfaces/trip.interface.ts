@@ -23,7 +23,7 @@ export interface ITripVM {
   departureDate: string;
   arrivalDate: string;
   carriages: ICarriagesVM[];
-  uniqueCarriages?: IUniqueCarriages[];
+  uniqueCarriages?: IUniqueCarriagesVM[];
 }
 export interface ICarriagesVM {
   number: number;
@@ -33,7 +33,7 @@ export interface ICarriagesVM {
   price: number;
   countSeats: number,
 }
-export interface IUniqueCarriages {
+export interface IUniqueCarriagesVM {
   type: string;
   occupiedSeats: number;
   price: number;
