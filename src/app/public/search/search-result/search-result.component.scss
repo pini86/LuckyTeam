@@ -1,15 +1,140 @@
+.title {
+  margin-top: 0.625rem;
+  margin-bottom: 0.625rem;
 
-.mdc-tab__text-label {
-  flex-direction: column !important;
+  &__date {
+    font-weight: bold;
+  }
+}
+
+.wrapper-content {
+  margin-top: 1rem;
+}
+
+.card {
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  margin-bottom: 0.7rem;
 }
 
 .cart-date {
-
   display: flex;
   flex-direction: column;
 
   &__title {
 
   }
+}
 
+.content {
+  display: flex;
+}
+
+.ride-data {
+  flex-basis: 50%;
+  flex-shrink: 0;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  &__between {
+    color: #1b3487;
+    font-size: 1.125rem;
+  }
+
+  &__between-time {
+    content: '';
+    position: absolute;
+    top: .3rem;
+    left: 50%;
+    padding: 0 .5rem;
+    transform: translateX(-50%);
+    background-color: #fff;
+    z-index: 1;
+  }
+
+  &__separator {
+    content: '';
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    width: 60%;
+    height: 2px;
+    transform: translateX(-50%);
+    background-color: #1b3487;
+  }
+
+  &__separator::before, &__separator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    border: 1px solid #1b3487;
+  }
+
+  &__separator::after {
+    left: -0.625rem;
+  }
+
+  &__separator::before {
+    right: -0.625rem;
+    background-color: #1b3487;
+  }
+
+  &__time {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+
+  &__date {
+    font-size: 1.2rem;
+  }
+
+  &__station {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  &__date-info {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+
+  &__date-info:last-child {
+    align-items: end;
+  }
+
+  &__route-info {
+    display: flex;
+    align-items: center;
+  }
+
+  &__footer {
+    margin-top: 1.25rem;
+    border: 1px solid #1f1f1f;
+    padding: 0.2rem 1.25rem;
+    width: fit-content;
+    border-radius: 0.625rem;
+  }
+
+  &__route {
+    display: flex;
+    gap: 0.625rem;
+    align-items: center;
+  }
+}
+
+.arrow-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  font-size: 0.75rem;
 }

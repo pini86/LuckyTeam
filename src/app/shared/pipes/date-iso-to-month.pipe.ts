@@ -8,7 +8,7 @@ export class TransformDateIsoToMonthPipe implements PipeTransform {
   // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   transform(isoDateString: string): string {
     const date = new Date(isoDateString);
-    const monthIndex = date.getMonth();
+    const monthIndex = date.getUTCMonth();
     const monthNames = [
       'January',
       'February',

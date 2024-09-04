@@ -1,6 +1,11 @@
 @if (_searchRoutes(); as model) {
   <div class="wrapper container">
-    <span>{{ _searchRoutes().from.city }} --> {{ _searchRoutes().to.city }} DATE</span>
+    <div class="title">
+      <span class="title__date">
+      {{ _searchRoutes().from.city }}
+        <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+        {{ _searchRoutes().to.city }}</span> {{ _selectedStartDate() |  transformDateIsoToMonth }}, {{ _selectedStartDate() |  transformDateIsoToDay }}
+    </div>
 
     <mat-tab-group [(selectedIndex)]="_selectedTabIndex" (selectedIndexChange)="_onTabChange($event)">
 
@@ -15,36 +20,70 @@
             <span class="card-date__week"> {{ date | transformDateIsoToWeek }}</span>
           </ng-template>
 
-
-          @for (ride of _rideModelRoutesSelectedDate(); track ride) {
-
-            <div class="border">
-
-              <span>{{ ride.routeId }}</span>
-
-              <div>
-                Date from {{ ride.dateFrom }}
-              </div>
+          <div class="wrapper-content">
 
 
-              <div>
-                Date to {{ ride.dateTo }}
-              </div>
+            @for (ride of _rideModelRoutesSelectedDate(); track ride) {
 
-              <span>{{ ride.path[0] }} {{ ride.path[ride.path.length - 1] }} </span>
+              <mat-card appearance="outlined" class="card">
+                <mat-card-content>
 
+                  <div class="content">
+                    <div class="ride-data">
+                      <div class="ride-data__header">
+                        <div class="ride-data__date-info">
+                          <span class="ride-data__time">{{ ride.dateFrom | transformDateIsoToTime }}</span>
+                          <span class="ride-data__date">
+                            <span>{{ ride.dateFrom | transformDateIsoToMonth }} </span>
+                            <span>{{ ride.dateFrom | transformDateIsoToDay }}</span>
+                          </span>
+                          <span class="ride-data__station">{{ _searchRoutes().from.city }}</span>
+                        </div>
+                        <div class="ride-data__between">
+                          <div class="ride-data__between-time">{{ ride.dateFrom | travelTime: ride.dateTo }}</div>
+                          <span class="ride-data__separator"></span>
+                        </div>
+                        <div class="ride-data__date-info">
+                          <span class="ride-data__time">{{ ride.dateTo | transformDateIsoToTime }}</span>
+                          <span class="ride-data__date">
+                            <span>{{ ride.dateTo | transformDateIsoToMonth }} </span>
+                            <span>{{ ride.dateTo | transformDateIsoToDay }}</span>
+                          </span>
+                          <span class="ride-data__station">{{ _searchRoutes().to.city }}</span>
+                        </div>
+                      </div>
 
-            </div>
-          }
+                      <div class="ride-data__footer">
+                        <div class="ride-data__route">
+                          <mat-icon class="tram-icon">tram</mat-icon>
+                          <div class="ride-data__route-info">
+                            @if (_cities().length) {
+                              <div>{{ ride.path[0] | transformRideCity: _cities() }}
+                                <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+                                {{ ride.path[ride.path.length - 1] | transformRideCity: _cities() }}
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="carriage-data">
+
+                    </div>
+
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            }
+
+          </div>
 
         </mat-tab>
       }
 
 
     </mat-tab-group>
-
-
-    {{ _selectedStartDate() }}
 
 
   </div>

@@ -8,7 +8,7 @@ export class TransformDateIsoToWeekPipe implements PipeTransform {
   // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   transform(isoDateString: string): string {
     const date = new Date(isoDateString);
-    const dayOfWeek = date.getDay();
+    const dayOfWeek = date.getUTCDay();
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return daysOfWeek[dayOfWeek];
   }

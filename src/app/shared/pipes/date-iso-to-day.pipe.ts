@@ -8,6 +8,6 @@ export class TransformDateIsoToDayPipe implements PipeTransform {
   // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
   transform(isoDateString: string): number {
     const date = new Date(isoDateString);
-    return date.getDate();
+    return date.getUTCDate();
   }
 }
