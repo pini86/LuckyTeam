@@ -36,3 +36,13 @@ export interface SegmentsSearchRoutesModel {
   readonly time: string[];
   readonly occupiedSeats: number[];
 }
+
+export class RideModelRoutesSelectedDate {
+  constructor(
+    public readonly routeId: number,
+    public readonly dateFrom: string,
+    public readonly dateTo: string,
+    public readonly path: number[],
+    public readonly occupiedSeats: number[],
+  ) {}
+}

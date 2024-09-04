@@ -2,24 +2,49 @@
   <div class="wrapper container">
     <span>{{ _searchRoutes().from.city }} --> {{ _searchRoutes().to.city }} DATE</span>
 
-    <mat-tab-group>
+    <mat-tab-group [(selectedIndex)]="_selectedTabIndex" (selectedIndexChange)="_onTabChange($event)">
 
 
       @for (date of _startDate(); track date) {
         <mat-tab>
-
           <ng-template mat-tab-label class="card-date">
+
             <div class="card-date__title">
               <span>{{ date | transformDateIsoToMonth }} </span> <span>{{ date | transformDateIsoToDay }}</span>
             </div>
             <span class="card-date__week"> {{ date | transformDateIsoToWeek }}</span>
           </ng-template>
 
+
+          @for (ride of _rideModelRoutesSelectedDate(); track ride) {
+
+            <div class="border">
+
+              <span>{{ ride.routeId }}</span>
+
+              <div>
+                Date from {{ ride.dateFrom }}
+              </div>
+
+
+              <div>
+                Date to {{ ride.dateTo }}
+              </div>
+
+              <span>{{ ride.path[0] }} {{ ride.path[ride.path.length - 1] }} </span>
+
+
+            </div>
+          }
+
         </mat-tab>
       }
 
 
     </mat-tab-group>
+
+
+    {{ _selectedStartDate() }}
 
 
   </div>
