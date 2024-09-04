@@ -55,7 +55,6 @@ export class TripDetailsComponent implements OnInit {
     ).subscribe({
       next: (tripVM) => {
         this._tripVMSignal.set(tripVM);
-        console.log('Trip ViewModel:', tripVM);
       },
       error: (error) => console.error('Error loading trip or stations:', error),
     });
@@ -63,8 +62,6 @@ export class TripDetailsComponent implements OnInit {
 
 
   private _buildTripVM(trip: ITrip, stations: IStations[]): ITripVM {
-    console.log('trip', trip);
-
     const firstCityId = trip.path[0];
     const lastCityId = trip.path[trip.path.length - 1];
 
@@ -103,23 +100,7 @@ export class TripDetailsComponent implements OnInit {
 
 
     const carriagesVM: ICarriagesVM[] = trip.carriages.map((carriage, index) => {
-      return {
-        number: index + 1,
-        name: `Car ${index + 1}`,
-        type: carriage,
-        availableSeats: segments.reduce((sum, segment) => {
-          return sum + segment.occupiedSeats.filter(seat => seat.toString() === carriage).length;
-        }, 0),
-        price: segments.reduce((sum, segment) => {
-          return sum + (segment.price[carriage] || 0);
-        }, 0) / 100,
-
-      };
-    });
-
-    const uniqueCarriagesSet = new Set(trip.carriages);
-    const uniqueCarriagesVM: IUniqueCarriages[] = [...uniqueCarriagesSet].map(carriage => {
-      const availableSeats = segments.reduce((sum, segment) => {
+      const occupiedSeats = segments.reduce((sum, segment) => {
         return sum + segment.occupiedSeats.filter(seat => seat.toString() === carriage).length;
       }, 0);
 
@@ -127,14 +108,39 @@ export class TripDetailsComponent implements OnInit {
         return sum + (segment.price[carriage] || 0);
       }, 0) / 100;
 
+      const countSeats = this._carriageService.carriagesFromResponseSignal()
+        .find((item) => item.code === carriage)?.countSeats || 0;
+
       return {
+        number: index + 1,
+        name: `Car ${index + 1}`,
         type: carriage,
-        availableSeats,
+        occupiedSeats,
         price,
+        countSeats,
       };
     });
-    console.log('carriagesVM', carriagesVM);
-    console.log('uniqueCarriagesVM', uniqueCarriagesVM);
+
+    const uniqueCarriagesSet = new Set(trip.carriages);
+    const uniqueCarriagesVM: IUniqueCarriages[] = [...uniqueCarriagesSet].map(carriage => {
+      const occupiedSeats = segments.reduce((sum, segment) => {
+        return sum + segment.occupiedSeats.filter(seat => seat.toString() === carriage).length;
+      }, 0);
+
+      const price = segments.reduce((sum, segment) => {
+        return sum + (segment.price[carriage] || 0);
+      }, 0) / 100;
+
+      const countSeats = this._carriageService.carriagesFromResponseSignal()
+        .find((item) => item.code === carriage)?.countSeats || 0;
+
+      return {
+        type: carriage,
+        occupiedSeats,
+        price,
+        countSeats,
+      };
+    });
     return {
       rideId: trip.rideId,
       firstCityName,

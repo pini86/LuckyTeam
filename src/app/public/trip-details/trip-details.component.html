@@ -38,15 +38,15 @@
     <mat-tab>
       <ng-template mat-tab-label>
         <div [ngClass]="{'additional-content': true}">
-          <div>Carriage type {{ uniqueCarriage.type }}: {{uniqueCarriage.availableSeats}}</div>
+          <div>Carriage type {{ uniqueCarriage.type }}: {{uniqueCarriage.countSeats - uniqueCarriage.occupiedSeats}}</div>
           <div>{{uniqueCarriage.price}}$</div>
         </div>
       </ng-template>
       @for(carriage of tripVM.carriages; track carriage ){
       @if(carriage.type === uniqueCarriage.type){
-      <div>
+      <div class="title__carriage">
         <span>{{carriage.name}}</span>
-        <span class="available-seats">{{carriage.availableSeats}} seats</span>
+        <span class="available-seats">{{carriage.countSeats - carriage.occupiedSeats}} seats</span>
       </div>
 
 

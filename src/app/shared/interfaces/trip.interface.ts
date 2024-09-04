@@ -29,11 +29,13 @@ export interface ICarriagesVM {
   number: number;
   name: string;
   type: string;
-  availableSeats: number;
+  occupiedSeats: number;
   price: number;
+  countSeats: number,
 }
 export interface IUniqueCarriages {
   type: string;
-  availableSeats: number;
+  occupiedSeats: number;
   price: number;
+  countSeats: number,
 }

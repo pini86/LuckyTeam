@@ -22,9 +22,7 @@ import { AuthService } from '../../shared/services/auth.service';
 })
 export class CarriagesCarsComponent implements OnInit {
   public form: FormGroup;
-  // public savedToken: string;
   public showForm = false;
-  // public carriagesFromResponseSignal = signal<ICarriageVM[]>([]);
   public carriageVM = signal<ICarriageVM | null>(null);
   public isUpdating = false;
 
@@ -33,7 +31,6 @@ export class CarriagesCarsComponent implements OnInit {
   @ViewChild('formContainer') public formContainer: ElementRef;
 
   public ngOnInit(): void {
-    // this.savedToken = localStorage.getItem('token');
     this.carriageService.getCarriages();
 
     this.form = this.fb.group({
@@ -77,7 +74,6 @@ export class CarriagesCarsComponent implements OnInit {
       }
 
       if (this.isUpdating) {
-        console.log('existingCarriage.code', this.carriageService.carriagesFromResponseSignal());
         this.http.put(`/api/carriage/${existingCarriage.code}`, dataFromForm, {
           headers: {
             Authorization: `Bearer ${this.auth.getToken()}`,

@@ -18,4 +18,5 @@ export interface ICarriageVM {
   columnsCount: number;
   leftSeats?: number;
   rightSeats?: number;
+  countSeats: number;
 }

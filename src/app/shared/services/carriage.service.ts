@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { AuthService } from './auth.service';
-import { ICarriage, ICarriageVM } from '../interfaces/carriages.interface';
 import { map } from 'rxjs';
+import { ICarriage, ICarriageVM } from '../interfaces/carriages.interface';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +51,7 @@ export class CarriageService {
       code,
       name,
       columnsCount,
+      countSeats: rowsCount * columnsCount,
       leftSeats,
       rightSeats
     }
