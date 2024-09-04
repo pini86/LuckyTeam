@@ -82,7 +82,7 @@
 
 
   <div class="list-carriages-container">
-    @for (carriage of carriagesFromResponseSignal(); track carriage;) {
+    @for (carriage of carriageService.carriagesFromResponseSignal(); track carriage;) {
 
     <div class="carriage-wrapper">
       <h4>{{ carriage.name }}</h4>

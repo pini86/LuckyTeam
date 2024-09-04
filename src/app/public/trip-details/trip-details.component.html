@@ -1,1 +1,92 @@
-<p>trip-details works!</p>
+<div class="container">
+  @if (_tripVMSignal(); as tripVM) {
+  <mat-card>
+    <div class="header">
+      <div class="header__city">
+
+        <button type="button"
+          class="button-back"
+          mat-icon-button
+          (click)="_handleBack()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+
+        <div>{{tripVM.firstCityName}} {{tripVM.departureDate}}</div>
+
+        <mat-icon aria-hidden="false"
+          aria-label="Example home icon"
+          fontIcon="trending_flat"></mat-icon>
+
+        <div>{{tripVM.lastCityName}} {{tripVM.arrivalDate}}</div>
+      </div>
+
+      <div class="header__title">
+        <p>Ride: {{ tripVM.rideId }}</p>
+        <a mat-raised-button
+          href="#">
+          Route
+          <mat-icon aria-hidden="false"
+            aria-label="Example home icon"
+            fontIcon="keyboard_arrow_down"></mat-icon>
+        </a>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-tab-group>
+    @for (uniqueCarriage of tripVM.uniqueCarriages; track uniqueCarriage) {
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div [ngClass]="{'additional-content': true}">
+          <div>Carriage type {{ uniqueCarriage.type }}: {{uniqueCarriage.countSeats - uniqueCarriage.occupiedSeats}}</div>
+          <div>{{uniqueCarriage.price}}$</div>
+        </div>
+      </ng-template>
+      @for(carriage of tripVM.carriages; track carriage ){
+      @if(carriage.type === uniqueCarriage.type){
+      <div class="title__carriage">
+        <span>{{carriage.name}}</span>
+        <span class="available-seats">{{carriage.countSeats - carriage.occupiedSeats}} seats</span>
+      </div>
+
+
+      <div class="list-carriages-container">
+        @for (carriagesFromResponse of _carriageService.carriagesFromResponseSignal(); track carriagesFromResponse;) {
+        @if(carriagesFromResponse.code === uniqueCarriage.type){
+        <div class="carriage-wrapper">
+          <div class="seats-wrapper">
+            <div class="line">
+              <p class="text">Rows</p>
+              <div class="title__columns">
+                @for (title of [].constructor(carriagesFromResponse.columnsCount); track $index) {
+                <div class="title__numbers">{{$index + 1}}</div>
+                }
+              </div>
+            </div>
+
+            <div class="block__seats">
+              @for (carriageRow of carriagesFromResponse.rows; track carriageRow; let rowIndex = $index) {
+              <div class="carriage-row"
+                [class.with-divider]="carriagesFromResponse.dividerIndex === rowIndex">
+                @for (item of carriageRow; track item.index; let itemIndex = $index) {
+                <button type="button"
+                  class="car-cell"
+                  [class.button-item]="rowIndex > carriagesFromResponse.dividerIndex">
+                  <span class="number">{{item.index}}</span>
+                </button>
+                }
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+        }
+        }
+      </div>
+      }
+      }
+    </mat-tab>
+    }
+  </mat-tab-group>
+  }
+</div>
