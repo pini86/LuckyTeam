@@ -21,7 +21,7 @@ export const routes: Routes = [
   { path: 'admin', component: AdminComponent, canActivate: [adminAccessGuard] },
   { path: 'signup', component: RegistrationComponent, canActivate: [guestAccessGuard] },
   { path: 'profile', component: UserProfileComponent, canActivate: [userAccessGuard] },
-  { path: 'trip', component: TripDetailsComponent },
+  { path: 'trip/:rideId', component: TripDetailsComponent },
   { path: 'orders', component: OrderComponent, canActivate: [userAccessGuard] },
   { path: 'admin/stations', component: StationsManagementComponent, canActivate: [adminAccessGuard] },
   { path: 'admin/carriages', component: CarriagesCarsComponent, canActivate: [adminAccessGuard] },
