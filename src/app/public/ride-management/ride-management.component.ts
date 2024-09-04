@@ -1,5 +1,5 @@
 import { AsyncPipe, Location } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute } from '@angular/router';
@@ -47,22 +47,23 @@ export class RideManagementComponent implements OnInit {
   }
 
   protected _handleCreateRide(): void {
-    const date = new Date();
-    date.toISOString();
+    const now = Date.now();
+
+    console.log('⭐:', new Date(now).toISOString());
 
     const getNewPrice = (price: Record<string, number>): Record<string, number> => {
       for (const key in price) {
         if (Object.hasOwn(price, key)) {
-          price[key] = 0;
+          price[key] = 100;
         }
       }
       return price;
     };
 
     if (this._currentRide().schedule.length > 0) {
-      const newSegment = this._currentRide().schedule[0].segments.map((segment: Segments) => ({
+      const newSegment = this._currentRide().schedule[0].segments.map((segment: Segments, index) => ({
         ...segment,
-        time: [date.toISOString(), date.toISOString()],
+        time: [new Date(now + index * 10 * 60 * 1000).toISOString(), new Date(now + (index * 10 * 60 * 1000 + 1000)).toISOString()],
         price: { ...getNewPrice(segment.price) },
       }));
 
@@ -70,21 +71,21 @@ export class RideManagementComponent implements OnInit {
     } else {
       const newArrSegment: Segments[] = [];
 
-      const createSegment = (): Segments => {
+      const createSegment = (index: number): Segments => {
         const originalCarriages = [...new Set(this._currentRide().carriages)];
         const carriageObject: Record<string, number> = {};
         for (const carriage of originalCarriages) {
-          carriageObject[carriage] = 0;
+          carriageObject[carriage] = 100;
         }
         return {
-          time: [date.toISOString(), date.toISOString()],
+          time: [new Date(now + index * 10 * 60 * 1000).toISOString(), new Date(now + (index * 10 * 60 * 1000 + 1000)).toISOString()],
           price: carriageObject,
         };
       };
 
       this._currentRide().path.forEach((_, index, array) => {
         if (index < array.length - 1) {
-          newArrSegment.push(createSegment());
+          newArrSegment.push(createSegment(index));
         }
       });
 
