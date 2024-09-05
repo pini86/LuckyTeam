@@ -39,7 +39,10 @@
   <button [disabled]="!_form.valid" class="button" mat-stroked-button type="submit">Search</button>
 </form>
 
-<app-search-result />
+@if (_searchRoutes()) {
+  <app-search-result [initialStartTimestamp]="this._selectDateTimestamp()" [searchRoutes]="_searchRoutes()" />
+}
+
 
 
 

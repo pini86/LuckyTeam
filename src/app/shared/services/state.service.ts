@@ -10,7 +10,7 @@ const initialState: StoreRoutes = {
   routes: [],
   searchRoutes: null,
   cities: [],
-  carriages: [],
+  carriages: []
 };
 
 @Injectable({ providedIn: 'root' })
@@ -48,6 +48,10 @@ export class StateService {
     this._stateRoute.update((state) => ({ ...state, searchRoutes }));
   }
 
+  public resetSearchRoutes(): void {
+    this._stateRoute.update((state) => ({ ...state, searchRoutes: null }));
+  }
+
   public addCities(cities: CitiesItems): void {
     this._stateRoute.update((state) => ({ ...state, cities: cities }));
   }
@@ -61,17 +65,17 @@ export class StateService {
           ...state.currentRide.schedule,
           {
             rideId,
-            segments,
-          },
-        ],
-      },
+            segments
+          }
+        ]
+      }
     }));
   }
 
   public createNewRoute(route: RoutesModel): void {
     this._stateRoute.update((state) => ({
       ...state,
-      routes: [...state.routes, route],
+      routes: [...state.routes, route]
     }));
   }
 
@@ -83,18 +87,18 @@ export class StateService {
           return {
             id: route.id,
             carriages,
-            path,
+            path
           };
         }
         return route;
-      }),
+      })
     }));
   }
 
   public deleteRoute(routeId: number): void {
     this._stateRoute.update((state) => ({
       ...state,
-      routes: state.routes.filter((route) => route.id !== routeId),
+      routes: state.routes.filter((route) => route.id !== routeId)
     }));
   }
 
@@ -105,8 +109,8 @@ export class StateService {
         ...state.currentRide,
         schedule: state.currentRide.schedule.filter((schedule) => {
           return schedule.rideId !== this.currentRideId();
-        }),
-      },
+        })
+      }
     }));
   }
 }

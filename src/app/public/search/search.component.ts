@@ -1,5 +1,5 @@
 import { AsyncPipe, NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteTrigger, MatOption } from '@angular/material/autocomplete';
 import { MatButton } from '@angular/material/button';
@@ -36,21 +36,22 @@ import { SearchResultComponent } from './search-result/search-result.component';
     NgFor,
     AsyncPipe,
     MatAutocompleteTrigger,
-    SearchResultComponent,
+    SearchResultComponent
   ],
   templateUrl: './search.component.html',
-  styleUrl: './search.component.scss',
+  styleUrl: './search.component.scss'
 })
 export class SearchComponent implements OnInit {
   protected _form = new FormGroup({
     from: new FormControl<string>(null, [Validators.required]),
     to: new FormControl<string>(null, Validators.required),
     date: new FormControl<string>('', Validators.required),
-    time: new FormControl<string>({ value: '', disabled: true }),
+    time: new FormControl<string>({ value: '', disabled: true })
   });
   protected readonly _minDate = new Date();
   protected _filteredOptionsFrom: Observable<CityModel[]>;
   protected _filteredOptionsTo: Observable<CityModel[]>;
+  protected readonly _selectDateTimestamp = signal<number>(null);
   private readonly _routeService: RouteService = inject(RouteService);
   private readonly _searchService: SearchService = inject(SearchService);
   private readonly _stateService: StateService = inject(StateService);
@@ -62,16 +63,19 @@ export class SearchComponent implements OnInit {
 
     this._filteredOptionsFrom = this._form.controls.from.valueChanges.pipe(
       startWith(''),
-      map((val) => this._filter(val)),
+      map((val) => this._filter(val))
     );
 
     this._filteredOptionsTo = this._form.controls.to.valueChanges.pipe(
       startWith(''),
-      map((val) => this._filter(val)),
+      map((val) => this._filter(val))
     );
   }
 
   protected _submit(): void {
+
+    this._stateService.resetSearchRoutes();
+
     const valueFrom = this._form.controls.from.value;
     const valueTo = this._form.controls.to.value;
 
@@ -92,31 +96,23 @@ export class SearchComponent implements OnInit {
       const toLatitude = toCity.latitude;
       const toLongitude = toCity.longitude;
 
-      let dateTimestamp: number;
-
       if (this._form.value.time) {
         const date = new Date(this._form.value.date);
         const time = this._form.value.time.split(':');
 
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth();
+        const day = date.getUTCDate() + 1;
         const hour = time[0];
         const minutes = time[1];
 
-        dateTimestamp = new Date(year, month, day, Number(hour), Number(minutes)).getTime() / 1000;
+        this._selectDateTimestamp.set(new Date(year, month, day, Number(hour), Number(minutes)).getTime() / 1000);
       } else {
-        dateTimestamp = new Date(this._form.value.date).getTime() / 1000;
+        this._selectDateTimestamp.set(new Date(this._form.value.date).getTime() / 1000);
       }
 
-      console.table({
-        fromLatitude,
-        fromLongitude,
-        toLatitude,
-        toLongitude,
-      });
 
-      this._searchService.getSection({ fromLatitude, fromLongitude, toLongitude, toLatitude, time: dateTimestamp });
+      this._searchService.getSection({ fromLatitude, fromLongitude, toLongitude, toLatitude, time: this._selectDateTimestamp() });
     }
   }
 

@@ -56,7 +56,7 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "./",
+              "baseHref": "/",
               "outputHashing": "all"
             },
             "development": {

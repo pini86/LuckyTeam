@@ -5,6 +5,12 @@
   &__date {
     font-weight: bold;
   }
+
+  &__error {
+    font-weight: bold;
+    color: #f44336;
+    padding-left: 2rem;
+  }
 }
 
 .wrapper-content {

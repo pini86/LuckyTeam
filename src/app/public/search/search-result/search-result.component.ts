@@ -1,4 +1,4 @@
-import { Component, effect, inject, Injector, OnInit, signal } from '@angular/core';
+import { Component, inject, Injector, input, OnChanges, signal, SimpleChanges } from '@angular/core';
 import { MatCard, MatCardActions, MatCardContent, MatCardFooter, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
@@ -12,7 +12,6 @@ import { TravelTimePipe } from '../../../shared/pipes/travel-time.pipe';
 import { StateService } from '../../../shared/services/state.service';
 import { RideModelRoutesSelectedDate, SearchRoutesModel } from '../../../shared/types/search-routes.model';
 import { removeTimeFromIsoDate } from '../../../shared/utils/remove-time-from-iso-date';
-import { mockObject } from '../mock-object';
 
 @Component({
   selector: 'app-search-result',
@@ -34,50 +33,110 @@ import { mockObject } from '../mock-object';
     MatIcon,
     TransformRideCityPipe,
     TransformDateIsoToTimePipe,
-    TravelTimePipe,
+    TravelTimePipe
   ],
   templateUrl: './search-result.component.html',
-  styleUrl: './search-result.component.scss',
+  styleUrl: './search-result.component.scss'
 })
-export class SearchResultComponent implements OnInit {
+export class SearchResultComponent implements OnChanges {
+  public readonly initialStartTimestamp = input.required<number>();
+  public readonly searchRoutes = input.required<SearchRoutesModel>();
   protected readonly _injector = inject(Injector);
-  protected readonly _searchRoutes = signal<SearchRoutesModel>(null);
+  // protected readonly _searchRoutes = signal<SearchRoutesModel>(null);
   protected readonly _startDate = signal([]);
   protected readonly _selectedStartDate = signal<string>(null);
-  protected readonly _rideModelRoutesSelectedDate = signal<RideModelRoutesSelectedDate[]>([]);
   protected _selectedTabIndex: number = 0;
+  // protected readonly _searchRoutes = this._stateService.searchRoutes;
+  protected readonly _rideModelRoutesSelectedDate = signal<RideModelRoutesSelectedDate[]>([]);
+
   private readonly _stateService: StateService = inject(StateService);
   protected readonly _cities = this._stateService.cities;
 
-  public ngOnInit(): void {
-    this._searchRoutes.set(mockObject);
-    effect(
-      () => {
-        console.log('[21] 🌻:', this._searchRoutes());
-      },
-      { injector: this._injector },
-    );
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['searchRoutes']) {
+      this._initTabs();
+    }
+  }
 
-    const arrDate: string[] = [];
+  protected _onTabChange(index: number): void {
+    this._selectedStartDate.set(this._startDate()[index]);
 
-    this._searchRoutes().routes.forEach((route, indexRoute) => {
+    this._rideModelRoutesSelectedDate.set([]);
+
+
+    this.searchRoutes().routes.forEach((route) => {
       let startIndex = 0;
       let endIndex = 0;
       route.path.forEach((p, i) => {
-        if (p === this._searchRoutes().from.stationId) {
+        if (p === this.searchRoutes().from.stationId) {
           startIndex = i;
         }
 
-        if (p === this._searchRoutes().to.stationId) {
+        if (p === this.searchRoutes().to.stationId) {
           endIndex = i;
         }
       });
 
       route.schedule.forEach((schedule) => {
-        const startTime = schedule.segments[startIndex].time[0];
-        const endTime = schedule.segments[endIndex - 1].time[1];
+        schedule.segments.forEach((segment, segmentIndex) => {
+          if (this._selectedStartDate() === removeTimeFromIsoDate(segment.time[0]) && segmentIndex === startIndex) {
+            // console.log('⭐:', segment.time[0], route.id, schedule.rideId, startIndex, endIndex);
+            // console.log('🍁:', schedule.rideId, schedule.segments, schedule.segments[endIndex - 1]);
 
-        arrDate.push(removeTimeFromIsoDate(startTime));
+            const arr = [];
+            schedule.segments.forEach((segment2, segmentIndex2) => {
+              if (segmentIndex2 > startIndex && segmentIndex2 <= endIndex) {
+                const keys = Object.getOwnPropertyNames(segment2.price);
+
+                keys.forEach((key) => {
+                  // console.log('🆘:', key, segment2.price[key]);
+
+                  arr.push({ key });
+                });
+              }
+            });
+
+            const dateFrom = schedule.segments[startIndex].time[0];
+            const dateTo = schedule.segments[endIndex - 1].time[1];
+
+            if (this._getDateUTCTimestamp(dateFrom) > this.initialStartTimestamp()) {
+              this._addRoute(new RideModelRoutesSelectedDate(route.id, dateFrom, dateTo, route.path, segment.occupiedSeats));
+            }
+          }
+        });
+      });
+    });
+
+    this._selectedTabIndex = index;
+  }
+
+  private _getDateUTCTimestamp(date: string): number {
+    const d = new Date(date);
+    const year = d.getUTCFullYear();
+    const month = d.getUTCMonth();
+    const day = d.getUTCDate();
+    const hours = d.getUTCHours();
+    const minutes = d.getUTCMinutes();
+
+    return new Date(year, month, day, hours, minutes).getTime();
+  }
+
+  private _initTabs(): void {
+    this._startDate.set([]);
+    this._selectedStartDate.set(null);
+
+    const arrDate: string[] = [];
+    this.searchRoutes().routes.forEach((route) => {
+      let startIndex = 0;
+      route.path.forEach((p, i) => {
+        if (p === this.searchRoutes().from.stationId) {
+          startIndex = i;
+        }
+      });
+
+      route.schedule.forEach((schedule) => {
+        const startTime = schedule.segments[startIndex].time[0];
+        arrDate.push(startTime);
       });
     });
 
@@ -88,66 +147,16 @@ export class SearchResultComponent implements OnInit {
     this._onTabChange(0);
   }
 
-  protected _onTabChange(index: number): void {
-    this._selectedStartDate.set(this._startDate()[index]);
-
-    console.log('[76] 🥕:', this._selectedStartDate());
-
-    this._rideModelRoutesSelectedDate.set([]);
-
-    this._searchRoutes().routes.forEach((route, indexRoute) => {
-      let startIndex = 0;
-      let endIndex = 0;
-      route.path.forEach((p, i) => {
-        if (p === this._searchRoutes().from.stationId) {
-          startIndex = i;
-        }
-
-        if (p === this._searchRoutes().to.stationId) {
-          endIndex = i;
-        }
-      });
-
-      route.schedule.forEach((schedule) => {
-        schedule.segments.forEach((segment, segmentIndex) => {
-          if (this._selectedStartDate() === removeTimeFromIsoDate(segment.time[0]) && segmentIndex === startIndex) {
-            console.log('⭐:', segment.time[0], route.id, schedule.rideId, startIndex, endIndex);
-            console.log('🍁:', schedule.rideId, schedule.segments, schedule.segments[endIndex - 1]);
-
-            const arr = [];
-
-            schedule.segments.forEach((segment2, segmentIndex2) => {
-              if (segmentIndex2 > startIndex && segmentIndex2 <= endIndex) {
-                const keys = Object.getOwnPropertyNames(segment2.price);
-
-                keys.forEach((key) => {
-                  console.log('🆘:', key, segment2.price[key]);
-
-                  arr.push({ key });
-                });
-              }
-            });
-
-            const dateFrom = schedule.segments[startIndex].time[0];
-            const dateTo = schedule.segments[endIndex - 1].time[1];
-
-            if (new Date(dateFrom).getTime() > Date.now()) {
-              this._addRoute(new RideModelRoutesSelectedDate(route.id, dateFrom, dateTo, route.path, segment.occupiedSeats));
-            }
-          }
-        });
-      });
-    });
-  }
-
   private _sortedUniqCurrentDate(arrDate: string[]): string[] {
     const sortedDate = arrDate.sort((a: string, b: string) => Number(new Date(a)) - Number(new Date(b)));
+
     const filterCurrentDate = sortedDate.filter((date) => {
-      const currentDate = Date.now();
-      return new Date(date).getTime() > currentDate;
+      return this._getDateUTCTimestamp(date) / 1000 > this.initialStartTimestamp();
     });
 
-    return [...new Set(filterCurrentDate)];
+    const transformDate = filterCurrentDate.map((date) => removeTimeFromIsoDate((date)));
+
+    return [...new Set(transformDate)];
   }
 
   private _addRoute(route: RideModelRoutesSelectedDate): void {
