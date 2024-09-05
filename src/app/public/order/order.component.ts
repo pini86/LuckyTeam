@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 import { Order } from '../../shared/interfaces/my-orders.interface';
 import { MyOrdersService } from '../../shared/services/my-orders.service';
 import { ModifiedRouteService } from '../stations-management/services/modified-route.service';
-import { ModifyRoutesModel } from '../stations-management/types/routes.model';
+import { StationService } from '../stations-management/services/station.service';
+import { CityModel, ModifyRoutesModel } from '../stations-management/types/routes.model';
 
 @Component({
   selector: 'app-order',
@@ -29,14 +30,18 @@ export class OrderComponent implements OnInit {
   ];
   public orders = new MatTableDataSource<Order>();
   public modifiedRoutes: ModifyRoutesModel[] = [];
+  public stations: CityModel[] = [];
 
   constructor(
     private myOrdersService: MyOrdersService,
     private modifiedRouteService: ModifiedRouteService,
+    private stationService: StationService,
+    private cd: ChangeDetectorRef,
   ) {}
 
   public ngOnInit(): void {
     this.loadOrders();
+    this.loadStations();
     this.loadModifiedRoutes();
   }
 
@@ -102,6 +107,17 @@ export class OrderComponent implements OnInit {
     this.orders.data = mockOrders;
   }
 
+  // Загрузка станций
+  public loadStations(): void {
+    this.stationService.getCitiesObserver().subscribe((cities) => {
+      this.stations = cities;
+      this.cd.detectChanges();
+    });
+
+    // Загрузка списка станций при инициализации компонента
+    this.stationService.getCities();
+  }
+
   public cancelOrder(orderId: number): void {
     // Implement cancellation logic here
     console.log('Cancelling order ID:', orderId);
@@ -125,24 +141,22 @@ export class OrderComponent implements OnInit {
   public loadModifiedRoutes(): void {
     this.modifiedRouteService.getModifiedRoutes().subscribe((routes) => {
       this.modifiedRoutes = routes;
-      this.orders.data = [...this.orders.data]; // Обновляем таблицу после загрузки маршрутов
+      this.cd.detectChanges();
     });
   }
 
+  // Метод для получения названия станции по ID
   public getStationNameById(stationId: number): string {
-    console.log('Searching for station with ID:', stationId);
-    console.log('Current modifiedRoutes:', this.modifiedRoutes);
-
-    if (!this.modifiedRoutes || this.modifiedRoutes.length === 0) {
-      return 'Unknown Station'; // Данные маршрутов ещё не загружены
-    }
-
+    // Поиск станции в загруженных маршрутах
     for (const route of this.modifiedRoutes) {
-      const foundStation = route.path.find((st) => st.id === stationId);
+      const foundStation = route.path.find((city) => city.id === stationId);
       if (foundStation) {
         return foundStation.city;
       }
     }
-    return 'Unknown Station';
+
+    // Если станция не найдена в маршрутах, ищем среди всех станций
+    const station = this.stations.find((city) => city.id === stationId);
+    return station ? station.city : 'Unknown Station';
   }
 }
