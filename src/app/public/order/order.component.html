@@ -1,1 +1,67 @@
-<p>order works!</p>
+<mat-table [dataSource]="orders"
+           class="mat-elevation-z8">
+
+  <!-- Order ID -->
+  <ng-container matColumnDef="orderID">
+    <mat-header-cell *matHeaderCellDef> Order ID </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.id}} </mat-cell>
+  </ng-container>
+
+  <!-- Start Station -->
+  <ng-container matColumnDef="startStation">
+    <mat-header-cell *matHeaderCellDef> Start Station </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{ getStationNameById(order.path[0]) }} </mat-cell>
+  </ng-container>
+
+  <!-- Start Time -->
+  <ng-container matColumnDef="startTime">
+    <mat-header-cell *matHeaderCellDef> Start Time </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.schedule.time[0] | date:'MMMM dd HH:mm'}} </mat-cell>
+  </ng-container>
+
+  <!-- End Station -->
+  <ng-container matColumnDef="endStation">
+    <mat-header-cell *matHeaderCellDef> End Station </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{ getStationNameById(order.path[order.path.length - 1]) }} </mat-cell>
+  </ng-container>
+
+  <!-- End Time -->
+  <ng-container matColumnDef="endTime">
+    <mat-header-cell *matHeaderCellDef> End Time </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.schedule.time[order.schedule.time.length - 1] | date:'MMMM dd HH:mm'}} </mat-cell>
+  </ng-container>
+
+  <!-- Trip Duration -->
+  <ng-container matColumnDef="duration">
+    <mat-header-cell *matHeaderCellDef> Trip Duration </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{calculateDuration(order.schedule.time[0], order.schedule.time[order.schedule.time.length - 1])}} </mat-cell>
+  </ng-container>
+
+  <!-- Carriage Details -->
+  <ng-container matColumnDef="carriageDetails">
+    <mat-header-cell *matHeaderCellDef> Carriage Details </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.carriages[0]}} - Car #{{order.carNumber}} - Seat #{{order.seatId}} </mat-cell>
+  </ng-container>
+
+  <!-- Price -->
+  <ng-container matColumnDef="price">
+    <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{ calculateTotalPrice(order.price) | currency }} </mat-cell>
+  </ng-container>
+
+  <!-- Cancel Button -->
+  <ng-container matColumnDef="cancel">
+    <mat-header-cell *matHeaderCellDef> Cancel Order </mat-header-cell>
+    <mat-cell *matCellDef="let order">
+      <button mat-button
+              type="button"
+              *ngIf="order.status === 'active'"
+              (click)="cancelOrder(order.id)">Cancel</button>
+    </mat-cell>
+  </ng-container>
+
+  <!-- Header and Row Declarations -->
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+</mat-table>
