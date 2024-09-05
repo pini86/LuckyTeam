@@ -1,4 +1,4 @@
-import { Component, inject, Injector, input, OnChanges, signal, SimpleChanges } from '@angular/core';
+import { Component, inject, input, OnChanges, signal, SimpleChanges } from '@angular/core';
 import { MatCard, MatCardActions, MatCardContent, MatCardFooter, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
@@ -12,6 +12,7 @@ import { TravelTimePipe } from '../../../shared/pipes/travel-time.pipe';
 import { StateService } from '../../../shared/services/state.service';
 import { RideModelRoutesSelectedDate, SearchRoutesModel } from '../../../shared/types/search-routes.model';
 import { removeTimeFromIsoDate } from '../../../shared/utils/remove-time-from-iso-date';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-result',
@@ -41,16 +42,13 @@ import { removeTimeFromIsoDate } from '../../../shared/utils/remove-time-from-is
 export class SearchResultComponent implements OnChanges {
   public readonly initialStartTimestamp = input.required<number>();
   public readonly searchRoutes = input.required<SearchRoutesModel>();
-  protected readonly _injector = inject(Injector);
-  // protected readonly _searchRoutes = signal<SearchRoutesModel>(null);
   protected readonly _startDate = signal([]);
   protected readonly _selectedStartDate = signal<string>(null);
   protected _selectedTabIndex: number = 0;
-  // protected readonly _searchRoutes = this._stateService.searchRoutes;
   protected readonly _rideModelRoutesSelectedDate = signal<RideModelRoutesSelectedDate[]>([]);
-
   private readonly _stateService: StateService = inject(StateService);
   protected readonly _cities = this._stateService.cities;
+  private readonly _router = inject(Router);
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['searchRoutes']) {
@@ -108,6 +106,12 @@ export class SearchResultComponent implements OnChanges {
     });
 
     this._selectedTabIndex = index;
+  }
+
+  protected _handleClickCard(routeId: number): void {
+    const from = this.searchRoutes().from.stationId;
+    const to = this.searchRoutes().to.stationId;
+    this._router.navigateByUrl(`trip/${routeId}?from=${from}&to=${to}`);
   }
 
   private _getDateUTCTimestamp(date: string): number {

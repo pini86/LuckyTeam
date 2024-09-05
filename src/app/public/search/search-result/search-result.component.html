@@ -33,7 +33,7 @@
 
               @for (ride of _rideModelRoutesSelectedDate(); track ride) {
 
-                <mat-card appearance="outlined" class="card">
+                <mat-card appearance="outlined" class="card" (click)="_handleClickCard(ride.routeId)">
                   <mat-card-content>
 
                     <div class="content">

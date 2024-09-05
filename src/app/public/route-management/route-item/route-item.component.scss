@@ -7,6 +7,10 @@
   margin-bottom: 0.7rem;
 }
 
+.example-card:hover {
+  box-shadow: 0 1rem 2rem 0 rgba(0, 0, 0, 0.15);
+
+}
 
 .card-header {
   align-items: center;
