@@ -14,6 +14,7 @@ import { RideModelRoutesSelectedDate, SearchRoutesModel } from '../../../shared/
 import { removeTimeFromIsoDate } from '../../../shared/utils/remove-time-from-iso-date';
 import { Router } from '@angular/router';
 import {KeyValuePipe} from "@angular/common";
+import {MatButton} from "@angular/material/button";
 
 
 @Component({
@@ -37,7 +38,8 @@ import {KeyValuePipe} from "@angular/common";
     TransformRideCityPipe,
     TransformDateIsoToTimePipe,
     TravelTimePipe,
-    KeyValuePipe
+    KeyValuePipe,
+    MatButton
   ],
   templateUrl: './search-result.component.html',
   styleUrl: './search-result.component.scss'
@@ -170,6 +172,13 @@ export class SearchResultComponent implements AfterViewInit {
     this._selectedStartDate.set(transformDate[0]);
 
     this._onTabChange(0);
+  }
+
+  protected _handleClickRoute(event: MouseEvent): void {
+    event.stopPropagation();
+
+    console.log( '🚨: click', event )
+
   }
 
   private _sortedUniqCurrentDate(arrDate: string[]): string[] {

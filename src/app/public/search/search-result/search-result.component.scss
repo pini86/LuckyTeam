@@ -134,13 +134,21 @@
 
   &__footer {
     margin-top: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 0.7rem;
+
+    button {
+      outline: none;
+    }
+  }
+
+  &__route {
     border: 1px solid #1f1f1f;
     padding: 0.2rem 1.25rem;
     width: fit-content;
     border-radius: 0.625rem;
-  }
-
-  &__route {
     display: flex;
     gap: 0.625rem;
     align-items: center;
