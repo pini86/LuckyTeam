@@ -13,6 +13,8 @@ import { SearchService } from '../../shared/services/search.service';
 import { StateService } from '../../shared/services/state.service';
 import { CityModel } from '../../shared/types/routes.model';
 import { SearchResultComponent } from './search-result/search-result.component';
+import {SearchRoutesModel} from "../../shared/types/search-routes.model";
+import {mockObject} from "./mock-object";
 
 @Component({
   selector: 'app-search',

@@ -77,9 +77,13 @@
                       </div>
 
                       <div class="carriage-data">
-
+                        @for (car of ride.price | keyvalue; track car) {
+                          <div class="carriage-data__price">
+                            <span class="carriage-data__type">{{ car.key }}:</span>
+                            <span class="carriage-data__value">{{ car.value }}</span>
+                          </div>
+                        }
                       </div>
-
                     </div>
                   </mat-card-content>
                 </mat-card>

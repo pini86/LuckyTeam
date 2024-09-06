@@ -44,5 +44,6 @@ export class RideModelRoutesSelectedDate {
     public readonly dateTo: string,
     public readonly path: number[],
     public readonly occupiedSeats: number[],
+    public readonly price: Record<string, number>,
   ) {}
 }
