@@ -1,0 +1,70 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 20px 10px 5px;
+  margin-top: auto;
+  min-height: 80px;
+}
+
+.footer-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.footer-icon-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  & a {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      transform: scaleX(0);
+      width: 100%;
+      height: 2px;
+      background-color: black;
+      transition: transform 0.5s ease;
+    }
+
+    @media (any-hover: hover) {
+      &:hover::before {
+        transform: scaleX(1);
+      }
+    }
+  }
+}
+
+.footer-image {
+  height: 60px;
+  width: 70px;
+}
+
+.footer-link-school {
+  position: relative;
+  color: black;
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    transform: scaleX(0);
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    transition: transform 0.5s ease;
+  }
+
+  @media (any-hover: hover) {
+    &:hover::before {
+      transform: scaleX(1);
+    }
+  }
+}
