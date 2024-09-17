@@ -24,39 +24,3 @@ a.home-hover-header {
     }
   }
 }
-
-/*
-a.home-hover-header {
-  position: relative;
-  text-decoration: none;
-  display: inline-block;
-  box-sizing: border-box;
-}
-
-.home-text {
-  position: relative;
-  display: inline-block;
-}
-
-.home-hover-header mat-icon {
-  vertical-align: middle; 
-}
-
-.home-text::before {
-  content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  transform: scaleX(0);
-  width: 100%;
-  height: 2px;
-  background-color: #ffd700;
-  transition: transform 0.5s ease;
-}
-
-@media (any-hover: hover) {
-  .home-text:hover::before {
-    transform: scaleX(1);
-  }
-}
-  */

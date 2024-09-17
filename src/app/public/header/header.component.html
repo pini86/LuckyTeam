@@ -55,15 +55,16 @@
     @if (_auth.isAdmin()) {
     <button type="button"
             mat-button
-            [matMenuTriggerFor]="admin">
+            [matMenuTriggerFor]="admin"
+            class="admin-button-hover">
       Admin
     </button>
     <mat-menu #admin="matMenu">
-      <button [routerLink]="['/admin']"
+      <!-- <button [routerLink]="['/admin']"
               type="button"
               mat-menu-item>
         Admin
-      </button>
+      </button> -->
 
       <button [routerLink]="['/admin/stations']"
               mat-menu-item
@@ -104,13 +105,3 @@
     }
   </mat-toolbar>
 </header>
-
-
-<!-- <a [routerLink]="['']"
-   mat-button
-   class="home-hover-header">
-  <mat-icon aria-hidden="false"
-            aria-label="Example home icon"
-            fontIcon="home"></mat-icon>
-  <span class="home-text">Home</span>
-</a> -->

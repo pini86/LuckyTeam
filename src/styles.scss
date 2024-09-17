@@ -49,3 +49,9 @@ body {
   --mat-toolbar-container-text-color: #e0e0e0;
   --mdc-text-button-label-text-size: 16px;
 }
+
+.admin-button-hover:hover,
+.admin-button-hover:focus {
+  background-color: #aedff7;
+  color: #ffd700;
+}
